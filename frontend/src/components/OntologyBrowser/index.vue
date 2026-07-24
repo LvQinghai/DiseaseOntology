@@ -6,9 +6,14 @@ import {
   LinkOutlined,
   MinusSquareOutlined,
   PlusSquareOutlined,
+  PlusOutlined,
+  EditOutlined,
+  DeleteOutlined,
+  DownOutlined,
 } from '@ant-design/icons-vue'
+import { message, Modal } from 'ant-design-vue'
 import { useAppStore } from '@/stores'
-import { fetchOntologyTree, fetchSubclassChildren } from '@/api'
+import { fetchOntologyTree, fetchSubclassChildren, deleteEntity } from '@/api'
 import type { OntologyTreeNode } from '@/types'
 
 const store = useAppStore()
@@ -18,6 +23,13 @@ const loading = ref(false)
 const selectedKeys = ref<string[]>([])
 const expandedKeys = ref<string[]>([])
 const treeVersion = ref(0)
+
+// 右键菜单状态
+const contextMenuVisible = ref(false)
+const contextMenuX = ref(0)
+const contextMenuY = ref(0)
+const contextNode = ref<TreeNode | null>(null)
+const deleting = ref(false)
 
 // ant-design-vue 需要的树节点类型
 interface TreeNode {
@@ -78,7 +90,7 @@ function buildTreeData(nodes: OntologyTreeNode[]): TreeNode[] {
       nodeName: node.name,
       elementId: node.elementId || '',
       children: node.children ? buildTreeData(node.children) : (node.elementId ? [] : undefined),
-      slots: { title: node.key || node.name },
+      slots: { title: node.name },
     }
   })
 }
@@ -160,7 +172,119 @@ watch(
   },
 )
 
-onMounted(loadData)
+// v2.0: 监听树刷新信号
+watch(
+  () => store.treeRefreshKey,
+  () => { loadData() },
+)
+
+// ---- 右键菜单 ----
+
+function findTreeNodeByKey(key: string, nodes: TreeNode[]): TreeNode | null {
+  for (const node of nodes) {
+    if (node.key === key) return node
+    if (node.children) {
+      const found = findTreeNodeByKey(key, node.children)
+      if (found) return found
+    }
+  }
+  return null
+}
+
+function handleTreeRightClick({ event, node }: any) {
+  const treeNode = findTreeNodeByKey(node.key, treeNodeData.value)
+  if (!treeNode || !treeNode.elementId) {
+    // 非实体节点不显示右键菜单
+    return
+  }
+  event.preventDefault()
+  contextNode.value = treeNode
+  contextMenuX.value = event.clientX
+  contextMenuY.value = event.clientY
+  contextMenuVisible.value = true
+}
+
+function closeContextMenu() {
+  contextMenuVisible.value = false
+  contextNode.value = null
+}
+
+function handleContextEdit() {
+  if (!contextNode.value) return
+  const entity = {
+    element_id: contextNode.value.elementId,
+    labels: [contextNode.value.nodeType],
+    name: contextNode.value.nodeName,
+    properties: {},
+    relationship_count: 0,
+  }
+  store.openEntityEditor('edit', entity)
+  closeContextMenu()
+}
+
+function handleContextAddSubclass() {
+  if (!contextNode.value) return
+  store.openCreateEntityWithLabel(contextNode.value.nodeType)
+  closeContextMenu()
+}
+
+function handleContextAddRelation() {
+  if (!contextNode.value) return
+  store.openRelationshipEditor(
+    contextNode.value.elementId,
+    contextNode.value.nodeName,
+  )
+  closeContextMenu()
+}
+
+async function handleContextDelete() {
+  if (!contextNode.value) return
+  const node = contextNode.value
+  closeContextMenu()
+
+  Modal.confirm({
+    title: `删除 "${node.nodeName}"`,
+    content: `确定要删除实体"${node.nodeName}"吗？此操作不可撤销，与该实体关联的所有关系也将被删除。`,
+    okText: '确认删除',
+    okType: 'danger',
+    cancelText: '取消',
+    async onOk() {
+      deleting.value = true
+      try {
+        await deleteEntity(node.elementId)
+        message.success('删除成功')
+        store.triggerTreeRefresh()
+        if (store.selectedNode?.elementId === node.elementId) {
+          store.clearSelection()
+        }
+      } catch (err: any) {
+        const detail = err?.response?.data?.detail || '删除失败'
+        message.error(typeof detail === 'string' ? detail : '删除失败')
+      } finally {
+        deleting.value = false
+      }
+    },
+  })
+}
+
+// 点击外部关闭右键菜单
+function handleDocumentClick() {
+  contextMenuVisible.value = false
+}
+
+// v2.0: 头部新增下拉菜单
+function handleAddMenuClick({ key }: { key: string }) {
+  if (key === 'entity') {
+    store.openEntityEditor('create')
+  } else if (key === 'relationship') {
+    store.openRelationshipEditor('', '')
+  }
+}
+
+onMounted(() => {
+  loadData()
+  document.addEventListener('click', handleDocumentClick)
+})
 
 defineExpose({ loadData })
 </script>
@@ -170,6 +294,21 @@ defineExpose({ loadData })
     <div class="panel-header">
       <ApartmentOutlined />
       <span>本体与关系浏览器</span>
+      <a-dropdown :trigger="['click']">
+        <a-button type="default" size="small" class="header-add-btn">
+          <PlusOutlined /> 新增 <DownOutlined style="font-size:10px" />
+        </a-button>
+        <template #overlay>
+          <a-menu @click="handleAddMenuClick">
+            <a-menu-item key="entity">
+              <ApartmentOutlined /> 新增实体
+            </a-menu-item>
+            <a-menu-item key="relationship">
+              <LinkOutlined /> 新增关系
+            </a-menu-item>
+          </a-menu>
+        </template>
+      </a-dropdown>
     </div>
 
     <!-- 快速统计条 -->
@@ -194,6 +333,7 @@ defineExpose({ loadData })
         block-node
         @select="handleSelect"
         @expand="(keys: string[]) => (expandedKeys = keys)"
+        @rightClick="handleTreeRightClick"
       >
         <!-- 自定义节点渲染 -->
         <template #title="{ label, nodeType, count, elementId, nodeName }">
@@ -235,6 +375,35 @@ defineExpose({ loadData })
 
       <a-empty v-else-if="!loading" description="暂无本体数据" />
     </a-spin>
+
+    <!-- v2.0: 右键上下文菜单 -->
+    <Teleport to="body">
+      <div
+        v-if="contextMenuVisible && contextNode"
+        class="context-menu-overlay"
+        :style="{ left: contextMenuX + 'px', top: contextMenuY + 'px' }"
+        @click.stop
+      >
+        <div class="context-menu">
+          <div class="context-menu-item" @click="handleContextEdit">
+            <EditOutlined /> 编辑节点
+          </div>
+          <div class="context-menu-item" @click="handleContextAddSubclass">
+            <PlusOutlined /> 新增子类
+          </div>
+          <div class="context-menu-item" @click="handleContextAddRelation">
+            <LinkOutlined /> 新增关系
+          </div>
+          <div class="context-menu-divider" />
+          <div
+            class="context-menu-item context-menu-danger"
+            @click="handleContextDelete"
+          >
+            <DeleteOutlined /> 删除节点
+          </div>
+        </div>
+      </div>
+    </Teleport>
   </div>
 </template>
 
@@ -474,5 +643,68 @@ defineExpose({ loadData })
 /* ========== 加载动画 ========== */
 :deep(.ant-tree-switcher-loading-icon) {
   color: #1890ff;
+}
+
+/* ========== v2.0 头部新增按钮 ========== */
+.header-add-btn {
+  margin-left: auto;
+  height: 26px;
+  padding: 0 10px;
+  font-size: 12px;
+  color: #1677ff;
+  border-color: #1677ff;
+  border-radius: 4px;
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.header-add-btn:hover {
+  color: #fff !important;
+  background: #1677ff !important;
+  border-color: #1677ff !important;
+}
+
+.header-add-btn :deep(.anticon) {
+  font-size: 10px;
+  line-height: 1;
+}
+
+/* ========== v2.0 右键上下文菜单 ========== */
+.context-menu-overlay {
+  position: fixed;
+  z-index: 9999;
+}
+.context-menu {
+  min-width: 160px;
+  background: #fff;
+  border-radius: 6px;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12), 0 3px 6px rgba(0, 0, 0, 0.08);
+  padding: 4px;
+}
+.context-menu-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 12px;
+  font-size: 13px;
+  color: #262626;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: all 0.15s;
+  user-select: none;
+}
+.context-menu-item:hover {
+  background: #f0f5ff;
+  color: #1890ff;
+}
+.context-menu-divider {
+  height: 1px;
+  background: #f0f0f0;
+  margin: 4px 0;
+}
+.context-menu-danger:hover {
+  background: #fff1f0;
+  color: #ff4d4f;
 }
 </style>

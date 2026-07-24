@@ -1,27 +1,41 @@
 <script setup lang="ts">
-import { ref, watch } from 'vue'
+import { ref, watch, nextTick, h } from 'vue'
 import {
   SendOutlined,
   SearchOutlined,
   InfoCircleOutlined,
   NodeIndexOutlined,
+  EditOutlined,
+  DeleteOutlined,
 } from '@ant-design/icons-vue'
-import { message } from 'ant-design-vue'
+import { message, Modal } from 'ant-design-vue'
 import { useAppStore } from '@/stores'
-import { fetchNodeDetail, postQuery } from '@/api'
-import type { NodeDetail, QueryResponse } from '@/types'
+import { fetchNodeDetail, postQuery, deleteEntity, checkEntityDeletion, fetchRelationship, deleteRelationship } from '@/api'
+import type { NodeDetail, QueryResponse, RelationshipResponse, DeletionCheckResult } from '@/types'
 
 const store = useAppStore()
 
 const question = ref('')
 const asking = ref(false)
 const conversation = ref<Array<{ role: 'user' | 'ai'; content: string }>>([])
+const conversationBodyRef = ref<HTMLElement | null>(null)
 
-// 节点详情相关
+function scrollToBottom() {
+  nextTick(() => {
+    const el = conversationBodyRef.value
+    if (el) {
+      el.scrollTop = el.scrollHeight
+    }
+  })
+}
+
+// 节点/关系详情相关
 const detail = ref<NodeDetail | null>(null)
+const relDetail = ref<RelationshipResponse | null>(null)
 const detailLoading = ref(false)
 const detailError = ref('')
-const isCategoryNode = ref(false) // 是否选中了分类节点（非实体）
+const isCategoryNode = ref(false)
+const isRelationNode = ref(false)
 
 // 监听选中节点，加载详情
 watch(
@@ -29,28 +43,64 @@ watch(
   async (node) => {
     if (!node) {
       detail.value = null
+      relDetail.value = null
       detailError.value = ''
       isCategoryNode.value = false
+      isRelationNode.value = false
       return
     }
 
-    // 关系元数据/根节点只展示摘要，不发请求
-    if (node.type === '__RELATIONSHIP_ROOT__' || node.type === '__RELATIONSHIP__' || node.type === '__REL_META__') {
+    // 关系元数据/根节点只展示摘要
+    if (node.type === '__RELATIONSHIP_ROOT__' || node.type === '__REL_META__') {
       detail.value = null
+      relDetail.value = null
       detailError.value = ''
       isCategoryNode.value = true
+      isRelationNode.value = false
       return
     }
 
-    // 没有 elementId 的类型节点（如点击 "Disease" 分类）
+    // 关系节点（左侧树中的关系类型：无具体 elementId → 分类摘要）
+    if (node.type === '__RELATIONSHIP__') {
+      if (!node.elementId) {
+        detail.value = null
+        relDetail.value = null
+        detailError.value = ''
+        isCategoryNode.value = true
+        isRelationNode.value = false
+        return
+      }
+
+      detail.value = null
+      detailError.value = ''
+      isCategoryNode.value = false
+      isRelationNode.value = true
+      detailLoading.value = true
+      try {
+        relDetail.value = await fetchRelationship(node.elementId)
+      } catch (e: any) {
+        detailError.value = e?.response?.data?.detail || '加载关系详情失败'
+        relDetail.value = null
+      } finally {
+        detailLoading.value = false
+      }
+      return
+    }
+
+    // 没有 elementId 的类型节点
     if (!node.elementId) {
       detail.value = null
+      relDetail.value = null
       detailError.value = ''
       isCategoryNode.value = true
+      isRelationNode.value = false
       return
     }
 
+    // 实体节点
     isCategoryNode.value = false
+    isRelationNode.value = false
+    relDetail.value = null
     detailLoading.value = true
     detailError.value = ''
     try {
@@ -73,10 +123,12 @@ async function handleAsk() {
   asking.value = true
   conversation.value.push({ role: 'user', content: q })
   question.value = ''
+  scrollToBottom()
 
   try {
     const res = await postQuery({ question: q })
     conversation.value.push({ role: 'ai', content: res.answer })
+    scrollToBottom()
   } catch (e: any) {
     const errMsg = e?.response?.data?.detail || '查询失败，请检查后端服务'
     message.error(errMsg)
@@ -84,6 +136,146 @@ async function handleAsk() {
   } finally {
     asking.value = false
   }
+}
+
+// v2.0: 编辑当前选中实体或关系
+function handleEdit() {
+  // 如果选中的是关系详情（有具体 elementId）
+  if (isRelationNode.value && relDetail.value) {
+    store.openEditRelationshipEditor(relDetail.value)
+    return
+  }
+
+  // 如果选中的是关系类型分类节点 → 打开新增关系面板（预填类型）
+  if (isCategoryNode.value && store.selectedNode?.type === '__RELATIONSHIP__') {
+    store.openCreateRelationshipWithType(store.selectedNode.name)
+    return
+  }
+
+  if (!store.selectedNode || !store.selectedNode.elementId) {
+    message.warning('请先在左侧树中点击选择一个实体或关系')
+    return
+  }
+  if (!detail.value) return
+  store.openEntityEditor('edit', {
+    element_id: store.selectedNode.elementId,
+    labels: [detail.value.type],
+    name: detail.value.name,
+    properties: Object.fromEntries(
+      detail.value.properties.map((p) => [p.key, p.value]),
+    ),
+    relationship_count: detail.value.relationships.length,
+  })
+}
+
+// v2.0: 删除当前选中实体或关系
+async function handleDelete() {
+  // 关系删除
+  if (isRelationNode.value && relDetail.value) {
+    const rel = relDetail.value
+    Modal.confirm({
+      title: `删除关系`,
+      content: `确定要删除关系 "${rel.source_name} →[${rel.type}]→ ${rel.target_name}" 吗？`,
+      okText: '确认删除',
+      okType: 'danger',
+      cancelText: '取消',
+      async onOk() {
+        try {
+          await deleteRelationship(rel.element_id)
+          message.success('关系已删除')
+          store.clearSelection()
+          store.triggerTreeRefresh()
+        } catch (err: any) {
+          const detailMsg = err?.response?.data?.detail || '删除失败'
+          message.error(typeof detailMsg === 'string' ? detailMsg : '删除失败')
+        }
+      },
+    })
+    return
+  }
+
+  // 实体删除：先校验
+  if (!store.selectedNode) {
+    message.warning('请先在左侧树中点击选择一个实体或关系')
+    return
+  }
+  const node = store.selectedNode
+
+  // 删除前校验：检查该节点是否有关联关系
+  let checkResult: DeletionCheckResult
+  try {
+    checkResult = await checkEntityDeletion(node.elementId)
+  } catch (err: any) {
+    const detailMsg = err?.response?.data?.detail || '校验失败，请稍后重试'
+    message.error(typeof detailMsg === 'string' ? detailMsg : '校验失败')
+    return
+  }
+
+  if (!checkResult.can_delete) {
+    // 存在关联关系，弹窗展示详情并引导用户
+    const relList = checkResult.relationships
+    const relItems = relList.map(
+      (r) => {
+        const arrow = r.direction === 'outgoing' ? '→' : '←'
+        const sourcePart = r.direction === 'outgoing' ? node.name : r.other_node_name
+        const targetPart = r.direction === 'outgoing' ? r.other_node_name : node.name
+        return `  • ${sourcePart} ${arrow}[${r.type}]${arrow} ${targetPart}`
+      }
+    ).join('\n')
+
+    Modal.warning({
+      title: `无法删除 "${node.name}"`,
+      width: 560,
+      content: h('div', null, [
+        h('p', { style: { marginBottom: '12px', color: '#ff4d4f', fontWeight: 'bold' } },
+          `该节点仍有 ${checkResult.relationship_count} 条关联关系，无法直接删除。`
+        ),
+        h('p', { style: { marginBottom: '8px' } }, '关联关系列表：'),
+        h('pre', {
+          style: {
+            background: '#fafafa', padding: '8px 12px', borderRadius: '6px',
+            fontSize: '13px', lineHeight: '1.8', maxHeight: '200px',
+            overflowY: 'auto', marginBottom: '12px',
+          },
+        }, relItems),
+        h('div', { style: { color: '#666', fontSize: '13px', lineHeight: '1.8' } }, [
+          h('strong', null, '操作指引：'),
+          h('br'),
+          '1. 在左侧面板"关系"目录下找到上述关系类型',
+          h('br'),
+          '2. 点击对应关系进入详情，使用 ',
+          h('span', { style: { background: '#fff1f0', color: '#ff4d4f', padding: '2px 6px', borderRadius: '3px' } }, '删除'),
+          ' 按钮逐条删除',
+          h('br'),
+          '3. 或切换到图谱视图，选中关联边后删除',
+          h('br'),
+          '4. 所有关系删除完毕后，即可删除该实体',
+        ]),
+      ]),
+      okText: '我知道了',
+    })
+    return
+  }
+
+  // 无关联关系，允许删除
+  Modal.confirm({
+    title: `删除 "${node.name}"`,
+    content: `确定要删除实体"${node.name}"吗？此操作不可撤销。`,
+    okText: '确认删除',
+    okType: 'danger',
+    cancelText: '取消',
+    async onOk() {
+      try {
+        await deleteEntity(node.elementId)
+        message.success('删除成功')
+        store.clearSelection()
+        store.triggerTreeRefresh()
+      } catch (err: any) {
+        const detailMsg = err?.response?.data?.detail || '删除失败'
+        message.error(typeof detailMsg === 'string' ? detailMsg : '删除失败')
+      }
+    },
+  })
 }
 
 function handleKeyup(e: KeyboardEvent) {
@@ -102,6 +294,19 @@ function handleKeyup(e: KeyboardEvent) {
         <InfoCircleOutlined />
         <span>详情</span>
         <a-spin v-if="detailLoading" size="small" />
+
+        <!-- v2.0: 编辑按钮（实体或关系均可编辑） -->
+        <a-button type="default" size="small" class="header-action-btn header-action-edit" @click="handleEdit">
+          <EditOutlined /> 编辑
+        </a-button>
+        <a-button
+          type="default"
+          size="small"
+          class="header-action-btn header-action-danger"
+          @click="handleDelete"
+        >
+          <DeleteOutlined /> 删除
+        </a-button>
       </div>
       <div class="detail-body">
         <template v-if="!store.selectedNode">
@@ -123,12 +328,35 @@ function handleKeyup(e: KeyboardEvent) {
         <template v-else-if="detailError">
           <a-alert :message="detailError" type="error" show-icon />
         </template>
+
+        <!-- v2.0: 关系详情展示 -->
+        <template v-else-if="isRelationNode && relDetail">
+          <div class="detail-rel-header">
+            <span class="detail-rel-source">{{ relDetail.source_name }}</span>
+            <span class="detail-rel-arrow">→</span>
+            <a-tag color="blue">{{ relDetail.type }}</a-tag>
+            <span class="detail-rel-arrow">→</span>
+            <span class="detail-rel-target">{{ relDetail.target_name }}</span>
+          </div>
+          <a-divider style="margin: 12px 0" />
+
+          <!-- 关系属性 -->
+          <div v-if="relDetail.properties && Object.keys(relDetail.properties).length > 0" class="detail-props">
+            <div class="sub-title">属性</div>
+            <div v-for="(val, key) in relDetail.properties" :key="key" class="prop-row">
+              <span class="prop-key">{{ key }}</span>
+              <span class="prop-value">{{ val }}</span>
+            </div>
+          </div>
+          <a-empty v-else description="该关系无属性" :image-style="{ height: '30px' }" />
+        </template>
+
+        <!-- 实体详情展示 -->
         <template v-else-if="detail">
           <div class="detail-node-name">{{ detail.name }}</div>
           <a-tag :color="detail.type === 'Disease' ? 'red' : 'blue'">{{ detail.type }}</a-tag>
           <a-divider style="margin: 12px 0" />
 
-          <!-- 属性列表 -->
           <div v-if="detail.properties.length > 0" class="detail-props">
             <div class="sub-title">属性</div>
             <div v-for="prop in detail.properties" :key="prop.key" class="prop-row">
@@ -137,7 +365,6 @@ function handleKeyup(e: KeyboardEvent) {
             </div>
           </div>
 
-          <!-- 关系列表 -->
           <div v-if="detail.relationships.length > 0" class="detail-relations">
             <div class="sub-title">关系 ({{ detail.relationships.length }})</div>
             <div
@@ -169,7 +396,7 @@ function handleKeyup(e: KeyboardEvent) {
           <a-textarea
             v-model:value="question"
             placeholder="输入自然语言问题，例如: '感冒有什么症状?'"
-            :auto-size="{ minRows: 4, maxRows: 10 }"
+            :auto-size="{ minRows: 2, maxRows: 6 }"
             @keyup="handleKeyup"
           />
           <a-button
@@ -181,7 +408,7 @@ function handleKeyup(e: KeyboardEvent) {
             <template #icon><SendOutlined /></template>
           </a-button>
         </div>
-        <div class="conversation-body">
+        <div ref="conversationBodyRef" class="conversation-body">
           <div
             v-for="(msg, idx) in conversation"
             :key="idx"
@@ -220,8 +447,9 @@ function handleKeyup(e: KeyboardEvent) {
 }
 
 .query-section {
-  height: 40%;
-  min-height: 300px;
+  height: 55%;
+  min-height: 280px;
+  overflow: hidden;
   background: #fff;
 }
 
@@ -236,11 +464,56 @@ function handleKeyup(e: KeyboardEvent) {
   border-bottom: 1px solid #f0f0f0;
   flex-shrink: 0;
   background: #fafafa;
+  flex-wrap: wrap;
+  overflow: visible;
 }
 
 .panel-header :deep(.anticon) {
   color: #1890ff;
   font-size: 14px;
+}
+
+/* v2.0: 详情头部操作按钮 */
+.header-action-btn {
+  margin-left: 4px;
+  font-size: 12px;
+  height: 26px;
+  padding: 0 10px;
+  border-radius: 4px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+.header-action-edit {
+  color: #1677ff;
+  border-color: #1677ff;
+}
+.header-action-edit:hover {
+  color: #fff !important;
+  background: #1677ff !important;
+  border-color: #1677ff !important;
+}
+
+.header-action-link {
+  color: #52c41a;
+  border-color: #52c41a;
+}
+.header-action-link:hover {
+  color: #fff !important;
+  background: #52c41a !important;
+  border-color: #52c41a !important;
+}
+
+.header-action-danger {
+  color: #ff4d4f;
+  border-color: #ff4d4f;
+}
+.header-action-danger:hover {
+  color: #fff !important;
+  background: #ff4d4f !important;
+  border-color: #ff4d4f !important;
 }
 
 .detail-body {
@@ -263,6 +536,28 @@ function handleKeyup(e: KeyboardEvent) {
   color: #262626;
   margin-bottom: 6px;
   line-height: 1.4;
+}
+
+/* v2.0: 关系详情头部 */
+.detail-rel-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  font-size: 15px;
+  font-weight: 600;
+  color: #262626;
+}
+
+.detail-rel-source,
+.detail-rel-target {
+  color: #1677ff;
+  cursor: pointer;
+}
+
+.detail-rel-arrow {
+  color: #bfbfbf;
+  font-size: 16px;
 }
 
 .sub-title {
@@ -343,27 +638,23 @@ function handleKeyup(e: KeyboardEvent) {
   flex: 1;
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
   overflow: hidden;
 }
 
-/* 输入区域 — 在查询区域中垂直居中 */
 .input-area {
   display: flex;
   align-items: flex-start;
   gap: 10px;
-  padding: 16px;
+  padding: 12px 16px;
   background: #fff;
   flex-shrink: 0;
-  min-height: 200px;
   width: 100%;
 }
 
 .input-area :deep(textarea.ant-input) {
   resize: vertical;
-  min-height: 180px !important;
-  height: 100% !important;
+  min-height: 72px !important;
+  height: 72px !important;
   font-size: 14px;
   line-height: 1.6;
 }
@@ -372,8 +663,9 @@ function handleKeyup(e: KeyboardEvent) {
   flex-shrink: 0;
 }
 
-/* 对话结果区域 — 有内容时自然展示在输入框下方 */
 .conversation-body {
+  flex: 1;
+  min-height: 0;
   width: 100%;
   overflow-y: auto;
   padding: 12px 16px;

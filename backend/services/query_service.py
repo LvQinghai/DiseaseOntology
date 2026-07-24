@@ -30,6 +30,9 @@ CYPHER_GENERATION_TEMPLATE = """任务：将用户问题转换为 Neo4j Cypher �
     -CONTRAINDICATED_WITH 硬约束 → 用 NOT 排除
     -CAN_SUBSTITUTE 对称性 → 双向查询
     -MANIFESTS_IN 多值 → 一症状对应多病，按匹配数排序
+    -TREATS 多值 → 一病对应多药，按匹配数排序
+    -AFFECTS 多值 → 一病对应多部位，按匹配数排序
+    -HAS_SIDE_EFFECT 多值 → 一药对应多副作用，按匹配数排序
     -综合推理 → 用 WITH 串联多步
 4. 如果问题涉及某"大类"的疾病（如"消化系统疾病""呼吸系统疾病"），必须通过 `SUB_CLASS_OF` 递归查找所有子类疾病，再查找子类的症状。不能只查大类本身（大类本身没有症状）。
 5. 对于层次结构，使用可变长度路径 `*1..2` 确保覆盖底层子类。

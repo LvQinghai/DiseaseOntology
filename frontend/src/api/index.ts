@@ -11,6 +11,16 @@ import type {
   PathData,
   QueryRequest,
   QueryResponse,
+  EntityResponse,
+  CreateEntityRequest,
+  UpdateEntityRequest,
+  RelationshipResponse,
+  CreateRelationshipRequest,
+  UpdateRelationshipRequest,
+  NodeSearchResult,
+  AvailableLabelsResponse,
+  AvailableRelationshipsResponse,
+  RelationshipInstanceSummary,
 } from '@/types'
 
 const api = axios.create({
@@ -84,10 +94,17 @@ export async function fetchNodeDetail(elementId: string): Promise<NodeDetail> {
     targetType: r.target_label,
     targetElementId: r.target_element_id,
   }))
+  // v2.0: 将 name 属性排到最前面
+  const propEntries = Object.entries(props)
+    .filter(([k]) => k !== 'name')
+    .map(([key, value]) => ({ key, value }))
+  if (props.name !== undefined) {
+    propEntries.unshift({ key: 'name', value: props.name })
+  }
   return {
     name: props.name || (data.labels && data.labels[0]) || '',
     type: (data.labels && data.labels[0]) || '',
-    properties: Object.entries(props).map(([key, value]) => ({ key, value })),
+    properties: propEntries,
     relationships: [...incoming, ...outgoing],
   }
 }
@@ -145,5 +162,119 @@ export async function fetchShortestPath(
 
 export async function postQuery(req: QueryRequest): Promise<QueryResponse> {
   const { data } = await api.post('/query', req)
+  return data
+}
+
+// ==================== v2.0 编辑 API ====================
+
+// ----- 实体 CRUD -----
+
+export async function createEntity(req: CreateEntityRequest): Promise<EntityResponse> {
+  const { data } = await api.post('/editor/entities', req)
+  return data
+}
+
+export async function getEntity(elementId: string): Promise<EntityResponse> {
+  const { data } = await api.get(`/editor/entities/${encodeURIComponent(elementId)}`)
+  return data
+}
+
+export async function updateEntity(
+  elementId: string,
+  req: UpdateEntityRequest,
+): Promise<EntityResponse> {
+  const { data } = await api.put(`/editor/entities/${encodeURIComponent(elementId)}`, req)
+  return data
+}
+
+export async function deleteEntity(elementId: string): Promise<void> {
+  await api.delete(`/editor/entities/${encodeURIComponent(elementId)}`)
+}
+
+export async function checkEntityDeletion(elementId: string): Promise<import('@/types').DeletionCheckResult> {
+  const { data } = await api.get(`/editor/entities/${encodeURIComponent(elementId)}/deletion-check`)
+  return data
+}
+
+// ----- 属性操作 -----
+
+export async function setProperties(
+  elementId: string,
+  properties: Record<string, unknown>,
+): Promise<EntityResponse> {
+  const { data } = await api.post(
+    `/editor/entities/${encodeURIComponent(elementId)}/properties`,
+    { properties },
+  )
+  return data
+}
+
+export async function deleteProperty(
+  elementId: string,
+  key: string,
+): Promise<EntityResponse> {
+  const { data } = await api.delete(
+    `/editor/entities/${encodeURIComponent(elementId)}/properties/${encodeURIComponent(key)}`,
+  )
+  return data
+}
+
+// ----- 关系 CRUD -----
+
+export async function createRelationship(
+  req: CreateRelationshipRequest,
+): Promise<RelationshipResponse> {
+  const { data } = await api.post('/editor/relationships', req)
+  return data
+}
+
+export async function updateRelationship(
+  relId: string,
+  req: UpdateRelationshipRequest,
+): Promise<RelationshipResponse> {
+  const { data } = await api.put(`/editor/relationships/${encodeURIComponent(relId)}`, req)
+  return data
+}
+
+export async function deleteRelationship(relId: string): Promise<void> {
+  await api.delete(`/editor/relationships/${encodeURIComponent(relId)}`)
+}
+
+export async function fetchRelationship(relId: string): Promise<RelationshipResponse> {
+  const { data } = await api.get(`/editor/relationships/${encodeURIComponent(relId)}`)
+  return data
+}
+
+export async function updateRelationshipFull(
+  relId: string,
+  req: UpdateRelationshipRequest,
+): Promise<RelationshipResponse> {
+  const { data } = await api.put(`/editor/relationships/${encodeURIComponent(relId)}`, req)
+  return data
+}
+
+// ----- 元数据 -----
+
+export async function fetchAvailableLabels(): Promise<AvailableLabelsResponse> {
+  const { data } = await api.get('/editor/labels')
+  return data
+}
+
+export async function fetchAvailableRelationshipTypes(): Promise<AvailableRelationshipsResponse> {
+  const { data } = await api.get('/editor/relationship-types')
+  return data
+}
+
+export async function searchNodes(keyword: string): Promise<NodeSearchResult[]> {
+  const { data } = await api.get('/editor/nodes/search', { params: { keyword } })
+  return data
+}
+
+// ----- 关系实例列表 -----
+
+export async function fetchRelationshipInstances(
+  type: string,
+): Promise<RelationshipInstanceSummary[]> {
+  const { data } = await api.get('/editor/relationship-instances', { params: { type } })
   return data
 }

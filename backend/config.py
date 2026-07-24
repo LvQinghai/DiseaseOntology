@@ -13,6 +13,7 @@ class Settings(BaseSettings):
     llm_api_base: str = "https://aicopilot.goldwind.com.cn:3213/v1"
     llm_api_key: str = "sk-xxx"
     llm_model: str = "glm-5.2"
+    llm_mode: str = ""
 
     # 服务
     host: str = "0.0.0.0"
@@ -24,6 +25,7 @@ class Settings(BaseSettings):
     model_config = {
         "env_file": ".env",
         "env_file_encoding": "utf-8",
+        "extra": "ignore",
     }
 
 

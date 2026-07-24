@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, onMounted, watch, onUnmounted, nextTick } from 'vue'
-import { ReloadOutlined, AimOutlined } from '@ant-design/icons-vue'
+import { ReloadOutlined, PlusOutlined, MinusOutlined } from '@ant-design/icons-vue'
 import { DataSet, Network } from 'vis-network/standalone'
 import { useAppStore } from '@/stores'
 import { fetchGraphOverview, fetchNeighborhood, fetchNodeDetail } from '@/api'
@@ -13,6 +13,43 @@ const nodeCount = ref(0)
 const edgeCount = ref(0)
 const expandedNodes = ref<Set<string>>(new Set())
 let network: Network | null = null
+
+// v2.0: 缩放控制
+const currentScale = ref(1)
+const ZOOM_STEP = 0.25
+const SCALE_MIN = 0.30   // 最小缩小比例为30%，防止图表缩到过小无法恢复
+
+function safeScale(s: number): boolean {
+  return isFinite(s) && s > 0.001
+}
+
+function zoomTo(scale: number) {
+  if (!network) return
+  network.moveTo({ scale, animation: { duration: 250, easingFunction: 'easeInOutQuad' } })
+  currentScale.value = scale
+}
+
+function handleZoomIn() {
+  if (!network) return
+  const scale = network.getScale()
+  if (!safeScale(scale)) {
+    network.fit({ animation: { duration: 400, easingFunction: 'easeInOutQuad' } })
+    currentScale.value = network.getScale()
+    return
+  }
+  zoomTo(scale + ZOOM_STEP)
+}
+
+function handleZoomOut() {
+  if (!network) return
+  const scale = network.getScale()
+  if (!safeScale(scale)) {
+    network.fit({ animation: { duration: 400, easingFunction: 'easeInOutQuad' } })
+    currentScale.value = network.getScale()
+    return
+  }
+  zoomTo(Math.max(SCALE_MIN, scale - ZOOM_STEP))
+}
 
 /** 节点类型颜色 - 工业专业配色 */
 const nodeTypeColors: Record<string, string> = {
@@ -115,16 +152,37 @@ function renderGraph(nodesData: any[], edgesData: any[]) {
       hover: true,
       tooltipDelay: 150,
       zoomView: true,
-      dragView: true,
+      dragView: false,
       keyboard: true,
     },
   }
 
   if (network) {
     network.setData({ nodes, edges })
+    updateBBox()
+    // 若当前比例过低（eg 数据刷新前被缩到极小），重置为 fit 视图
+    const s = network.getScale()
+    if (!safeScale(s)) {
+      network.fit({ animation: { duration: 400, easingFunction: 'easeInOutQuad' } })
+      currentScale.value = network.getScale()
+    }
     network.stabilize(60)
   } else {
     network = new Network(containerRef.value, { nodes, edges }, options)
+
+    // ---- 缩放事件：同步当前比例 + 下限保护 ----
+    network.on('zoom', () => {
+      const s = network!.getScale()
+      if (s < SCALE_MIN) {
+        // 防止缩放到过小导致不可见，回弹到最低可见比例
+        network!.moveTo({ scale: SCALE_MIN })
+        currentScale.value = SCALE_MIN
+        return
+      }
+      currentScale.value = s
+    })
+    // 初始化缩放值
+    currentScale.value = network.getScale()
 
     // ---- 单击节点：选中 → 触发 watch ----
     network.on('click', (params: any) => {
@@ -139,7 +197,99 @@ function renderGraph(nodesData: any[], edgesData: any[]) {
         store.clearSelection()
       }
     })
+
+    // ---- 启动自定义带边界约束的平移 ----
+    setupCustomPan()
+    updateBBox()
   }
+}
+
+// ===== 节点包围盒缓存（辅助边界计算） =====
+let nodesMinX = 0, nodesMaxX = 0, nodesMinY = 0, nodesMaxY = 0
+let bboxValid = false
+
+function updateBBox() {
+  if (!network) return
+  const positions = network.getPositions()
+  const ids = Object.keys(positions)
+  if (ids.length === 0) { bboxValid = false; return }
+  nodesMinX = Infinity; nodesMaxX = -Infinity
+  nodesMinY = Infinity; nodesMaxY = -Infinity
+  for (const id of ids) {
+    const p = positions[id]
+    if (p.x < nodesMinX) nodesMinX = p.x
+    if (p.x > nodesMaxX) nodesMaxX = p.x
+    if (p.y < nodesMinY) nodesMinY = p.y
+    if (p.y > nodesMaxY) nodesMaxY = p.y
+  }
+  bboxValid = true
+}
+
+function clampViewPos(x: number, y: number, scale: number, container: HTMLElement): { x: number; y: number } {
+  if (!bboxValid) return { x, y }
+  const vw = container.clientWidth / scale
+  const vh = container.clientHeight / scale
+  const viewLeft = x - vw / 2
+  const viewRight = x + vw / 2
+  const viewTop = y - vh / 2
+  const viewBottom = y + vh / 2
+
+  let nx = x, ny = y
+  if (viewLeft > nodesMaxX) nx = nodesMaxX - vw / 2 + vw * 0.2
+  else if (viewRight < nodesMinX) nx = nodesMinX + vw / 2 - vw * 0.2
+  if (viewTop > nodesMaxY) ny = nodesMaxY - vh / 2 + vh * 0.2
+  else if (viewBottom < nodesMinY) ny = nodesMinY + vh / 2 - vh * 0.2
+  return { x: nx, y: ny }
+}
+
+// ===== 自定义平移：通过原生 DOM 事件实现，在拖拽过程中实时钳制位置 =====
+let panning = false
+let panStartClientX = 0, panStartClientY = 0
+let panStartViewX = 0, panStartViewY = 0
+
+function onMouseDown(e: MouseEvent) {
+  if (!network || !containerRef.value) return
+  const rect = containerRef.value.getBoundingClientRect()
+  const canvasPos = network.DOMtoCanvas({ x: e.clientX - rect.left, y: e.clientY - rect.top })
+  const nodeId = network.getNodeAt(canvasPos)
+  if (nodeId) return  // 点击在节点上，交给 vis-network 处理
+
+  panning = true
+  panStartClientX = e.clientX
+  panStartClientY = e.clientY
+  const vp = network.getViewPosition()
+  panStartViewX = vp.x
+  panStartViewY = vp.y
+  e.preventDefault()
+}
+
+function onMouseMove(e: MouseEvent) {
+  if (!panning || !network || !containerRef.value) return
+  const scale = network.getScale()
+  const dx = -(e.clientX - panStartClientX) / scale
+  const dy = -(e.clientY - panStartClientY) / scale
+  const clamped = clampViewPos(panStartViewX + dx, panStartViewY + dy, scale, containerRef.value)
+  network.moveTo({ position: { x: clamped.x, y: clamped.y }, scale, animation: false })
+}
+
+function onMouseUp() {
+  panning = false
+}
+
+function setupCustomPan() {
+  if (!containerRef.value) return
+  containerRef.value.addEventListener('mousedown', onMouseDown)
+  window.addEventListener('mousemove', onMouseMove)
+  window.addEventListener('mouseup', onMouseUp)
+}
+
+function teardownCustomPan() {
+  panning = false
+  if (containerRef.value) {
+    containerRef.value.removeEventListener('mousedown', onMouseDown)
+  }
+  window.removeEventListener('mousemove', onMouseMove)
+  window.removeEventListener('mouseup', onMouseUp)
 }
 
 // ===== 图谱全局数据（可渐进扩展） =====
@@ -230,6 +380,7 @@ watch(
 onMounted(loadData)
 
 onUnmounted(() => {
+  teardownCustomPan()
   if (network) {
     network.destroy()
     network = null
@@ -270,6 +421,16 @@ onUnmounted(() => {
         description="暂无图谱数据"
         style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%)"
       />
+      <!-- v2.0: 缩放控制 -->
+      <div class="zoom-controls">
+        <a-button size="small" shape="circle" @click="handleZoomIn" :disabled="!network">
+          <template #icon><PlusOutlined /></template>
+        </a-button>
+        <span class="zoom-label">{{ Math.round(currentScale * 100) }}%</span>
+        <a-button size="small" shape="circle" @click="handleZoomOut" :disabled="!network">
+          <template #icon><MinusOutlined /></template>
+        </a-button>
+      </div>
     </div>
   </div>
 </template>
@@ -350,5 +511,36 @@ onUnmounted(() => {
 .graph-container {
   width: 100%;
   height: 100%;
+}
+
+/* v2.0: 缩放控制 */
+.zoom-controls {
+  position: absolute;
+  bottom: 16px;
+  right: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  background: #fff;
+  border-radius: 20px;
+  padding: 6px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+}
+
+.zoom-controls :deep(.ant-btn) {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.zoom-label {
+  font-size: 11px;
+  color: #8c8c8c;
+  line-height: 1;
+  padding: 2px 0;
+  user-select: none;
 }
 </style>

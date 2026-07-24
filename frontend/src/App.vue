@@ -4,6 +4,8 @@ import { MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons-vue'
 import OntologyBrowser from './components/OntologyBrowser/index.vue'
 import GraphCanvas from './components/GraphCanvas/index.vue'
 import QueryPanel from './components/QueryPanel/index.vue'
+import EntityEditor from './components/EntityEditor/index.vue'
+import RelationshipEditor from './components/RelationshipEditor/index.vue'
 import { useAppStore } from './stores'
 
 const store = useAppStore()
@@ -130,6 +132,10 @@ const rightPanelStyle = computed(() => {
         <GraphCanvas v-if="!store.rightCollapsed" />
       </aside>
     </div>
+
+    <!-- v2.0: 编辑弹窗 -->
+    <EntityEditor />
+    <RelationshipEditor />
   </div>
 </template>
 

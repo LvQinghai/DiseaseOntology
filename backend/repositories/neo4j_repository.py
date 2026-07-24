@@ -130,7 +130,15 @@ class Neo4jRepository:
         return incoming + outgoing
 
     def search_nodes(self, keyword: str, labels: list[str] | None = None) -> list[dict]:
-        """模糊搜索节点（按 name 属性 CONTAINS 匹配）."""
+        """模糊搜索节点（按 name 属性 CONTAINS 匹配），keyword 为空时返回全部节点."""
+        if not keyword:
+            return self._run(
+                "MATCH (n) "
+                "RETURN elementId(n) AS element_id, n.name AS name, "
+                "labels(n) AS labels "
+                "ORDER BY n.name "
+                "LIMIT 200",
+            )
         if labels:
             clauses = " OR ".join([f"n:`{lbl}`" for lbl in labels])
             label_filter = f"AND ({clauses})"
@@ -258,3 +266,231 @@ class Neo4jRepository:
         ⚠️ 仅内部使用，不对外暴露 API.
         """
         return self._run(cypher)
+
+    # ==================== 实体（节点）写操作 ====================
+
+    def create_node(self, label: str, properties: dict) -> dict:
+        """创建指定标签的新节点."""
+        return self._run(
+            f"CREATE (n:`{label}`) SET n = $props "
+            "RETURN elementId(n) AS element_id, labels(n) AS labels, "
+            "properties(n) AS properties",
+            props=properties,
+        )[0]
+
+    def update_node_properties(self, element_id: str, properties: dict) -> dict | None:
+        """更新节点属性（合并模式）."""
+        records = self._run(
+            "MATCH (n) WHERE elementId(n) = $eid "
+            "SET n += $props "
+            "RETURN elementId(n) AS element_id, labels(n) AS labels, "
+            "properties(n) AS properties",
+            eid=element_id, props=properties,
+        )
+        return records[0] if records else None
+
+    def set_node_name(self, element_id: str, name: str) -> dict | None:
+        """更新节点名称."""
+        records = self._run(
+            "MATCH (n) WHERE elementId(n) = $eid "
+            "SET n.name = $name "
+            "RETURN elementId(n) AS element_id, labels(n) AS labels, "
+            "properties(n) AS properties",
+            eid=element_id, name=name,
+        )
+        return records[0] if records else None
+
+    def update_node_label(self, element_id: str, new_label: str) -> dict | None:
+        """更新节点标签（替换所有标签为新标签）."""
+        # 先移除所有标签，再设置新标签
+        node = self.get_node_by_id(element_id)
+        if not node:
+            return None
+        old_labels = node["labels"]
+        remove_clause = " ".join(f"REMOVE n:`{lbl}`" for lbl in old_labels)
+        self._run(
+            f"MATCH (n) WHERE elementId(n) = $eid {remove_clause}",
+            eid=element_id,
+        )
+        records = self._run(
+            f"MATCH (n) WHERE elementId(n) = $eid "
+            f"SET n:`{new_label}` "
+            "RETURN elementId(n) AS element_id, labels(n) AS labels, "
+            "properties(n) AS properties",
+            eid=element_id,
+        )
+        return records[0] if records else None
+
+    def delete_node(self, element_id: str, force: bool = False) -> bool:
+        """删除节点。force=False 时只删除无关系的节点；force=True 时级联删除所有关系."""
+        if force:
+            cypher = "MATCH (n) WHERE elementId(n) = $eid DETACH DELETE n RETURN count(n) AS deleted"
+        else:
+            cypher = "MATCH (n) WHERE elementId(n) = $eid DELETE n RETURN count(n) AS deleted"
+        records = self._run(cypher, eid=element_id)
+        return records[0].get("deleted", 0) > 0 if records else False
+
+    def get_node_relationships_detail(self, element_id: str) -> list[dict]:
+        """获取节点的所有关系详细信息（用于删除前校验）."""
+        incoming = self._run(
+            "MATCH (source)-[r]->(target) WHERE elementId(target) = $eid "
+            "RETURN elementId(r) AS element_id, type(r) AS type, "
+            "'incoming' AS direction, "
+            "source.name AS other_node_name, "
+            "elementId(source) AS other_node_element_id, "
+            "labels(source)[0] AS other_node_label",
+            eid=element_id,
+        )
+        outgoing = self._run(
+            "MATCH (source)-[r]->(target) WHERE elementId(source) = $eid "
+            "RETURN elementId(r) AS element_id, type(r) AS type, "
+            "'outgoing' AS direction, "
+            "target.name AS other_node_name, "
+            "elementId(target) AS other_node_element_id, "
+            "labels(target)[0] AS other_node_label",
+            eid=element_id,
+        )
+        return incoming + outgoing
+
+    def get_node_relationship_count(self, element_id: str) -> int:
+        """获取节点关联的关系数."""
+        records = self._run(
+            "MATCH (n)-[r]-() WHERE elementId(n) = $eid "
+            "RETURN count(r) AS rel_count",
+            eid=element_id,
+        )
+        return records[0].get("rel_count", 0) if records else 0
+
+    def find_node_by_name(self, name: str, label: str | None = None) -> dict | None:
+        """按名称查找节点（精确匹配）."""
+        if label:
+            records = self._run(
+                f"MATCH (n:`{label}`) WHERE n.name = $name "
+                "RETURN elementId(n) AS element_id, labels(n) AS labels, "
+                "properties(n) AS properties LIMIT 1",
+                name=name,
+            )
+        else:
+            records = self._run(
+                "MATCH (n) WHERE n.name = $name "
+                "RETURN elementId(n) AS element_id, labels(n) AS labels, "
+                "properties(n) AS properties LIMIT 1",
+                name=name,
+            )
+        return records[0] if records else None
+
+    # ==================== 属性操作 ====================
+
+    def delete_node_property(self, element_id: str, property_key: str) -> dict | None:
+        """删除节点的指定属性."""
+        records = self._run(
+            "MATCH (n) WHERE elementId(n) = $eid "
+            f"SET n.`{property_key}` = null "
+            "RETURN elementId(n) AS element_id, labels(n) AS labels, "
+            "properties(n) AS properties",
+            eid=element_id,
+        )
+        return records[0] if records else None
+
+    # ==================== 关系写操作 ====================
+
+    def create_relationship(
+        self,
+        source_id: str,
+        target_id: str,
+        rel_type: str,
+        properties: dict | None = None,
+    ) -> dict:
+        """在两个节点间创建关系."""
+        props = properties or {}
+        records = self._run(
+            f"MATCH (a), (b) "
+            "WHERE elementId(a) = $src AND elementId(b) = $tgt "
+            f"CREATE (a)-[r:`{rel_type}`]->(b) SET r = $props "
+            "RETURN elementId(r) AS element_id, type(r) AS type, "
+            "elementId(a) AS source_id, a.name AS source_name, "
+            "elementId(b) AS target_id, b.name AS target_name, "
+            "properties(r) AS properties",
+            src=source_id, tgt=target_id, props=props,
+        )
+        return records[0] if records else None
+
+    def update_relationship_properties(self, rel_element_id: str, properties: dict) -> dict | None:
+        """更新关系属性."""
+        records = self._run(
+            "MATCH ()-[r]->() WHERE elementId(r) = $eid "
+            "SET r += $props "
+            "RETURN elementId(r) AS element_id, type(r) AS type, "
+            "elementId(startNode(r)) AS source_id, startNode(r).name AS source_name, "
+            "elementId(endNode(r)) AS target_id, endNode(r).name AS target_name, "
+            "properties(r) AS properties",
+            eid=rel_element_id, props=properties,
+        )
+        return records[0] if records else None
+
+    def get_relationship_by_id(self, rel_element_id: str) -> dict | None:
+        """获取关系详情."""
+        records = self._run(
+            "MATCH (a)-[r]->(b) WHERE elementId(r) = $eid "
+            "RETURN elementId(r) AS element_id, type(r) AS type, "
+            "elementId(a) AS source_id, a.name AS source_name, "
+            "elementId(b) AS target_id, b.name AS target_name, "
+            "properties(r) AS properties",
+            eid=rel_element_id,
+        )
+        return records[0] if records else None
+
+    def update_relationship_full(
+        self,
+        rel_element_id: str,
+        source_id: str | None = None,
+        target_id: str | None = None,
+        rel_type: str | None = None,
+        properties: dict | None = None,
+    ) -> dict | None:
+        """全量更新关系（源/目标/类型/属性均可改）."""
+        old = self.get_relationship_by_id(rel_element_id)
+        if not old:
+            return None
+
+        new_src = source_id or old["source_id"]
+        new_tgt = target_id or old["target_id"]
+        new_type = rel_type or old["type"]
+        props = properties if properties is not None else old["properties"]
+
+        # 删除旧关系，创建新关系
+        self.delete_relationship(rel_element_id)
+        return self.create_relationship(new_src, new_tgt, new_type, props)
+
+    def delete_relationship(self, rel_element_id: str) -> bool:
+        """删除关系."""
+        records = self._run(
+            "MATCH ()-[r]->() WHERE elementId(r) = $eid DELETE r "
+            "RETURN count(r) AS deleted",
+            eid=rel_element_id,
+        )
+        return records[0].get("deleted", 0) > 0 if records else False
+
+    def find_relationship(
+        self, source_id: str, target_id: str, rel_type: str
+    ) -> dict | None:
+        """查找两个节点间指定类型的关系（用于重复检测）."""
+        records = self._run(
+            f"MATCH (a)-[r:`{rel_type}`]->(b) "
+            "WHERE elementId(a) = $src AND elementId(b) = $tgt "
+            "RETURN elementId(r) AS element_id LIMIT 1",
+            src=source_id, tgt=target_id,
+        )
+        return records[0] if records else None
+
+    # ==================== 元数据（编辑用） ====================
+
+    def get_all_labels(self) -> list[str]:
+        """获取数据库中所有存在的标签."""
+        records = self._run("CALL db.labels()")
+        return [r["label"] for r in records]
+
+    def get_all_relationship_type_names(self) -> list[str]:
+        """获取所有关系类型名称."""
+        records = self._run("CALL db.relationshipTypes()")
+        return [r["relationshipType"] for r in records]

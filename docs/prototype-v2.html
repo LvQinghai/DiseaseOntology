@@ -1,0 +1,761 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>疾病本体知识图谱平台 v2.0 — 原型</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; background:#f0f2f5; height:100vh; overflow:hidden; }
+
+  /* ===== 顶部栏 ===== */
+  .app-header { height:48px; background:linear-gradient(135deg,#001529 0%,#002140 50%,#001f33 100%); display:flex; align-items:center; justify-content:space-between; padding:0 24px; flex-shrink:0; box-shadow:0 1px 4px rgba(0,0,0,0.25); border-bottom:1px solid rgba(255,255,255,0.08); }
+  .header-left { display:flex; align-items:center; gap:10px; }
+  .app-logo { color:#1890ff; font-size:16px; }
+  .app-title { color:rgba(255,255,255,0.95); font-size:14px; font-weight:600; }
+  .app-title .v2-badge { background:#52c41a; color:#fff; font-size:10px; padding:1px 6px; border-radius:3px; margin-left:6px; vertical-align:middle; }
+  .header-subtitle { color:rgba(255,255,255,0.45); font-size:12px; }
+
+  /* ===== 主布局 ===== */
+  .main-content { flex:1; display:flex; overflow:hidden; min-height:0; height:calc(100vh - 48px); }
+
+  /* ===== 左侧面板 ===== */
+  .panel-left { width:300px; background:#fff; border-right:1px solid #e8e8e8; display:flex; flex-direction:column; }
+  .panel-header { display:flex; align-items:center; gap:8px; padding:10px 16px; font-size:13px; font-weight:600; color:#262626; border-bottom:1px solid #f0f0f0; background:#fafafa; }
+  .panel-header .icon { color:#1890ff; font-size:14px; }
+
+  /* 工具栏 */
+  .toolbar { display:flex; gap:6px; padding:8px 12px; background:#fafafa; border-bottom:1px solid #f0f0f0; }
+  .toolbar-btn { padding:4px 10px; font-size:12px; border:1px solid #d9d9d9; background:#fff; border-radius:4px; cursor:pointer; color:#595959; transition:all 0.2s; }
+  .toolbar-btn:hover { border-color:#1890ff; color:#1890ff; }
+  .toolbar-btn.primary { background:#1890ff; color:#fff; border-color:#1890ff; }
+  .toolbar-btn.primary:hover { background:#40a9ff; }
+
+  /* 统计条 */
+  .stats-bar { display:flex; align-items:center; gap:18px; padding:8px 16px; background:#fafafa; border-bottom:1px solid #f0f0f0; }
+  .stats-item { font-size:12px; color:#595959; display:flex; align-items:center; gap:5px; }
+  .stats-dot { display:inline-block; width:8px; height:8px; border-radius:50%; }
+
+  /* 树 */
+  .tree-container { flex:1; overflow-y:auto; padding:6px 0 12px 4px; }
+  .tree-node { display:flex; align-items:center; gap:6px; padding:3px 8px; margin:1px 0; border-radius:4px; cursor:pointer; transition:background 0.15s; line-height:1.6; min-height:28px; }
+  .tree-node:hover { background:#f0f5ff; }
+  .tree-node.selected { background:#e6f7ff; }
+  .tree-node .node-dot { width:8px; height:8px; border-radius:50%; flex-shrink:0; }
+  .tree-node .node-label { font-size:13px; color:#262626; }
+  .tree-node .node-tag { font-size:10px; font-weight:500; border:1px solid; border-radius:3px; padding:0 4px; line-height:16px; flex-shrink:0; opacity:0.75; }
+  .tree-indent { width:24px; flex-shrink:0; }
+  .tree-expand-icon { width:16px; text-align:center; color:#bfbfbf; font-size:12px; flex-shrink:0; cursor:pointer; }
+  .tree-expand-icon.expanded { color:#1890ff; }
+  .tree-expand-icon:hover { color:#1890ff; }
+
+  /* ===== 中间面板 ===== */
+  .panel-center { width:420px; background:#fafafa; border-right:1px solid #e8e8e8; display:flex; flex-direction:column; }
+  .detail-section { flex:1; display:flex; flex-direction:column; border-bottom:1px solid #e8e8e8; background:#fff; }
+  .detail-body { flex:1; overflow-y:auto; padding:14px 16px; }
+  .detail-node-name { font-size:18px; font-weight:700; color:#262626; margin-bottom:6px; display:flex; align-items:center; gap:8px; }
+  .detail-tag { font-size:11px; padding:1px 8px; border-radius:3px; color:#fff; }
+  .detail-actions { display:flex; gap:6px; margin-bottom:12px; }
+  .detail-actions .btn { padding:4px 12px; font-size:12px; border:1px solid #d9d9d9; background:#fff; border-radius:4px; cursor:pointer; }
+  .detail-actions .btn.edit { border-color:#1890ff; color:#1890ff; }
+  .detail-actions .btn.delete { border-color:#ff4d4f; color:#ff4d4f; }
+  .detail-actions .btn:hover { opacity:0.8; }
+  .sub-title { font-size:11px; font-weight:600; color:#8c8c8c; text-transform:uppercase; letter-spacing:0.5px; margin:12px 0 6px; padding-bottom:4px; border-bottom:1px solid #f5f5f5; display:flex; align-items:center; justify-content:space-between; }
+  .sub-title .add-btn { color:#1890ff; cursor:pointer; font-size:14px; }
+  .prop-row { display:flex; justify-content:space-between; align-items:center; padding:5px 0; border-bottom:1px solid #fafafa; font-size:13px; }
+  .prop-row:hover { background:#fafafa; }
+  .prop-key { color:#8c8c8c; flex-shrink:0; margin-right:12px; }
+  .prop-value { color:#262626; text-align:right; word-break:break-all; }
+  .prop-actions { display:flex; gap:4px; margin-left:8px; }
+  .prop-actions span { cursor:pointer; font-size:12px; opacity:0; transition:opacity 0.2s; }
+  .prop-row:hover .prop-actions span { opacity:1; }
+  .prop-actions .edit-icon { color:#1890ff; }
+  .prop-actions .delete-icon { color:#ff4d4f; }
+  .rel-row { display:flex; align-items:center; gap:8px; padding:6px 10px; margin:2px 0; border-radius:4px; font-size:12px; background:#fafafa; border:1px solid transparent; transition:all 0.2s; position:relative; }
+  .rel-row:hover { background:#e6f7ff; border-color:#91d5ff; }
+  .rel-row .rel-type { color:#1890ff; font-weight:600; font-size:11px; background:#e6f7ff; padding:1px 6px; border-radius:3px; }
+  .rel-row .rel-arrow { color:#bfbfbf; }
+  .rel-row .rel-target { color:#262626; font-weight:500; }
+  .rel-row .rel-actions { position:absolute; right:8px; display:none; gap:4px; }
+  .rel-row:hover .rel-actions { display:flex; }
+  .rel-actions span { cursor:pointer; font-size:12px; }
+
+  /* 查询区 */
+  .query-section { height:40%; min-height:280px; display:flex; flex-direction:column; background:#fff; }
+  .query-body { flex:1; display:flex; flex-direction:column; justify-content:center; align-items:center; overflow:hidden; }
+  .input-area { display:flex; align-items:flex-start; gap:10px; padding:16px; width:100%; }
+  .input-area textarea { flex:1; min-height:100px; resize:vertical; font-size:14px; line-height:1.6; padding:8px 12px; border:1px solid #d9d9d9; border-radius:4px; }
+  .input-area textarea:focus { border-color:#1890ff; outline:none; }
+  .input-area button { padding:8px 16px; background:#1890ff; color:#fff; border:none; border-radius:4px; cursor:pointer; height:36px; }
+
+  /* ===== 右侧面板 ===== */
+  .panel-right { flex:1; background:#fafafa; display:flex; flex-direction:column; }
+  .graph-placeholder { flex:1; display:flex; align-items:center; justify-content:center; flex-direction:column; gap:12px; color:#bfbfbf; }
+  .graph-placeholder .graph-icon { font-size:48px; }
+  .graph-mode-bar { display:flex; gap:8px; padding:10px 16px; background:#fff; border-bottom:1px solid #f0f0f0; }
+  .graph-mode-btn { padding:4px 14px; font-size:12px; border:1px solid #d9d9d9; background:#fff; border-radius:4px; cursor:pointer; }
+  .graph-mode-btn.active { background:#1890ff; color:#fff; border-color:#1890ff; }
+
+  /* ===== 右键菜单 ===== */
+  .context-menu { position:fixed; background:#fff; border:1px solid #e8e8e8; border-radius:6px; box-shadow:0 4px 16px rgba(0,0,0,0.15); z-index:1000; min-width:160px; padding:4px 0; }
+  .context-menu-item { padding:8px 16px; font-size:13px; color:#262626; cursor:pointer; display:flex; align-items:center; gap:8px; transition:background 0.15s; }
+  .context-menu-item:hover { background:#f0f5ff; }
+  .context-menu-item.danger { color:#ff4d4f; }
+  .context-menu-item.danger:hover { background:#fff1f0; }
+  .context-menu-divider { height:1px; background:#f0f0f0; margin:4px 0; }
+  .context-menu-item .menu-icon { width:16px; text-align:center; }
+
+  /* ===== 弹窗遮罩 ===== */
+  .modal-mask { position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.45); z-index:900; display:flex; align-items:center; justify-content:center; }
+
+  /* ===== 实体编辑器弹窗 ===== */
+  .modal { background:#fff; border-radius:8px; box-shadow:0 8px 32px rgba(0,0,0,0.2); width:520px; max-height:80vh; overflow:hidden; display:flex; flex-direction:column; }
+  .modal-header { padding:16px 24px; border-bottom:1px solid #f0f0f0; display:flex; align-items:center; justify-content:space-between; }
+  .modal-header h3 { font-size:15px; font-weight:600; color:#262626; }
+  .modal-close { cursor:pointer; color:#bfbfbf; font-size:18px; line-height:1; }
+  .modal-close:hover { color:#262626; }
+  .modal-body { flex:1; overflow-y:auto; padding:20px 24px; }
+  .modal-footer { padding:12px 24px; border-top:1px solid #f0f0f0; display:flex; justify-content:flex-end; gap:8px; }
+
+  .form-group { margin-bottom:16px; }
+  .form-label { font-size:13px; font-weight:500; color:#262626; margin-bottom:6px; display:block; }
+  .form-label .required { color:#ff4d4f; }
+  .form-control { width:100%; padding:8px 12px; font-size:13px; border:1px solid #d9d9d9; border-radius:4px; transition:border-color 0.2s; }
+  .form-control:focus { border-color:#1890ff; outline:none; box-shadow:0 0 0 2px rgba(24,144,255,0.1); }
+  .form-select { width:100%; padding:8px 12px; font-size:13px; border:1px solid #d9d9d9; border-radius:4px; background:#fff; cursor:pointer; }
+  .form-hint { font-size:11px; color:#bfbfbf; margin-top:4px; }
+
+  /* 属性编辑表格 */
+  .prop-editor { border:1px solid #e8e8e8; border-radius:4px; }
+  .prop-editor-header { display:flex; background:#fafafa; border-bottom:1px solid #e8e8e8; padding:8px 12px; font-size:12px; font-weight:600; color:#8c8c8c; }
+  .prop-editor-header .col-key { flex:1; }
+  .prop-editor-header .col-value { flex:2; }
+  .prop-editor-header .col-action { width:40px; text-align:center; }
+  .prop-editor-row { display:flex; padding:4px 12px; border-bottom:1px solid #f5f5f5; align-items:center; }
+  .prop-editor-row:last-child { border-bottom:none; }
+  .prop-editor-row input { border:1px solid transparent; background:transparent; padding:6px 4px; font-size:13px; border-radius:3px; }
+  .prop-editor-row input:focus { border-color:#1890ff; background:#fff; outline:none; }
+  .prop-editor-row .col-key { flex:1; }
+  .prop-editor-row .col-value { flex:2; }
+  .prop-editor-row .col-action { width:40px; text-align:center; }
+  .prop-remove { color:#ff4d4f; cursor:pointer; font-size:14px; }
+  .prop-add { display:flex; align-items:center; justify-content:center; padding:8px; color:#1890ff; cursor:pointer; font-size:13px; border-top:1px dashed #e8e8e8; }
+  .prop-add:hover { background:#f0f5ff; }
+
+  /* 按钮 */
+  .btn { padding:8px 20px; font-size:13px; border:1px solid #d9d9d9; background:#fff; border-radius:4px; cursor:pointer; transition:all 0.2s; }
+  .btn:hover { opacity:0.85; }
+  .btn-primary { background:#1890ff; color:#fff; border-color:#1890ff; }
+  .btn-primary:hover { background:#40a9ff; }
+  .btn-danger { background:#ff4d4f; color:#fff; border-color:#ff4d4f; }
+
+  /* 删除确认弹窗 */
+  .confirm-body { text-align:center; padding:32px 24px; }
+  .confirm-icon { font-size:48px; margin-bottom:16px; }
+  .confirm-title { font-size:15px; font-weight:600; color:#262626; margin-bottom:8px; }
+  .confirm-desc { font-size:13px; color:#595959; line-height:1.6; }
+  .confirm-desc .highlight { color:#ff4d4f; font-weight:600; }
+
+  /* 关系编辑器弹窗 */
+  .rel-node-display { background:#f5f5f5; border:1px solid #e8e8e8; border-radius:4px; padding:10px 14px; font-size:13px; }
+  .rel-node-display .node-type-badge { font-size:10px; padding:0 6px; border-radius:2px; color:#fff; margin-right:6px; }
+  .rel-direction { text-align:center; font-size:20px; color:#bfbfbf; margin:8px 0; }
+
+  /* 图谱内模拟节点 */
+  .graph-canvas-area { flex:1; position:relative; overflow:hidden; }
+  .graph-mock-node { position:absolute; width:60px; height:60px; border-radius:50%; display:flex; align-items:center; justify-content:center; color:#fff; font-size:10px; font-weight:600; cursor:pointer; box-shadow:0 2px 8px rgba(0,0,0,0.15); transition:transform 0.2s; }
+  .graph-mock-node:hover { transform:scale(1.1); }
+  .graph-mock-node.selected { box-shadow:0 0 0 3px #1890ff, 0 2px 8px rgba(0,0,0,0.15); }
+  .graph-mock-edge { position:absolute; background:#d9d9d9; height:2px; transform-origin:left center; }
+  .graph-mock-edge-label { position:absolute; font-size:10px; color:#8c8c8c; background:#fff; padding:1px 4px; border-radius:2px; }
+  .graph-action-bar { position:absolute; bottom:16px; left:50%; transform:translateX(-50%); display:flex; gap:8px; background:#fff; padding:8px 16px; border-radius:24px; box-shadow:0 2px 12px rgba(0,0,0,0.1); }
+
+  /* 标签页 */
+  .tab-bar { display:flex; border-bottom:1px solid #f0f0f0; background:#fafafa; }
+  .tab-item { padding:8px 20px; font-size:13px; color:#595959; cursor:pointer; border-bottom:2px solid transparent; }
+  .tab-item.active { color:#1890ff; border-bottom-color:#1890ff; font-weight:500; }
+  .tab-content { display:none; }
+  .tab-content.active { display:block; }
+
+  /* 隐藏元素 */
+  .hidden { display:none !important; }
+</style>
+</head>
+<body>
+
+<!-- 顶部栏 -->
+<header class="app-header">
+  <div class="header-left">
+    <span class="app-logo">●</span>
+    <span class="app-title">疾病本体知识图谱平台 <span class="v2-badge">v2.0</span></span>
+  </div>
+  <div class="header-right">
+    <span class="header-subtitle">本体编辑与管理</span>
+  </div>
+</header>
+
+<!-- 主内容区 -->
+<div class="main-content">
+
+  <!-- ===== 左侧：本体浏览器 ===== -->
+  <aside class="panel-left">
+    <div class="panel-header">
+      <span class="icon">🌿</span>
+      <span>本体与关系浏览器</span>
+    </div>
+
+    <!-- 工具栏 -->
+    <div class="toolbar">
+      <button class="toolbar-btn primary" onclick="openEntityEditor('create')">+ 新增实体</button>
+      <button class="toolbar-btn" onclick="showToast('批量导入功能开发中')">导入</button>
+    </div>
+
+    <!-- 统计条 -->
+    <div class="stats-bar">
+      <span class="stats-item"><i class="stats-dot" style="background:#1890ff"></i>55 个节点</span>
+      <span class="stats-item"><i class="stats-dot" style="background:#52c41a"></i>112 条关系</span>
+    </div>
+
+    <!-- 树结构 -->
+    <div class="tree-container" id="treeArea">
+      <!-- Disease -->
+      <div class="tree-node" style="padding-left:8px; font-weight:600;">
+        <span class="tree-expand-icon expanded">▾</span>
+        <span style="color:#8c8c8c;">📁</span>
+        <span class="node-label">Disease</span>
+        <span style="font-size:11px; color:#595959; background:#f0f0f0; padding:0 5px; border-radius:8px;">19</span>
+      </div>
+      <div class="tree-node" style="padding-left:32px;">
+        <span class="tree-expand-icon expanded">▾</span>
+        <span class="node-dot" style="background:#f5222d;"></span>
+        <span class="node-label">感染性疾病</span>
+        <span class="node-tag" style="color:#f5222d; border-color:#f5222d;">Disease</span>
+      </div>
+      <div class="tree-node" style="padding-left:56px;" oncontextmenu="showContextMenu(event, '上呼吸道感染', 'Disease', this)">
+        <span class="tree-expand-icon">▸</span>
+        <span class="node-dot" style="background:#f5222d;"></span>
+        <span class="node-label">上呼吸道感染</span>
+        <span class="node-tag" style="color:#f5222d; border-color:#f5222d;">Disease</span>
+      </div>
+      <div class="tree-node" style="padding-left:56px;" oncontextmenu="showContextMenu(event, '下呼吸道感染', 'Disease', this)">
+        <span class="tree-expand-icon">▸</span>
+        <span class="node-dot" style="background:#f5222d;"></span>
+        <span class="node-label">下呼吸道感染</span>
+        <span class="node-tag" style="color:#f5222d; border-color:#f5222d;">Disease</span>
+      </div>
+      <div class="tree-node" style="padding-left:32px;" oncontextmenu="showContextMenu(event, '心血管疾病', 'Disease', this)">
+        <span class="tree-expand-icon">▸</span>
+        <span class="node-dot" style="background:#f5222d;"></span>
+        <span class="node-label">心血管疾病</span>
+        <span class="node-tag" style="color:#f5222d; border-color:#f5222d;">Disease</span>
+      </div>
+      <div class="tree-node" style="padding-left:32px;" oncontextmenu="showContextMenu(event, '消化系统疾病', 'Disease', this)">
+        <span class="tree-expand-icon">▸</span>
+        <span class="node-dot" style="background:#f5222d;"></span>
+        <span class="node-label">消化系统疾病</span>
+        <span class="node-tag" style="color:#f5222d; border-color:#f5222d;">Disease</span>
+      </div>
+      <div class="tree-node" style="padding-left:32px;" oncontextmenu="showContextMenu(event, '严重主动脉瓣狭窄', 'Disease', this)">
+        <span style="width:16px;"></span>
+        <span class="node-dot" style="background:#f5222d;"></span>
+        <span class="node-label">严重主动脉瓣狭窄</span>
+        <span class="node-tag" style="color:#f5222d; border-color:#f5222d;">Disease</span>
+      </div>
+      <div class="tree-node" style="padding-left:32px;" oncontextmenu="showContextMenu(event, '青霉素过敏', 'Disease', this)">
+        <span style="width:16px;"></span>
+        <span class="node-dot" style="background:#f5222d;"></span>
+        <span class="node-label">青霉素过敏</span>
+        <span class="node-tag" style="color:#f5222d; border-color:#f5222d;">Disease</span>
+      </div>
+
+      <!-- Symptom -->
+      <div class="tree-node" style="padding-left:8px; font-weight:600; margin-top:8px;">
+        <span class="tree-expand-icon">▸</span>
+        <span style="color:#8c8c8c;">📁</span>
+        <span class="node-label">Symptom</span>
+        <span style="font-size:11px; color:#595959; background:#f0f0f0; padding:0 5px; border-radius:8px;">14</span>
+      </div>
+
+      <!-- Drug -->
+      <div class="tree-node" style="padding-left:8px; font-weight:600;">
+        <span class="tree-expand-icon">▸</span>
+        <span style="color:#8c8c8c;">📁</span>
+        <span class="node-label">Drug</span>
+        <span style="font-size:11px; color:#595959; background:#f0f0f0; padding:0 5px; border-radius:8px;">8</span>
+      </div>
+
+      <!-- BodyPart -->
+      <div class="tree-node" style="padding-left:8px; font-weight:600;">
+        <span class="tree-expand-icon">▸</span>
+        <span style="color:#8c8c8c;">📁</span>
+        <span class="node-label">BodyPart</span>
+        <span style="font-size:11px; color:#595959; background:#f0f0f0; padding:0 5px; border-radius:8px;">7</span>
+      </div>
+
+      <!-- SideEffect -->
+      <div class="tree-node" style="padding-left:8px; font-weight:600;">
+        <span class="tree-expand-icon">▸</span>
+        <span style="color:#8c8c8c;">📁</span>
+        <span class="node-label">SideEffect</span>
+        <span style="font-size:11px; color:#595959; background:#f0f0f0; padding:0 5px; border-radius:8px;">7</span>
+      </div>
+
+      <!-- 关系 -->
+      <div class="tree-node" style="padding-left:8px; font-weight:600; margin-top:8px;">
+        <span class="tree-expand-icon">▸</span>
+        <span style="color:#1890ff;">🔗</span>
+        <span class="node-label">关系</span>
+        <span style="font-size:11px; color:#1890ff; background:#e6f7ff; padding:0 5px; border-radius:8px;">7</span>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ===== 中间：详情 + 查询 ===== -->
+  <main class="panel-center">
+    <!-- 详情区 -->
+    <div class="detail-section">
+      <div class="panel-header">
+        <span class="icon">ℹ️</span>
+        <span>详情</span>
+      </div>
+      <div class="detail-body">
+        <div class="detail-node-name">
+          上呼吸道感染
+          <span class="detail-tag" style="background:#f5222d;">Disease</span>
+        </div>
+
+        <div class="detail-actions">
+          <button class="btn edit" onclick="openEntityEditor('edit')">✏️ 编辑</button>
+          <button class="btn delete" onclick="openDeleteConfirm()">🗑 删除</button>
+        </div>
+
+        <div class="sub-title">
+          属性
+          <span class="add-btn" onclick="showToast('添加属性行')">+</span>
+        </div>
+        <div class="prop-row">
+          <span class="prop-key">name</span>
+          <span class="prop-value">上呼吸道感染</span>
+          <span class="prop-actions">
+            <span class="edit-icon" onclick="showToast('编辑属性')">✏️</span>
+            <span class="delete-icon" onclick="showToast('删除属性')">🗑</span>
+          </span>
+        </div>
+        <div class="prop-row">
+          <span class="prop-key">icd_prefix</span>
+          <span class="prop-value">J06</span>
+          <span class="prop-actions">
+            <span class="edit-icon" onclick="showToast('编辑属性')">✏️</span>
+            <span class="delete-icon" onclick="showToast('删除属性')">🗑</span>
+          </span>
+        </div>
+        <div class="prop-row">
+          <span class="prop-key">definition</span>
+          <span class="prop-value">鼻腔、咽或喉部急性炎症的总称</span>
+          <span class="prop-actions">
+            <span class="edit-icon" onclick="showToast('编辑属性')">✏️</span>
+            <span class="delete-icon" onclick="showToast('删除属性')">🗑</span>
+          </span>
+        </div>
+
+        <div class="sub-title">
+          出边关系 (3)
+          <span class="add-btn" onclick="openRelationshipEditor('create')">+</span>
+        </div>
+        <div class="rel-row">
+          <span class="rel-type">MANIFESTS_IN</span>
+          <span class="rel-arrow">→</span>
+          <span class="rel-target">发热</span>
+          <span class="rel-actions">
+            <span onclick="openRelationshipEditor('edit')" style="color:#1890ff;">✏️</span>
+            <span onclick="showToast('删除关系')" style="color:#ff4d4f;">🗑</span>
+          </span>
+        </div>
+        <div class="rel-row">
+          <span class="rel-type">MANIFESTS_IN</span>
+          <span class="rel-arrow">→</span>
+          <span class="rel-target">咳嗽</span>
+          <span class="rel-actions">
+            <span onclick="openRelationshipEditor('edit')" style="color:#1890ff;">✏️</span>
+            <span onclick="showToast('删除关系')" style="color:#ff4d4f;">🗑</span>
+          </span>
+        </div>
+        <div class="rel-row">
+          <span class="rel-type">AFFECTS</span>
+          <span class="rel-arrow">→</span>
+          <span class="rel-target">呼吸系统</span>
+          <span class="rel-actions">
+            <span onclick="openRelationshipEditor('edit')" style="color:#1890ff;">✏️</span>
+            <span onclick="showToast('删除关系')" style="color:#ff4d4f;">🗑</span>
+          </span>
+        </div>
+
+        <div class="sub-title">
+          入边关系 (2)
+        </div>
+        <div class="rel-row">
+          <span class="rel-type">SUB_CLASS_OF</span>
+          <span class="rel-arrow">←</span>
+          <span class="rel-target">普通感冒</span>
+        </div>
+        <div class="rel-row">
+          <span class="rel-type">SUB_CLASS_OF</span>
+          <span class="rel-arrow">←</span>
+          <span class="rel-target">流行性感冒</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 查询区 -->
+    <div class="query-section">
+      <div class="panel-header">
+        <span class="icon">🔍</span>
+        <span>疾病与诊疗查询</span>
+      </div>
+      <div class="query-body">
+        <div class="input-area">
+          <textarea placeholder="输入自然语言问题，例如: '感冒有什么症状?'"></textarea>
+          <button>➤</button>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- ===== 右侧：图谱画布 ===== -->
+  <aside class="panel-right">
+    <div class="panel-header">
+      <span class="icon">🕸️</span>
+      <span>图谱画布</span>
+    </div>
+    <div class="graph-mode-bar">
+      <button class="graph-mode-btn active">总览</button>
+      <button class="graph-mode-btn">邻域</button>
+      <button class="graph-mode-btn">最短路径</button>
+    </div>
+    <div class="graph-canvas-area" id="graphArea">
+      <!-- 模拟图谱节点 -->
+      <div class="graph-mock-node" style="background:#f5222d; top:20%; left:30%; width:70px; height:70px;" onclick="selectGraphNode(this, '上呼吸道感染')">上呼吸道<br>感染</div>
+      <div class="graph-mock-node" style="background:#f5222d; top:15%; left:60%; width:60px; height:60px;" onclick="selectGraphNode(this, '感染性疾病')">感染性<br>疾病</div>
+      <div class="graph-mock-node" style="background:#fa8c16; top:45%; left:20%;" onclick="selectGraphNode(this, '发热')">发热</div>
+      <div class="graph-mock-node" style="background:#fa8c16; top:50%; left:40%;" onclick="selectGraphNode(this, '咳嗽')">咳嗽</div>
+      <div class="graph-mock-node" style="background:#52c41a; top:40%; left:65%;" onclick="selectGraphNode(this, '呼吸系统')">呼吸系统</div>
+      <div class="graph-mock-node" style="background:#1890ff; top:70%; left:35%;" onclick="selectGraphNode(this, '布洛芬')">布洛芬</div>
+      <div class="graph-mock-node" style="background:#722ed1; top:75%; left:60%;" onclick="selectGraphNode(this, '胃肠道不适')">胃肠道<br>不适</div>
+
+      <!-- 模拟连线 -->
+      <div class="graph-mock-edge" style="top:28%; left:38%; width:120px; transform:rotate(-10deg);"></div>
+      <div class="graph-mock-edge" style="top:40%; left:28%; width:80px; transform:rotate(30deg);"></div>
+      <div class="graph-mock-edge" style="top:48%; left:42%; width:100px; transform:rotate(-5deg);"></div>
+      <div class="graph-mock-edge" style="top:38%; left:55%; width:60px; transform:rotate(15deg);"></div>
+      <div class="graph-mock-edge" style="top:65%; left:40%; width:80px; transform:rotate(25deg);"></div>
+
+      <!-- 图谱操作栏 -->
+      <div class="graph-action-bar">
+        <button class="toolbar-btn" onclick="showToast('框选两个节点后可创建关系')">🔗 连接</button>
+        <button class="toolbar-btn" onclick="openEntityEditor('create')">+ 新增节点</button>
+      </div>
+    </div>
+  </aside>
+</div>
+
+<!-- ===== 右键菜单 ===== -->
+<div class="context-menu hidden" id="contextMenu">
+  <div class="context-menu-item" onclick="closeContextMenu(); openEntityEditor('edit')">
+    <span class="menu-icon">✏️</span> 编辑节点
+  </div>
+  <div class="context-menu-item" onclick="closeContextMenu(); openEntityEditor('create-child')">
+    <span class="menu-icon">➕</span> 新增子类
+  </div>
+  <div class="context-menu-item" onclick="closeContextMenu(); openRelationshipEditor('create')">
+    <span class="menu-icon">🔗</span> 新增关系
+  </div>
+  <div class="context-menu-divider"></div>
+  <div class="context-menu-item danger" onclick="closeContextMenu(); openDeleteConfirm()">
+    <span class="menu-icon">🗑</span> 删除节点
+  </div>
+</div>
+
+<!-- ===== 实体编辑器弹窗 ===== -->
+<div class="modal-mask hidden" id="entityEditorModal">
+  <div class="modal">
+    <div class="modal-header">
+      <h3 id="entityEditorTitle">新增实体</h3>
+      <span class="modal-close" onclick="closeModal('entityEditorModal')">×</span>
+    </div>
+    <div class="modal-body">
+      <!-- 标签页 -->
+      <div class="tab-bar">
+        <div class="tab-item active" onclick="switchTab(this, 'tabBasic')">基本信息</div>
+        <div class="tab-item" onclick="switchTab(this, 'tabProps')">属性编辑</div>
+      </div>
+
+      <!-- 基本信息 Tab -->
+      <div class="tab-content active" id="tabBasic">
+        <div class="form-group">
+          <label class="form-label">标签 (Label) <span class="required">*</span></label>
+          <select class="form-select" id="entityLabel">
+            <option value="Disease">Disease</option>
+            <option value="Symptom">Symptom</option>
+            <option value="Drug">Drug</option>
+            <option value="BodyPart">BodyPart</option>
+            <option value="SideEffect">SideEffect</option>
+            <option value="__new__">+ 新建标签...</option>
+          </select>
+          <div class="form-hint">选择已有标签或创建新标签</div>
+        </div>
+        <div class="form-group" id="newLabelGroup" style="display:none;">
+          <label class="form-label">新标签名称 <span class="required">*</span></label>
+          <input class="form-control" placeholder="输入新标签名称" id="newLabelInput">
+        </div>
+        <div class="form-group">
+          <label class="form-label">节点名称 <span class="required">*</span></label>
+          <input class="form-control" placeholder="输入节点名称" id="entityName" value="上呼吸道感染">
+        </div>
+        <div class="form-group" id="parentNodeGroup">
+          <label class="form-label">父类节点</label>
+          <div class="rel-node-display">
+            <span class="node-type-badge" style="background:#f5222d;">Disease</span>
+            <span id="parentNodeName">感染性疾病</span>
+          </div>
+          <div class="form-hint">创建后自动建立 SUB_CLASS_OF 关系</div>
+        </div>
+      </div>
+
+      <!-- 属性编辑 Tab -->
+      <div class="tab-content" id="tabProps">
+        <div class="form-group">
+          <label class="form-label">属性列表</label>
+          <div class="prop-editor">
+            <div class="prop-editor-header">
+              <span class="col-key">属性名</span>
+              <span class="col-value">属性值</span>
+              <span class="col-action"></span>
+            </div>
+            <div class="prop-editor-row">
+              <input class="col-key" value="name" placeholder="属性名">
+              <input class="col-value" value="上呼吸道感染" placeholder="属性值">
+              <span class="col-action prop-remove" onclick="this.parentElement.remove()">×</span>
+            </div>
+            <div class="prop-editor-row">
+              <input class="col-key" value="icd_prefix" placeholder="属性名">
+              <input class="col-value" value="J06" placeholder="属性值">
+              <span class="col-action prop-remove" onclick="this.parentElement.remove()">×</span>
+            </div>
+            <div class="prop-editor-row">
+              <input class="col-key" value="definition" placeholder="属性名">
+              <input class="col-value" value="鼻腔、咽或喉部急性炎症的总称" placeholder="属性值">
+              <span class="col-action prop-remove" onclick="this.parentElement.remove()">×</span>
+            </div>
+            <div class="prop-add" onclick="addPropRow(this)">+ 添加属性</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn" onclick="closeModal('entityEditorModal')">取消</button>
+      <button class="btn btn-primary" onclick="saveEntity()">保存</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== 关系编辑器弹窗 ===== -->
+<div class="modal-mask hidden" id="relEditorModal">
+  <div class="modal" style="width:480px;">
+    <div class="modal-header">
+      <h3 id="relEditorTitle">创建关系</h3>
+      <span class="modal-close" onclick="closeModal('relEditorModal')">×</span>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label class="form-label">源节点</label>
+        <div class="rel-node-display">
+          <span class="node-type-badge" style="background:#f5222d;">Disease</span>
+          上呼吸道感染
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">关系类型 <span class="required">*</span></label>
+        <select class="form-select">
+          <option>MANIFESTS_IN</option>
+          <option>SUB_CLASS_OF</option>
+          <option>AFFECTS</option>
+          <option>TREATS</option>
+          <option>HAS_SIDE_EFFECT</option>
+          <option>CONTRAINDICATED_WITH</option>
+          <option>CAN_SUBSTITUTE</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">目标节点 <span class="required">*</span></label>
+        <input class="form-control" placeholder="🔍 搜索节点名称..." style="margin-bottom:8px;">
+        <div class="rel-node-display" style="background:#fff; border:1px solid #d9d9d9; cursor:pointer;" onclick="this.style.borderColor='#1890ff'">
+          <span class="node-type-badge" style="background:#fa8c16;">Symptom</span>
+          发热
+        </div>
+        <div class="rel-node-display" style="background:#fff; border:1px solid #d9d9d9; cursor:pointer; margin-top:4px;" onclick="this.style.borderColor='#1890ff'">
+          <span class="node-type-badge" style="background:#fa8c16;">Symptom</span>
+          咳嗽
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">关系属性</label>
+        <div class="prop-editor">
+          <div class="prop-editor-header">
+            <span class="col-key">属性名</span>
+            <span class="col-value">属性值</span>
+            <span class="col-action"></span>
+          </div>
+          <div class="prop-add" onclick="addPropRow(this)">+ 添加属性</div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn" onclick="closeModal('relEditorModal')">取消</button>
+      <button class="btn btn-primary" onclick="saveRelationship()">创建</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== 删除确认弹窗 ===== -->
+<div class="modal-mask hidden" id="deleteConfirmModal">
+  <div class="modal" style="width:400px;">
+    <div class="confirm-body">
+      <div class="confirm-icon">⚠️</div>
+      <div class="confirm-title">确认删除节点？</div>
+      <div class="confirm-desc">
+        节点 <span class="highlight">「上呼吸道感染」</span> 将被永久删除。<br>
+        该节点关联了 <span class="highlight">5</span> 条关系，删除后所有关系将同时移除。<br>
+        此操作不可撤销。
+      </div>
+    </div>
+    <div class="modal-footer" style="justify-content:center;">
+      <button class="btn" onclick="closeModal('deleteConfirmModal')">取消</button>
+      <button class="btn btn-danger" onclick="confirmDelete()">确认删除</button>
+    </div>
+  </div>
+</div>
+
+<!-- Toast 提示 -->
+<div id="toast" style="position:fixed; top:60px; left:50%; transform:translateX(-50%); background:rgba(0,0,0,0.75); color:#fff; padding:8px 20px; border-radius:4px; font-size:13px; z-index:2000; display:none;"></div>
+
+<script>
+// ===== 右键菜单 =====
+function showContextMenu(e, nodeName, nodeType, el) {
+  e.preventDefault();
+  const menu = document.getElementById('contextMenu');
+  menu.classList.remove('hidden');
+  menu.style.left = e.clientX + 'px';
+  menu.style.top = e.clientY + 'px';
+
+  // 高亮当前节点
+  document.querySelectorAll('.tree-node').forEach(n => n.classList.remove('selected'));
+  el.classList.add('selected');
+}
+
+function closeContextMenu() {
+  document.getElementById('contextMenu').classList.add('hidden');
+}
+
+document.addEventListener('click', closeContextMenu);
+
+// ===== 弹窗控制 =====
+function openEntityEditor(mode) {
+  const modal = document.getElementById('entityEditorModal');
+  const title = document.getElementById('entityEditorTitle');
+  const parentGroup = document.getElementById('parentNodeGroup');
+  const nameInput = document.getElementById('entityName');
+
+  if (mode === 'create') {
+    title.textContent = '新增实体';
+    parentGroup.style.display = 'none';
+    nameInput.value = '';
+  } else if (mode === 'create-child') {
+    title.textContent = '新增子类实体';
+    parentGroup.style.display = 'block';
+    nameInput.value = '';
+  } else if (mode === 'edit') {
+    title.textContent = '编辑实体';
+    parentGroup.style.display = 'none';
+    nameInput.value = '上呼吸道感染';
+  }
+
+  modal.classList.remove('hidden');
+}
+
+function openRelationshipEditor(mode) {
+  const modal = document.getElementById('relEditorModal');
+  const title = document.getElementById('relEditorTitle');
+  title.textContent = mode === 'create' ? '创建关系' : '编辑关系';
+  modal.classList.remove('hidden');
+}
+
+function openDeleteConfirm() {
+  document.getElementById('deleteConfirmModal').classList.remove('hidden');
+}
+
+function closeModal(id) {
+  document.getElementById(id).classList.add('hidden');
+}
+
+// ===== 表单操作 =====
+function addPropRow(btn) {
+  const row = document.createElement('div');
+  row.className = 'prop-editor-row';
+  row.innerHTML = `
+    <input class="col-key" placeholder="属性名">
+    <input class="col-value" placeholder="属性值">
+    <span class="col-action prop-remove" onclick="this.parentElement.remove()">×</span>
+  `;
+  btn.parentElement.insertBefore(row, btn);
+}
+
+function switchTab(tabEl, tabId) {
+  document.querySelectorAll('.tab-item').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  tabEl.classList.add('active');
+  document.getElementById(tabId).classList.add('active');
+}
+
+// ===== 标签选择监听 =====
+document.getElementById('entityLabel').addEventListener('change', function() {
+  document.getElementById('newLabelGroup').style.display =
+    this.value === '__new__' ? 'block' : 'none';
+});
+
+// ===== 保存操作 =====
+function saveEntity() {
+  closeModal('entityEditorModal');
+  showToast('✅ 实体已保存');
+}
+
+function saveRelationship() {
+  closeModal('relEditorModal');
+  showToast('✅ 关系已创建');
+}
+
+function confirmDelete() {
+  closeModal('deleteConfirmModal');
+  showToast('🗑 节点已删除');
+}
+
+// ===== 图谱节点选择 =====
+function selectGraphNode(el, name) {
+  document.querySelectorAll('.graph-mock-node').forEach(n => n.classList.remove('selected'));
+  el.classList.add('selected');
+  showToast('已选中: ' + name);
+}
+
+// ===== Toast =====
+function showToast(msg) {
+  const toast = document.getElementById('toast');
+  toast.textContent = msg;
+  toast.style.display = 'block';
+  setTimeout(() => { toast.style.display = 'none'; }, 2000);
+}
+</script>
+
+</body>
+</html>

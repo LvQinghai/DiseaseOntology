@@ -9,12 +9,14 @@ from backend.repositories.neo4j_repository import Neo4jRepository
 from backend.services.ontology_service import OntologyService
 from backend.services.graph_service import GraphService
 from backend.services.query_service import QueryService
+from backend.services.editor_service import EditorService
 
 # ---- 全局服务实例 ----
 _repo: Neo4jRepository | None = None
 _ontology_svc: OntologyService | None = None
 _graph_svc: GraphService | None = None
 _query_svc: QueryService | None = None
+_editor_svc: EditorService | None = None
 
 
 def get_ontology_service() -> OntologyService:
@@ -32,10 +34,15 @@ def get_query_service() -> QueryService:
     return _query_svc
 
 
+def get_editor_service() -> EditorService:
+    assert _editor_svc is not None, "EditorService 未初始化"
+    return _editor_svc
+
+
 # ---- 生命周期 ----
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    global _repo, _ontology_svc, _graph_svc, _query_svc
+    global _repo, _ontology_svc, _graph_svc, _query_svc, _editor_svc
     print(f"🚀 正在连接 Neo4j: {settings.neo4j_uri}")
     _repo = Neo4jRepository(
         uri=settings.neo4j_uri,
@@ -45,6 +52,7 @@ async def lifespan(app: FastAPI):
     _ontology_svc = OntologyService(_repo)
     _graph_svc = GraphService(_repo)
     _query_svc = QueryService(_repo)
+    _editor_svc = EditorService(_repo)
     print("✅ 服务初始化完成")
     yield
     if _repo:
@@ -70,16 +78,17 @@ app.add_middleware(
 )
 
 # 注册路由
-from backend.routers import ontology_router, graph_router, query_router
+from backend.routers import ontology_router, graph_router, query_router, editor_router
 
 app.include_router(ontology_router)
 app.include_router(graph_router)
 app.include_router(query_router)
+app.include_router(editor_router)
 
 
 @app.get("/")
 def root():
-    return {"service": "疾病本体知识图谱可视化系统", "version": "1.0.0", "status": "running"}
+    return {"service": "疾病本体知识图谱可视化系统", "version": "2.0.0", "status": "running"}
 
 
 @app.get("/api/health")
