@@ -137,7 +137,7 @@ const labelOptions = computed(() => {
 async function loadLabels() {
   loadingLabels.value = true
   try {
-    const res = await fetchAvailableLabels()
+    const res = await fetchAvailableLabels(store.currentSystemId)
     availableLabels.value = res.labels || []
   } catch {
     // 静默处理

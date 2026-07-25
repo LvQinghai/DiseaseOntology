@@ -1,10 +1,11 @@
-"""本体编辑器服务 —— 包含业务校验逻辑."""
+"""本体编辑器服务 —— v3.0: prefix 驱动，短标签名对外透明."""
 
 import re
 
 from fastapi import HTTPException
 
 from backend.repositories.neo4j_repository import Neo4jRepository
+from backend.utils.label_utils import strip_prefix
 from backend.models.editor import (
     CreateEntityRequest,
     UpdateEntityRequest,
@@ -20,7 +21,7 @@ from backend.models.editor import (
 
 
 def _validate_entity_name(name: str) -> str:
-    """校验节点名称：不能为空，长度 1-200"""
+    """校验节点名称."""
     name = name.strip()
     if not name:
         raise HTTPException(status_code=400, detail="节点名称不能为空")
@@ -30,7 +31,7 @@ def _validate_entity_name(name: str) -> str:
 
 
 def _validate_label(label: str) -> str:
-    """校验标签格式：只能含字母/中文/数字/下划线"""
+    """校验标签格式（v3.0: 短标签名，不含前缀）."""
     label = label.strip()
     if not label:
         raise HTTPException(status_code=400, detail="标签不能为空")
@@ -40,7 +41,7 @@ def _validate_label(label: str) -> str:
 
 
 def _validate_properties(properties: dict) -> dict:
-    """校验属性：key 不能重复，不能含特殊字符"""
+    """校验属性."""
     if not properties:
         return {}
     for key in properties:
@@ -62,22 +63,21 @@ class EditorService:
 
     # ==================== 实体 CRUD ====================
 
-    def create_entity(self, req: CreateEntityRequest) -> EntityResponse:
-        """创建实体节点."""
+    def create_entity(self, req: CreateEntityRequest, prefix: str) -> EntityResponse:
+        """创建实体节点（label 为短标签名，自动拼接 prefix）。"""
         label = _validate_label(req.label)
         name = _validate_entity_name(req.name)
         props = _validate_properties(req.properties)
         props["name"] = name
 
-        # 可选：检查同名节点
-        existing = self._repo.find_node_by_name(name, label)
+        existing = self._repo.find_node_by_name(name, label, prefix)
         if existing:
             raise HTTPException(
                 status_code=409,
                 detail=f"节点 '{name}' ({label}) 已存在",
             )
 
-        result = self._repo.create_node(label, props)
+        result = self._repo.create_node(label, props, prefix)
         rel_count = self._repo.get_node_relationship_count(result["element_id"])
         return EntityResponse(
             element_id=result["element_id"],
@@ -87,34 +87,29 @@ class EditorService:
             relationship_count=rel_count,
         )
 
-    def update_entity(self, element_id: str, req: UpdateEntityRequest) -> EntityResponse:
+    def update_entity(self, element_id: str, req: UpdateEntityRequest,
+                      prefix: str) -> EntityResponse:
         """更新实体节点."""
-        # 校验节点存在
         node = self._repo.get_node_by_id(element_id)
         if not node:
             raise HTTPException(status_code=404, detail=f"节点 {element_id} 不存在")
 
-        # 更新名称
         if req.name is not None:
             name = _validate_entity_name(req.name)
             self._repo.set_node_name(element_id, name)
 
-        # 更新标签
         if req.label is not None:
             label = _validate_label(req.label)
-            self._repo.update_node_label(element_id, label)
+            self._repo.update_node_label(element_id, label, prefix)
 
-        # 更新属性
         if req.properties is not None:
             props = _validate_properties(req.properties)
-            # 名称单独处理
             if "name" in props:
                 name = _validate_entity_name(props.pop("name"))
                 self._repo.set_node_name(element_id, name)
             if props:
                 self._repo.update_node_properties(element_id, props)
 
-        # 返回更新后的数据
         updated = self._repo.get_node_by_id(element_id)
         rel_count = self._repo.get_node_relationship_count(element_id)
         return EntityResponse(
@@ -126,7 +121,7 @@ class EditorService:
         )
 
     def delete_entity(self, element_id: str) -> dict:
-        """删除实体节点（Neo4j 要求节点不能有关联关系，否则拒删）."""
+        """删除实体节点."""
         node = self._repo.get_node_by_id(element_id)
         if not node:
             raise HTTPException(status_code=404, detail=f"节点 {element_id} 不存在")
@@ -147,14 +142,10 @@ class EditorService:
             )
 
         self._repo.delete_node(element_id)
-        return {
-            "deleted": True,
-            "name": name,
-            "relationship_count": 0,
-        }
+        return {"deleted": True, "name": name, "relationship_count": 0}
 
     def check_entity_deletion(self, element_id: str) -> DeletionCheckResult:
-        """校验节点是否可删除，返回详细关系列表."""
+        """校验节点是否可删除."""
         node = self._repo.get_node_by_id(element_id)
         if not node:
             raise HTTPException(status_code=404, detail=f"节点 {element_id} 不存在")
@@ -196,7 +187,6 @@ class EditorService:
         node = self._repo.get_node_by_id(element_id)
         if not node:
             raise HTTPException(status_code=404, detail=f"节点 {element_id} 不存在")
-
         rel_count = self._repo.get_node_relationship_count(element_id)
         return EntityResponse(
             element_id=node["element_id"],
@@ -209,7 +199,7 @@ class EditorService:
     # ==================== 属性操作 ====================
 
     def set_properties(self, element_id: str, properties: dict) -> EntityResponse:
-        """批量设置属性（合并模式）."""
+        """批量设置属性."""
         node = self._repo.get_node_by_id(element_id)
         if not node:
             raise HTTPException(status_code=404, detail=f"节点 {element_id} 不存在")
@@ -232,11 +222,10 @@ class EditorService:
         )
 
     def delete_property(self, element_id: str, key: str) -> EntityResponse:
-        """删除节点的指定属性."""
+        """删除节点属性."""
         node = self._repo.get_node_by_id(element_id)
         if not node:
             raise HTTPException(status_code=404, detail=f"节点 {element_id} 不存在")
-
         self._repo.delete_node_property(element_id, key)
         updated = self._repo.get_node_by_id(element_id)
         rel_count = self._repo.get_node_relationship_count(element_id)
@@ -250,52 +239,39 @@ class EditorService:
 
     # ==================== 关系 CRUD ====================
 
-    def create_relationship(self, req: CreateRelationshipRequest) -> RelationshipResponse:
-        """创建节点间关系（源/目标可选，但若填写则需成对提供且为已存在节点）."""
+    def create_relationship(self, req: CreateRelationshipRequest,
+                            prefix: str) -> RelationshipResponse:
+        """创建节点间关系（type 为短类型名，自动拼接 prefix）。"""
         src_id = req.source_element_id.strip() if req.source_element_id else ""
         tgt_id = req.target_element_id.strip() if req.target_element_id else ""
 
-        # 若填写了任一端，则两端都必须填写且指向已存在节点
         has_src = bool(src_id)
         has_tgt = bool(tgt_id)
         if has_src != has_tgt:
-            raise HTTPException(
-                status_code=400,
-                detail="源节点和目标节点需要同时填写或同时留空",
-            )
+            raise HTTPException(status_code=400, detail="源节点和目标节点需要同时填写或同时留空")
         if not has_src and not has_tgt:
-            raise HTTPException(
-                status_code=400,
-                detail="请至少提供源节点和目标节点；可在详情编辑中补充端点信息后保存",
-            )
+            raise HTTPException(status_code=400, detail="请至少提供源节点和目标节点")
 
-        # 校验源节点存在
         source = self._repo.get_node_by_id(src_id)
         if not source:
             raise HTTPException(status_code=404, detail=f"源节点 {src_id} 不存在")
 
-        # 校验目标节点存在
         target = self._repo.get_node_by_id(tgt_id)
         if not target:
             raise HTTPException(status_code=404, detail=f"目标节点 {tgt_id} 不存在")
 
-        # 校验关系类型
         rel_type = _validate_label(req.type)
 
-        # 检查重复关系
-        existing = self._repo.find_relationship(
-            src_id, tgt_id, rel_type
-        )
+        existing = self._repo.find_relationship(src_id, tgt_id, rel_type, prefix)
         if existing:
             raise HTTPException(
                 status_code=409,
-                detail=f"关系 {source['properties'].get('name', '')} →[{rel_type}]→ {target['properties'].get('name', '')} 已存在",
+                detail=f"关系 {source['properties'].get('name','')} "
+                       f"→[{rel_type}]→ {target['properties'].get('name','')} 已存在",
             )
 
         props = _validate_properties(req.properties)
-        result = self._repo.create_relationship(
-            src_id, tgt_id, rel_type, props
-        )
+        result = self._repo.create_relationship(src_id, tgt_id, rel_type, props, prefix)
 
         return RelationshipResponse(
             element_id=result["element_id"],
@@ -322,21 +298,15 @@ class EditorService:
             properties=result["properties"],
         )
 
-    def update_relationship(self, rel_element_id: str, req: UpdateRelationshipRequest) -> RelationshipResponse:
-        """更新关系（支持修改源/目标/类型/属性）."""
+    def update_relationship(self, rel_element_id: str,
+                            req: UpdateRelationshipRequest) -> RelationshipResponse:
+        """更新关系."""
         rel = self._repo.get_relationship_by_id(rel_element_id)
         if not rel:
             raise HTTPException(status_code=404, detail=f"关系 {rel_element_id} 不存在")
 
-        # 校验必填项
-        if req.type is not None:
-            rel_type = _validate_label(req.type)
-        else:
-            rel_type = None
-
-        props = None
-        if req.properties is not None:
-            props = _validate_properties(req.properties)
+        rel_type = _validate_label(req.type) if req.type is not None else None
+        props = _validate_properties(req.properties) if req.properties is not None else None
 
         result = self._repo.update_relationship_full(
             rel_element_id,
@@ -363,12 +333,13 @@ class EditorService:
             raise HTTPException(status_code=404, detail=f"关系 {rel_element_id} 不存在")
         return {"deleted": True}
 
-    def get_relationship_instances(self, rel_type: str, limit: int = 200) -> list[RelationshipInstanceSummary]:
-        """获取指定关系类型的所有实例（源→目标对列表）"""
-        results = self._repo.get_relationships_by_type(rel_type, limit)
+    def get_relationship_instances(self, rel_type: str, prefix: str,
+                                   limit: int = 200) -> list[RelationshipInstanceSummary]:
+        """获取指定关系类型的所有实例."""
+        results = self._repo.get_relationship_instances(rel_type, prefix, limit)
         return [
             RelationshipInstanceSummary(
-                element_id=r.get("id", ""),
+                element_id=r.get("element_id", ""),
                 source_name=r.get("source_name", ""),
                 source_label=r.get("source_label", ""),
                 target_name=r.get("target_name", ""),
@@ -379,17 +350,17 @@ class EditorService:
 
     # ==================== 元数据 ====================
 
-    def get_available_labels(self) -> list[str]:
-        """获取可用标签列表."""
-        return self._repo.get_all_labels()
+    def get_available_labels(self, prefix: str) -> list[str]:
+        """获取可用标签列表（完整标签名，带前缀）。"""
+        return self._repo.get_all_labels(prefix)
 
-    def get_available_relationship_types(self) -> list[str]:
-        """获取可用关系类型列表."""
-        return self._repo.get_all_relationship_type_names()
+    def get_available_relationship_types(self, prefix: str) -> list[str]:
+        """获取可用关系类型列表（完整类型名，带前缀）。"""
+        return self._repo.get_all_relationship_type_names(prefix)
 
-    def search_nodes(self, keyword: str) -> list[NodeSearchResult]:
-        """搜索节点（供关系编辑器选择目标）."""
-        results = self._repo.search_nodes(keyword)
+    def search_nodes(self, keyword: str, prefix: str) -> list[NodeSearchResult]:
+        """搜索节点."""
+        results = self._repo.search_nodes(keyword, prefix)
         return [
             NodeSearchResult(
                 element_id=r["element_id"],

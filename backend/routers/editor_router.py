@@ -1,6 +1,6 @@
-"""本体编辑相关 API 路由."""
+"""本体编辑器 API 路由 —— v3.0: system_id → prefix 解析."""
 
-from fastapi import APIRouter, Query
+from fastapi import APIRouter, HTTPException, Query
 
 from backend.models.editor import (
     CreateEntityRequest,
@@ -9,129 +9,171 @@ from backend.models.editor import (
     CreateRelationshipRequest,
     UpdateRelationshipRequest,
     RelationshipResponse,
-    SetPropertiesRequest,
-    AvailableLabelsResponse,
-    AvailableRelationshipsResponse,
-    NodeSearchResult,
     DeletionCheckResult,
+    NodeSearchResult,
     RelationshipInstanceSummary,
 )
 
-router = APIRouter(prefix="/api/editor", tags=["本体编辑"])
+router = APIRouter(prefix="/api/editor", tags=["编辑器"])
 
 
-# ==================== 实体 CRUD ====================
+def _resolve_prefix(system_id: str) -> str:
+    """system_id → prefix 解析."""
+    from backend.main import get_system_service
+    try:
+        return get_system_service().get_prefix(system_id)
+    except ValueError as e:
+        raise HTTPException(status_code=404, detail=str(e))
 
-@router.post("/entities", response_model=EntityResponse)
-def create_entity(req: CreateEntityRequest) -> EntityResponse:
-    """创建实体节点."""
+
+def _get_editor_service():
     from backend.main import get_editor_service
-    return get_editor_service().create_entity(req)
+    return get_editor_service()
 
 
-@router.get("/entities/{element_id}", response_model=EntityResponse)
-def get_entity(element_id: str) -> EntityResponse:
-    """获取实体详情."""
-    from backend.main import get_editor_service
-    return get_editor_service().get_entity(element_id)
+# ═══════════════════════════════════════════
+# 实体 CRUD
+# ═══════════════════════════════════════════
+
+@router.post("/entity", response_model=EntityResponse)
+def create_entity(
+    req: CreateEntityRequest,
+    system_id: str = Query(default="disease_ontology", description="系统标识"),
+):
+    """创建实体节点。"""
+    prefix = _resolve_prefix(system_id)
+    return _get_editor_service().create_entity(req, prefix)
 
 
-@router.put("/entities/{element_id}", response_model=EntityResponse)
-def update_entity(element_id: str, req: UpdateEntityRequest) -> EntityResponse:
-    """更新实体节点（名称/标签/属性）."""
-    from backend.main import get_editor_service
-    return get_editor_service().update_entity(element_id, req)
+@router.get("/entity/{element_id}", response_model=EntityResponse)
+def get_entity(element_id: str):
+    """获取实体详情。"""
+    return _get_editor_service().get_entity(element_id)
 
 
-@router.get("/entities/{element_id}/deletion-check", response_model=DeletionCheckResult)
-def check_entity_deletion(element_id: str) -> DeletionCheckResult:
-    """校验节点是否可删除（返回关联关系列表）."""
-    from backend.main import get_editor_service
-    return get_editor_service().check_entity_deletion(element_id)
+@router.put("/entity/{element_id}", response_model=EntityResponse)
+def update_entity(
+    element_id: str,
+    req: UpdateEntityRequest,
+    system_id: str = Query(default="disease_ontology", description="系统标识"),
+):
+    """更新实体节点。"""
+    prefix = _resolve_prefix(system_id)
+    return _get_editor_service().update_entity(element_id, req, prefix)
 
 
-@router.delete("/entities/{element_id}")
-def delete_entity(element_id: str) -> dict:
-    """删除实体节点（Neo4j 要求节点不能有关联关系）."""
-    from backend.main import get_editor_service
-    return get_editor_service().delete_entity(element_id)
+@router.delete("/entity/{element_id}")
+def delete_entity(element_id: str):
+    """删除实体节点。"""
+    return _get_editor_service().delete_entity(element_id)
 
 
-# ==================== 属性操作 ====================
+# ═══════════════════════════════════════════
+# 属性操作
+# ═══════════════════════════════════════════
 
-@router.post("/entities/{element_id}/properties", response_model=EntityResponse)
-def set_properties(element_id: str, req: SetPropertiesRequest) -> EntityResponse:
-    """批量设置节点属性（合并模式）."""
-    from backend.main import get_editor_service
-    return get_editor_service().set_properties(element_id, req.properties)
-
-
-@router.delete("/entities/{element_id}/properties/{key}", response_model=EntityResponse)
-def delete_property(element_id: str, key: str) -> EntityResponse:
-    """删除节点指定属性."""
-    from backend.main import get_editor_service
-    return get_editor_service().delete_property(element_id, key)
+@router.put("/entity/{element_id}/properties", response_model=EntityResponse)
+def set_properties(element_id: str, properties: dict):
+    """设置节点属性（合并模式）。"""
+    return _get_editor_service().set_properties(element_id, properties)
 
 
-# ==================== 关系 CRUD ====================
-
-@router.post("/relationships", response_model=RelationshipResponse)
-def create_relationship(req: CreateRelationshipRequest) -> RelationshipResponse:
-    """创建节点间关系."""
-    from backend.main import get_editor_service
-    return get_editor_service().create_relationship(req)
+@router.delete("/entity/{element_id}/properties/{key}", response_model=EntityResponse)
+def remove_property(element_id: str, key: str):
+    """删除节点属性。"""
+    return _get_editor_service().delete_property(element_id, key)
 
 
-@router.get("/relationships/{rel_id}", response_model=RelationshipResponse)
-def get_relationship(rel_id: str) -> RelationshipResponse:
-    """获取关系详情."""
-    from backend.main import get_editor_service
-    return get_editor_service().get_relationship(rel_id)
+# ═══════════════════════════════════════════
+# 删除前检查
+# ═══════════════════════════════════════════
+
+@router.get("/entity/{element_id}/check-deletion", response_model=DeletionCheckResult)
+def check_deletion(element_id: str):
+    """检查节点是否可删除。"""
+    return _get_editor_service().check_entity_deletion(element_id)
 
 
-@router.put("/relationships/{rel_id}", response_model=RelationshipResponse)
-def update_relationship(rel_id: str, req: UpdateRelationshipRequest) -> RelationshipResponse:
-    """更新关系（支持修改源节点/目标节点/类型/属性）."""
-    from backend.main import get_editor_service
-    return get_editor_service().update_relationship(rel_id, req)
+# ═══════════════════════════════════════════
+# 关系 CRUD
+# ═══════════════════════════════════════════
+
+@router.post("/relationship", response_model=RelationshipResponse)
+def create_relationship(
+    req: CreateRelationshipRequest,
+    system_id: str = Query(default="disease_ontology", description="系统标识"),
+):
+    """创建节点间关系。"""
+    prefix = _resolve_prefix(system_id)
+    return _get_editor_service().create_relationship(req, prefix)
 
 
-@router.delete("/relationships/{rel_id}")
-def delete_relationship(rel_id: str) -> dict:
-    """删除关系."""
-    from backend.main import get_editor_service
-    return get_editor_service().delete_relationship(rel_id)
+@router.get("/relationship/{rel_element_id}", response_model=RelationshipResponse)
+def get_relationship(rel_element_id: str):
+    """获取关系详情。"""
+    return _get_editor_service().get_relationship(rel_element_id)
 
 
-# ==================== 元数据 ====================
-
-@router.get("/labels", response_model=AvailableLabelsResponse)
-def get_available_labels() -> AvailableLabelsResponse:
-    """获取可用标签列表."""
-    from backend.main import get_editor_service
-    labels = get_editor_service().get_available_labels()
-    return AvailableLabelsResponse(labels=labels)
+@router.put("/relationship/{rel_element_id}", response_model=RelationshipResponse)
+def update_relationship(rel_element_id: str, req: UpdateRelationshipRequest):
+    """更新关系。"""
+    return _get_editor_service().update_relationship(rel_element_id, req)
 
 
-@router.get("/relationship-types", response_model=AvailableRelationshipsResponse)
-def get_available_relationship_types() -> AvailableRelationshipsResponse:
-    """获取可用关系类型列表."""
-    from backend.main import get_editor_service
-    types = get_editor_service().get_available_relationship_types()
-    return AvailableRelationshipsResponse(relationship_types=types)
+@router.delete("/relationship/{rel_element_id}")
+def delete_relationship(rel_element_id: str):
+    """删除关系。"""
+    return _get_editor_service().delete_relationship(rel_element_id)
 
 
-@router.get("/nodes/search", response_model=list[NodeSearchResult])
-def search_nodes(keyword: str = Query(default="", min_length=0, description="搜索关键词（为空时返回全部节点）")) -> list[NodeSearchResult]:
-    """搜索节点（供关系编辑器选择目标）."""
-    from backend.main import get_editor_service
-    return get_editor_service().search_nodes(keyword)
+# ═══════════════════════════════════════════
+# 元数据
+# ═══════════════════════════════════════════
+
+@router.get("/labels")
+def get_available_labels(
+    system_id: str = Query(default="disease_ontology", description="系统标识"),
+):
+    """获取可用标签列表（完整标签名，含前缀）。"""
+    prefix = _resolve_prefix(system_id)
+    return {"labels": _get_editor_service().get_available_labels(prefix)}
 
 
-@router.get("/relationship-instances", response_model=list[RelationshipInstanceSummary])
+@router.get("/relationship-types")
+def get_relationship_type_names(
+    system_id: str = Query(default="disease_ontology", description="系统标识"),
+):
+    """获取可用关系类型列表（完整类型名，含前缀）。"""
+    prefix = _resolve_prefix(system_id)
+    return {
+        "relationship_types": _get_editor_service().get_available_relationship_types(prefix),
+    }
+
+
+# ═══════════════════════════════════════════
+# 搜索
+# ═══════════════════════════════════════════
+
+@router.get("/search-nodes", response_model=list[NodeSearchResult])
+def search_nodes(
+    keyword: str = Query(..., min_length=1, description="搜索关键词"),
+    system_id: str = Query(default="disease_ontology", description="系统标识"),
+):
+    """搜索节点（用于编辑器内选择源/目标节点）。"""
+    prefix = _resolve_prefix(system_id)
+    return _get_editor_service().search_nodes(keyword, prefix)
+
+
+# ═══════════════════════════════════════════
+# 关系实例
+# ═══════════════════════════════════════════
+
+@router.get("/relationship-instances/{rel_type}",
+            response_model=list[RelationshipInstanceSummary])
 def get_relationship_instances(
-    type: str = Query(..., description="关系类型名称（如 TREATS）"),
-) -> list[RelationshipInstanceSummary]:
-    """获取指定关系类型的所有实例（源→目标对列表）"""
-    from backend.main import get_editor_service
-    return get_editor_service().get_relationship_instances(type)
+    rel_type: str,
+    system_id: str = Query(default="disease_ontology", description="系统标识"),
+):
+    """获取指定关系类型的所有实例。"""
+    prefix = _resolve_prefix(system_id)
+    return _get_editor_service().get_relationship_instances(rel_type, prefix, limit=200)

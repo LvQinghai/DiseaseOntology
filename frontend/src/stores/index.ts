@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
-import { ref } from 'vue'
-import type { NodeDetail, GraphData, EntityResponse, RelationshipResponse } from '@/types'
+import { ref, computed } from 'vue'
+import type { NodeDetail, GraphData, EntityResponse, RelationshipResponse, SystemInfo } from '@/types'
 
 export const useAppStore = defineStore('app', () => {
   // 当前选中的节点
@@ -35,6 +35,8 @@ export const useAppStore = defineStore('app', () => {
 
   // 本体树刷新计数器
   const treeRefreshKey = ref(0)
+
+  // ==================== v2.0 状态操作方法 ====================
 
   function selectNode(type: string, name: string, elementId = '') {
     selectedNode.value = { type, name, elementId }
@@ -114,6 +116,85 @@ export const useAppStore = defineStore('app', () => {
     treeRefreshKey.value++
   }
 
+  // ==================== v3.0 多系统管理 ====================
+
+  /** 当前选中的系统ID */
+  const currentSystemId = ref('disease_ontology')
+
+  /** 当前系统信息 */
+  const currentSystemInfo = ref<SystemInfo | null>(null)
+
+  /** 所有系统列表 */
+  const systemList = ref<SystemInfo[]>([])
+
+  /** ★ v3.0: 当前系统的 prefix（如 MED_） */
+  const currentPrefix = computed(() => {
+    const sys = systemList.value.find(s => s.system_id === currentSystemId.value)
+    return sys?.prefix || 'MED_'
+  })
+
+  /** ★ v3.0: 剥离前缀用于展示（MED_Disease → Disease） */
+  function displayLabel(fullLabel: string): string {
+    const p = currentPrefix.value
+    if (p && fullLabel.startsWith(p)) {
+      return fullLabel.slice(p.length)
+    }
+    return fullLabel
+  }
+
+  /** 导入向导可见性 */
+  const importWizardVisible = ref(false)
+
+  /** 导入来源类型 */
+  const importSource = ref<'excel' | 'database'>('excel')
+
+  /** 系统管理对话框可见性 */
+  const systemManagerVisible = ref(false)
+
+  function setCurrentSystem(systemId: string) {
+    currentSystemId.value = systemId
+    const sys = systemList.value.find(s => s.system_id === systemId)
+    if (sys) currentSystemInfo.value = sys
+  }
+
+  function setSystemList(list: SystemInfo[]) {
+    systemList.value = list
+  }
+
+  function addSystem(sys: SystemInfo) {
+    const idx = systemList.value.findIndex(s => s.system_id === sys.system_id)
+    if (idx >= 0) {
+      systemList.value[idx] = sys
+    } else {
+      systemList.value.unshift(sys)
+    }
+  }
+
+  function removeSystem(systemId: string) {
+    systemList.value = systemList.value.filter(s => s.system_id !== systemId)
+    // 如果当前系统被删，切回默认
+    if (currentSystemId.value === systemId) {
+      setCurrentSystem('disease_ontology')
+    }
+  }
+
+  function openImportWizard(source: 'excel' | 'database') {
+    importSource.value = source
+    importWizardVisible.value = true
+  }
+
+  function closeImportWizard() {
+    importWizardVisible.value = false
+  }
+
+  function openSystemManager() {
+    systemManagerVisible.value = true
+  }
+
+  function closeSystemManager() {
+    systemManagerVisible.value = false
+  }
+
   return {
     selectedNode,
     selectedNodeDetail,
@@ -148,5 +229,22 @@ export const useAppStore = defineStore('app', () => {
     openCreateRelationshipWithType,
     closeRelationshipEditor,
     triggerTreeRefresh,
+    // v3.0
+    currentSystemId,
+    currentSystemInfo,
+    systemList,
+    currentPrefix,
+    displayLabel,
+    importWizardVisible,
+    importSource,
+    systemManagerVisible,
+    setCurrentSystem,
+    setSystemList,
+    addSystem,
+    removeSystem,
+    openImportWizard,
+    closeImportWizard,
+    openSystemManager,
+    closeSystemManager,
   }
 })

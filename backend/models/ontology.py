@@ -38,6 +38,7 @@ class RelationshipItem(BaseModel):
 class NodeDetail(BaseModel):
     """节点完整详情"""
     element_id: str
+    name: str
     labels: list[str]
     properties: dict
     incoming_relationships: list[RelationshipItem] = []

@@ -1,6 +1,7 @@
-"""本体浏览服务 —— 聚合本体元数据."""
+"""本体浏览服务 —— 聚合本体元数据（v3.0: prefix 驱动）."""
 
 from backend.repositories.neo4j_repository import Neo4jRepository, REL_TYPE_LABELS
+from backend.utils.label_utils import strip_prefix
 from backend.models.ontology import (
     PropertyDetail,
     NodeTypeInfo,
@@ -19,28 +20,26 @@ class OntologyService:
     def __init__(self, repo: Neo4jRepository):
         self._repo = repo
 
-    def get_tree(self) -> OntologyTree:
-        """构建完整本体树.
-        
-        对于 Disease 等标签：若根节点存在子类（如 '疾病' 节点），
-        则将其子类提升到根层级，去除冗余的聚合层级。
-        """
+    def get_tree(self, prefix: str) -> OntologyTree:
+        """构建完整本体树。prefix 用于过滤当前系统的标签和关系类型。"""
         # 节点类型
-        label_data = self._repo.get_node_labels()
+        label_data = self._repo.get_node_labels(prefix)
         node_types: list[NodeTypeInfo] = []
         for item in label_data:
-            label = item["label"]
-            props = self._repo.get_label_properties(label)
-            instances_raw = self._repo.get_root_nodes_by_label(label, limit=100)
+            full_label = item["label"]
+            short_label = strip_prefix(full_label, prefix)
+            props = self._repo.get_label_properties(short_label, prefix)
+            instances_raw = self._repo.get_root_nodes_by_label(
+                short_label, prefix, limit=100
+            )
 
             # 展开聚合节点：若根节点有子类，将其子类提升到根层级
             instances: list[NodeInstance] = []
             for inst in instances_raw:
                 child_count = inst.get("child_count", 0)
                 if child_count > 0:
-                    # 聚合节点（如 '疾病'）—— 用其子类替代
                     children_raw = self._repo.get_subclass_children(
-                        inst["element_id"], limit=100
+                        inst["element_id"], prefix, limit=100
                     )
                     for child in children_raw:
                         instances.append(NodeInstance(
@@ -50,7 +49,6 @@ class OntologyService:
                             child_count=child.get("child_count", 0),
                         ))
                 else:
-                    # 叶子根节点（如 '严重主动脉瓣狭窄'、'青霉素过敏'）
                     instances.append(NodeInstance(
                         element_id=inst["element_id"],
                         name=inst.get("name", ""),
@@ -58,25 +56,29 @@ class OntologyService:
                         child_count=0,
                     ))
 
+            # 对外展示用短标签名
             node_types.append(NodeTypeInfo(
-                label=label,
+                label=short_label,
                 count=item["count"],
                 properties=[PropertyDetail(name=p["name"], sample_value=p["sample_value"])
                             for p in props],
                 instances=instances,
             ))
 
-        # 关系类型
-        rel_data = self._repo.get_relationship_types()
+        # 关系类型（对外剥离前缀）
+        rel_data = self._repo.get_relationship_types(prefix)
         rel_types: list[RelationshipCatalogItem] = []
         for item in rel_data:
             raw_type = item["type"]
+            short_type = strip_prefix(raw_type, prefix)
             rel_types.append(RelationshipCatalogItem(
-                type=raw_type,
+                type=short_type,
                 count=item["count"],
-                source_labels=[item["source_label"]] if item.get("source_label") else [],
-                target_labels=[item["target_label"]] if item.get("target_label") else [],
-                description=REL_TYPE_LABELS.get(raw_type, raw_type),
+                source_labels=[strip_prefix(item["source_label"], prefix)]
+                    if item.get("source_label") else [],
+                target_labels=[strip_prefix(item["target_label"], prefix)]
+                    if item.get("target_label") else [],
+                description=REL_TYPE_LABELS.get(short_type, raw_type),
             ))
 
         return OntologyTree(node_types=node_types, relationship_types=rel_types)
@@ -109,31 +111,38 @@ class OntologyService:
             for r in relationships if r["direction"] == "outgoing"
         ]
 
+        props = node.get("properties", {})
+        node_name = props.get("name", "") or node.get("name", "")
         return NodeDetail(
             element_id=node["element_id"],
+            name=node_name,
             labels=node["labels"],
-            properties=node.get("properties", {}),
+            properties=props,
             incoming_relationships=incoming,
             outgoing_relationships=outgoing,
         )
 
-    def get_relationship_catalog(self) -> list[RelationshipCatalogItem]:
-        """获取关系类型目录."""
-        rel_data = self._repo.get_relationship_types()
+    def get_relationship_catalog(self, prefix: str) -> list[RelationshipCatalogItem]:
+        """获取关系类型目录（对外剥离前缀）。"""
+        rel_data = self._repo.get_relationship_types(prefix)
         return [
             RelationshipCatalogItem(
-                type=item["type"],
+                type=strip_prefix(item["type"], prefix),
                 count=item["count"],
-                source_labels=[item["source_label"]] if item.get("source_label") else [],
-                target_labels=[item["target_label"]] if item.get("target_label") else [],
-                description=REL_TYPE_LABELS.get(item["type"], item["type"]),
+                source_labels=[strip_prefix(item["source_label"], prefix)]
+                    if item.get("source_label") else [],
+                target_labels=[strip_prefix(item["target_label"], prefix)]
+                    if item.get("target_label") else [],
+                description=REL_TYPE_LABELS.get(
+                    strip_prefix(item["type"], prefix), item["type"]
+                ),
             )
             for item in rel_data
         ]
 
-    def get_subclass_children(self, element_id: str) -> list[NodeInstance]:
+    def get_subclass_children(self, element_id: str, prefix: str) -> list[NodeInstance]:
         """获取节点的 SUB_CLASS_OF 子类."""
-        children = self._repo.get_subclass_children(element_id)
+        children = self._repo.get_subclass_children(element_id, prefix)
         return [
             NodeInstance(
                 element_id=c["element_id"],
@@ -144,9 +153,9 @@ class OntologyService:
             for c in children
         ]
 
-    def search(self, keyword: str) -> list[SearchResult]:
-        """全局模糊搜索."""
-        results = self._repo.search_nodes(keyword)
+    def search(self, keyword: str, prefix: str) -> list[SearchResult]:
+        """全局模糊搜索。."""
+        results = self._repo.search_nodes(keyword, prefix)
         return [
             SearchResult(
                 element_id=r["element_id"],

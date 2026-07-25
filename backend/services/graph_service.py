@@ -1,6 +1,7 @@
-"""图谱可视化服务."""
+"""图谱可视化服务（v3.0: prefix 驱动）."""
 
 from backend.repositories.neo4j_repository import Neo4jRepository, NODE_COLORS, REL_TYPE_LABELS
+from backend.utils.label_utils import strip_prefix
 from backend.models.graph import GraphNode, GraphEdge, GraphData, GraphMeta
 
 
@@ -10,30 +11,33 @@ class GraphService:
     def __init__(self, repo: Neo4jRepository):
         self._repo = repo
 
-    def get_overview(self) -> GraphData:
+    def get_overview(self, prefix: str) -> GraphData:
         """获取全量图谱数据."""
-        raw_nodes = self._repo.get_all_nodes()
-        raw_edges = self._repo.get_all_edges()
+        raw_nodes = self._repo.get_all_nodes(prefix)
+        raw_edges = self._repo.get_all_edges(prefix)
 
-        nodes = [
-            GraphNode(
+        nodes = []
+        for n in raw_nodes:
+            node_type = n.get("type", "Unknown")
+            short_type = strip_prefix(node_type, prefix)
+            nodes.append(GraphNode(
                 id=n["id"],
                 label=n.get("label", ""),
-                type=n.get("type", "Unknown"),
-                color=NODE_COLORS.get(n.get("type", ""), "#999999"),
-            )
-            for n in raw_nodes
-        ]
-        edges = [
-            GraphEdge(
+                type=short_type,  # 对外展示用短标签名
+                color=NODE_COLORS.get(short_type, "#999999"),
+            ))
+
+        edges = []
+        for e in raw_edges:
+            edge_type = e["type"]
+            short_type = strip_prefix(edge_type, prefix)
+            edges.append(GraphEdge(
                 id=e["id"],
                 source=e["source"],
                 target=e["target"],
-                type=e["type"],
-                label=REL_TYPE_LABELS.get(e["type"], e["type"]),
-            )
-            for e in raw_edges
-        ]
+                type=short_type,
+                label=REL_TYPE_LABELS.get(short_type, edge_type),
+            ))
 
         return GraphData(
             nodes=nodes,

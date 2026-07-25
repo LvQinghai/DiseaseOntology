@@ -299,7 +299,7 @@ let mergedEdges: any[] = []
 async function loadData() {
   loading.value = true
   try {
-    const data = await fetchGraphOverview()
+    const data = await fetchGraphOverview(store.currentSystemId)
     mergedNodes = [...(data.nodes || [])]
     mergedEdges = [...(data.edges || [])]
     store.setGraphData(data)
@@ -374,6 +374,17 @@ watch(
     } finally {
       pendingElementId = null
     }
+  },
+)
+
+// ===== v3.0: 系统切换时重新加载图谱 =====
+watch(
+  () => store.currentSystemId,
+  () => {
+    mergedNodes = []
+    mergedEdges = []
+    expandedNodes.value = new Set()
+    loadData()
   },
 )
 

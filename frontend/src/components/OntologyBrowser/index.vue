@@ -143,15 +143,21 @@ async function onLoadData(treeNode: any): Promise<void> {
 }
 
 function handleSelect(_keys: any, info: any) {
-  const { nodeType, nodeName, elementId } = info.node
+  // ant-design-vue 4 兼容：node 可能为 TreeNodeData 或 TreeNode 包装对象
+  const raw = info.node?.dataRef || info.node
+  if (!raw) return
+  const nodeType = raw.nodeType
+  const nodeName = raw.nodeName
+  const elementId = raw.elementId || ''
+  console.log('[OntologyBrowser] select:', { nodeType, nodeName, elementId })
   store.selectNode(nodeType, nodeName, elementId)
-  selectedKeys.value = [info.node.key]
+  selectedKeys.value = [raw.key || info.node?.key]
 }
 
 async function loadData() {
   loading.value = true
   try {
-    const tree = await fetchOntologyTree()
+    const tree = await fetchOntologyTree(store.currentSystemId)
     treeData.value = tree.roots
     expandedKeys.value = tree.roots.map((r) => `${r.nodeType}::${r.name}`)
     // 增量 key 强制 tree 组件完全重新挂载
@@ -173,8 +179,14 @@ watch(
 )
 
 // v2.0: 监听树刷新信号
+// v3.0: 系统切换或树刷新时重新加载
 watch(
   () => store.treeRefreshKey,
+  () => { loadData() },
+)
+
+watch(
+  () => store.currentSystemId,
   () => { loadData() },
 )
 
@@ -280,6 +292,13 @@ function handleAddMenuClick({ key }: { key: string }) {
     store.openRelationshipEditor('', '')
   }
 }
+
+// 系统切换时重新加载树
+watch(() => store.currentSystemId, () => {
+  if (store.currentSystemId) {
+    loadData()
+  }
+})
 
 onMounted(() => {
   loadData()

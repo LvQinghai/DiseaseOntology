@@ -119,6 +119,7 @@ export interface PathData {
 /** 问答 */
 export interface QueryRequest {
   question: string
+  system_id?: string
 }
 
 export interface QueryResponse {
@@ -223,4 +224,72 @@ export interface RelationshipInstanceSummary {
   source_label: string
   target_name: string
   target_label: string
+}
+
+// ==================== v3.0 多系统管理 ====================
+
+/** 系统信息 */
+export interface SystemInfo {
+  system_id: string
+  prefix: string
+  name: string
+  description: string
+  node_count: number
+  relationship_count: number
+  created_at: string
+  updated_at: string
+  import_source: string
+}
+
+// ==================== v3.0 数据导入 ====================
+
+/** 数据库连接 */
+export interface DBConnection {
+  db_type: 'mysql' | 'postgresql' | 'mssql' | 'oracle' | 'sqlite'
+  host: string
+  port: number
+  database: string
+  user: string
+  password: string
+}
+
+/** 数据库表结构 */
+export interface DBTableInfo {
+  name: string
+  columns: Array<{ name: string; type: string }>
+}
+
+/** 表映射配置 */
+export interface TableMapping {
+  source_table: string
+  source_column: string
+  target_label: string
+}
+
+/** 关系映射配置 */
+export interface RelationshipMapping {
+  source_table: string
+  source_column: string
+  target_table: string
+  target_column: string
+  relationship_type: string
+}
+
+/** 导入预览数据 */
+export interface ImportPreviewData {
+  entities: Array<Record<string, string>>
+  relationships: Array<Record<string, string>>
+  total_entities: number
+  total_relationships: number
+}
+
+/** 导入结果 */
+export interface ImportResult {
+  success: boolean
+  system_id: string
+  system_name: string
+  entities_created: number
+  relationships_created: number
+  message: string
+  errors: string[]
 }

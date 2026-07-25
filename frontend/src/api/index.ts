@@ -21,6 +21,13 @@ import type {
   AvailableLabelsResponse,
   AvailableRelationshipsResponse,
   RelationshipInstanceSummary,
+  SystemInfo,
+  DBConnection,
+  DBTableInfo,
+  TableMapping,
+  RelationshipMapping,
+  ImportPreviewData,
+  ImportResult,
 } from '@/types'
 
 const api = axios.create({
@@ -30,8 +37,10 @@ const api = axios.create({
 
 // ===== 本体浏览 =====
 
-export async function fetchOntologyTree(): Promise<OntologyTree> {
-  const { data } = await api.get<OntologyTreeApiResponse>('/ontology/tree')
+export async function fetchOntologyTree(systemId = 'disease_ontology'): Promise<OntologyTree> {
+  const { data } = await api.get<OntologyTreeApiResponse>('/ontology/tree', {
+    params: { system_id: systemId },
+  })
 
   // 本体类型 → 树节点
   const nodeTypeRoots = (data.node_types || []).map((nt) => ({
@@ -109,32 +118,38 @@ export async function fetchNodeDetail(elementId: string): Promise<NodeDetail> {
   }
 }
 
-export async function fetchRelationshipCatalog(): Promise<RelationshipCatalogItem[]> {
-  const { data } = await api.get('/ontology/relationships')
+export async function fetchRelationshipCatalog(systemId = 'disease_ontology'): Promise<RelationshipCatalogItem[]> {
+  const { data } = await api.get('/ontology/relationships', { params: { system_id: systemId } })
   return data
 }
 
-export async function fetchSearch(keyword: string): Promise<SearchResult> {
-  const { data } = await api.get('/ontology/search', { params: { keyword } })
+export async function fetchSearch(keyword: string, systemId = 'disease_ontology'): Promise<SearchResult> {
+  const { data } = await api.get('/ontology/search', { params: { keyword, system_id: systemId } })
   return data
 }
 
 // ===== 树形懒加载 =====
 
-export async function fetchSubclassChildren(elementId: string): Promise<{
+export async function fetchSubclassChildren(
+  elementId: string,
+  systemId = 'disease_ontology',
+): Promise<{
   element_id: string
   name: string
   labels: string[]
   child_count: number
 }[]> {
-  const { data } = await api.get(`/ontology/nodes/${encodeURIComponent(elementId)}/subclasses`)
+  const { data } = await api.get(
+    `/ontology/nodes/${encodeURIComponent(elementId)}/subclasses`,
+    { params: { system_id: systemId } },
+  )
   return data
 }
 
 // ===== 图谱 =====
 
-export async function fetchGraphOverview(): Promise<GraphData> {
-  const { data } = await api.get('/graph/overview')
+export async function fetchGraphOverview(systemId = 'disease_ontology'): Promise<GraphData> {
+  const { data } = await api.get('/graph/overview', { params: { system_id: systemId } })
   return data
 }
 
@@ -169,8 +184,8 @@ export async function postQuery(req: QueryRequest): Promise<QueryResponse> {
 
 // ----- 实体 CRUD -----
 
-export async function createEntity(req: CreateEntityRequest): Promise<EntityResponse> {
-  const { data } = await api.post('/editor/entities', req)
+export async function createEntity(req: CreateEntityRequest, systemId = 'disease_ontology'): Promise<EntityResponse> {
+  const { data } = await api.post('/editor/entities', req, { params: { system_id: systemId } })
   return data
 }
 
@@ -182,8 +197,12 @@ export async function getEntity(elementId: string): Promise<EntityResponse> {
 export async function updateEntity(
   elementId: string,
   req: UpdateEntityRequest,
+  systemId = 'disease_ontology',
 ): Promise<EntityResponse> {
-  const { data } = await api.put(`/editor/entities/${encodeURIComponent(elementId)}`, req)
+  const { data } = await api.put(
+    `/editor/entities/${encodeURIComponent(elementId)}`, req,
+    { params: { system_id: systemId } },
+  )
   return data
 }
 
@@ -223,8 +242,9 @@ export async function deleteProperty(
 
 export async function createRelationship(
   req: CreateRelationshipRequest,
+  systemId = 'disease_ontology',
 ): Promise<RelationshipResponse> {
-  const { data } = await api.post('/editor/relationships', req)
+  const { data } = await api.post('/editor/relationships', req, { params: { system_id: systemId } })
   return data
 }
 
@@ -255,18 +275,18 @@ export async function updateRelationshipFull(
 
 // ----- 元数据 -----
 
-export async function fetchAvailableLabels(): Promise<AvailableLabelsResponse> {
-  const { data } = await api.get('/editor/labels')
+export async function fetchAvailableLabels(systemId = 'disease_ontology'): Promise<AvailableLabelsResponse> {
+  const { data } = await api.get('/editor/labels', { params: { system_id: systemId } })
   return data
 }
 
-export async function fetchAvailableRelationshipTypes(): Promise<AvailableRelationshipsResponse> {
-  const { data } = await api.get('/editor/relationship-types')
+export async function fetchAvailableRelationshipTypes(systemId = 'disease_ontology'): Promise<AvailableRelationshipsResponse> {
+  const { data } = await api.get('/editor/relationship-types', { params: { system_id: systemId } })
   return data
 }
 
-export async function searchNodes(keyword: string): Promise<NodeSearchResult[]> {
-  const { data } = await api.get('/editor/nodes/search', { params: { keyword } })
+export async function searchNodes(keyword: string, systemId = 'disease_ontology'): Promise<NodeSearchResult[]> {
+  const { data } = await api.get('/editor/nodes/search', { params: { keyword, system_id: systemId } })
   return data
 }
 
@@ -274,7 +294,93 @@ export async function searchNodes(keyword: string): Promise<NodeSearchResult[]> 
 
 export async function fetchRelationshipInstances(
   type: string,
+  systemId = 'disease_ontology',
 ): Promise<RelationshipInstanceSummary[]> {
-  const { data } = await api.get('/editor/relationship-instances', { params: { type } })
+  const { data } = await api.get('/editor/relationship-instances', { params: { type, system_id: systemId } })
   return data
+}
+
+// ==================== v3.0 系统管理 API ====================
+
+export async function fetchSystemList(): Promise<SystemInfo[]> {
+  const { data } = await api.get('/system/list')
+  return data
+}
+
+export async function fetchDefaultSystem(): Promise<SystemInfo> {
+  const { data } = await api.get('/system/default')
+  return data
+}
+
+export async function deleteSystem(systemId: string): Promise<void> {
+  await api.delete(`/system/${encodeURIComponent(systemId)}`, {
+    params: { clean_neo4j: true },
+  })
+}
+
+// ==================== v3.0 数据导入 API ====================
+
+export async function previewExcel(file: File): Promise<ImportPreviewData> {
+  const formData = new FormData()
+  formData.append('file', file)
+  const { data } = await api.post('/import/excel/preview', formData)
+  return data
+}
+
+export async function importFromExcel(
+  file: File,
+  systemName: string,
+  description: string,
+): Promise<ImportResult> {
+  const formData = new FormData()
+  formData.append('file', file)
+  formData.append('system_name', systemName)
+  formData.append('description', description)
+  const { data } = await api.post('/import/excel/import', formData)
+  return data
+}
+
+export async function testDBConnection(conn: DBConnection): Promise<{ success: boolean; message: string }> {
+  const { data } = await api.post('/import/db/test', conn)
+  return data
+}
+
+export async function getDBTables(conn: DBConnection): Promise<DBTableInfo[]> {
+  const { data } = await api.post('/import/db/tables', conn)
+  return data
+}
+
+export async function previewDBImport(
+  conn: DBConnection,
+  entityMappings: TableMapping[],
+  relationshipMappings?: RelationshipMapping[],
+): Promise<ImportPreviewData> {
+  const { data } = await api.post('/import/db/preview', {
+    conn,
+    entity_mappings: entityMappings,
+    relationship_mappings: relationshipMappings,
+  })
+  return data
+}
+
+export async function importFromDB(
+  conn: DBConnection,
+  entityMappings: TableMapping[],
+  systemName: string,
+  description: string,
+  relationshipMappings?: RelationshipMapping[],
+): Promise<ImportResult> {
+  const { data } = await api.post('/import/db/import', {
+    conn,
+    entity_mappings: entityMappings,
+    relationship_mappings: relationshipMappings,
+    system_name: systemName,
+    description,
+  })
+  return data
+}
+
+export async function downloadTemplate(): Promise<Blob> {
+  const response = await api.get('/import/template', { responseType: 'blob' })
+  return response.data
 }

@@ -41,6 +41,7 @@ const isRelationNode = ref(false)
 watch(
   () => store.selectedNode,
   async (node) => {
+    console.log('[QueryPanel] watch selectedNode:', JSON.stringify(node))
     if (!node) {
       detail.value = null
       relDetail.value = null

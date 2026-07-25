@@ -64,7 +64,7 @@ async function loadAllNodes() {
   if (loadingNodes.value) return
   loadingNodes.value = true
   try {
-    const results = await searchNodes('')
+    const results = await searchNodes('', store.currentSystemId)
     allNodes.value = results.map((node) => ({
       value: node.element_id,
       label: `${node.name} [${node.labels.join(', ')}]`,
@@ -86,7 +86,7 @@ function filterNodeOption(input: string, option: any) {
 async function loadTypes() {
   loadingTypes.value = true
   try {
-    const { relationship_types } = await fetchAvailableRelationshipTypes()
+    const { relationship_types } = await fetchAvailableRelationshipTypes(store.currentSystemId)
     relationshipTypeOptions.value = relationship_types.map((t) => ({
       value: t,
       label: t,
@@ -103,7 +103,7 @@ async function loadInstances() {
   if (!rel) return
   loadingInstances.value = true
   try {
-    instances.value = await fetchRelationshipInstances(rel.type)
+    instances.value = await fetchRelationshipInstances(rel.type, store.currentSystemId)
   } catch {
     instances.value = []
   } finally {
