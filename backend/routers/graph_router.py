@@ -35,22 +35,26 @@ def get_overview(
 
 # ───────────── 邻域展开 ─────────────
 
-@router.get("/neighborhood/{element_id}", response_model=GraphData)
-def get_neighborhood(element_id: str, depth: int = 1):
-    """获取节点 N 跳邻域子图。"""
-    result = _get_graph_service().get_neighborhood(element_id, depth)
-    return result
+@router.get("/neighbors/{element_id}", response_model=GraphData)
+def get_neighborhood(
+    element_id: str,
+    system_id: str = Query(default="disease_ontology", description="系统标识"),
+    hops: int = 1,
+):
+    """获取节点 N 跳邻域子图（同系统内）。"""
+    prefix = _resolve_prefix(system_id)
+    return _get_graph_service().get_neighborhood(element_id, prefix, hops)
 
 
 # ───────────── 路径查找 ─────────────
 
 @router.get("/path", response_model=GraphData)
 def find_path(
-    source_id: str = Query(..., description="起始节点 elementId"),
-    target_id: str = Query(..., description="目标节点 elementId"),
+    source: str = Query(..., description="起始节点 elementId"),
+    target: str = Query(..., description="目标节点 elementId"),
 ):
     """查找两节点间的最短路径。"""
-    result = _get_graph_service().get_path(source_id, target_id)
+    result = _get_graph_service().get_path(source, target)
     if not result:
         raise HTTPException(status_code=404, detail="未找到路径")
     return result

@@ -20,14 +20,45 @@ REL_TYPE_LABELS: dict[str, str] = {
     "HAS_SIDE_EFFECT": "副作用",
 }
 
-# 节点类型配色（短名 → 色值）
+# 节点类型配色（短名 → 色值）—— 工业专业调色板
 NODE_COLORS: dict[str, str] = {
-    "Disease": "#FF6B6B",
-    "Symptom": "#4ECDC4",
-    "Drug": "#6C5CE7",
-    "BodyPart": "#FECA57",
-    "SideEffect": "#A29BFE",
+    "Disease": "#f5222d",
+    "Symptom": "#fa8c16",
+    "Drug": "#1890ff",
+    "BodyPart": "#52c41a",
+    "SideEffect": "#722ed1",
+    "Department": "#eb2f96",
+    "Student": "#13c2c2",
+    "Teacher": "#2f54eb",
+    "Subject": "#faad14",
+    "Course": "#a0d911",
+    "Patient": "#f759ab",
+    "Hospital": "#722ed1",
+    "Doctor": "#1677ff",
+    "Test": "#bfbfbf",
+    "Exam": "#ff7a45",
+    "Treatment": "#52c41a",
+    "Prescription": "#1890ff",
+    "Diagnosis": "#fa541c",
 }
+
+# 备用调色板（用于不在 NODE_COLORS 中的未知类型动态分配）
+_FALLBACK_COLORS: list[str] = [
+    "#f5222d", "#fa8c16", "#1890ff", "#52c41a", "#722ed1",
+    "#eb2f96", "#13c2c2", "#2f54eb", "#faad14", "#a0d911",
+    "#f759ab", "#1677ff", "#ff7a45", "#fa541c", "#9254de",
+    "#36cfc9", "#d4380d", "#0958d9", "#389e0d", "#c41d7f",
+]
+
+
+def get_node_color(node_type: str) -> str:
+    """获取节点类型的颜色。如果在映射表中则直接返回，否则基于哈希动态分配。"""
+    short = node_type.split("_")[-1] if "_" in node_type else node_type
+    if short in NODE_COLORS:
+        return NODE_COLORS[short]
+    # 动态分配：基于类型名哈希从备用调色板中选取
+    idx = hash(node_type) % len(_FALLBACK_COLORS)
+    return _FALLBACK_COLORS[idx]
 
 
 class Neo4jRepository:
@@ -81,15 +112,23 @@ class Neo4jRepository:
         ]
 
     def get_relationship_types(self, prefix: str) -> list[dict]:
-        """获取当前系统内所有关系类型、源标签、目标标签及数量."""
+        """获取当前系统内所有关系类型、源标签列表、目标标签列表及数量.
+
+        按关系类型聚合：同一类型用于多种标签组合时（如 MANIFESTS_IN 同时
+        连接 Symptom→Disease 和 SideEffect→Disease），合并为一条，
+        源/目标标签以列表形式返回，避免树状目录出现重复条目。
+        """
         return self._run(
             "MATCH (a)-[r]->(b) "
             "WHERE type(r) STARTS WITH $prefix "
             "AND ANY(l IN labels(a) WHERE l STARTS WITH $prefix) "
             "AND ANY(l IN labels(b) WHERE l STARTS WITH $prefix) "
-            "RETURN DISTINCT type(r) AS type, "
+            "WITH type(r) AS type, "
             "[l IN labels(a) WHERE l STARTS WITH $prefix][0] AS source_label, "
-            "[l IN labels(b) WHERE l STARTS WITH $prefix][0] AS target_label, "
+            "[l IN labels(b) WHERE l STARTS WITH $prefix][0] AS target_label "
+            "RETURN type, "
+            "collect(DISTINCT source_label) AS source_labels, "
+            "collect(DISTINCT target_label) AS target_labels, "
             "count(*) AS count "
             "ORDER BY type",
             prefix=prefix,
@@ -178,27 +217,62 @@ class Neo4jRepository:
         )
         return records[0] if records else None
 
-    def get_node_relationships(self, element_id: str) -> list[dict]:
-        """获取某节点的所有关系."""
-        incoming = self._run(
-            "MATCH (source)-[r]->(target) WHERE elementId(target) = $element_id "
-            "RETURN type(r) AS type, 'incoming' AS direction, "
-            "elementId(source) AS target_element_id, "
-            "source.name AS target_name, "
-            "labels(source)[0] AS target_label, "
-            "properties(r) AS properties",
-            element_id=element_id,
-        )
-        outgoing = self._run(
-            "MATCH (source)-[r]->(target) WHERE elementId(source) = $element_id "
-            "RETURN type(r) AS type, 'outgoing' AS direction, "
-            "elementId(target) AS target_element_id, "
-            "target.name AS target_name, "
-            "labels(target)[0] AS target_label, "
-            "properties(r) AS properties",
-            element_id=element_id,
-        )
-        return incoming + outgoing
+    def get_node_relationships(self, element_id: str, prefix: str = "") -> list[dict]:
+        """获取某节点的所有关系（按 type+direction+target 去重）.
+
+        prefix 非空时仅返回同系统关系，防止跨系统数据泄露。
+        """
+        if prefix:
+            incoming = self._run(
+                "MATCH (source)-[r]->(target) WHERE elementId(target) = $element_id "
+                "AND type(r) STARTS WITH $prefix "
+                "RETURN type(r) AS type, 'incoming' AS direction, "
+                "elementId(source) AS target_element_id, "
+                "source.name AS target_name, "
+                "[l IN labels(source) WHERE l STARTS WITH $prefix][0] AS target_label, "
+                "properties(r) AS properties",
+                element_id=element_id, prefix=prefix,
+            )
+            outgoing = self._run(
+                "MATCH (source)-[r]->(target) WHERE elementId(source) = $element_id "
+                "AND type(r) STARTS WITH $prefix "
+                "RETURN type(r) AS type, 'outgoing' AS direction, "
+                "elementId(target) AS target_element_id, "
+                "target.name AS target_name, "
+                "[l IN labels(target) WHERE l STARTS WITH $prefix][0] AS target_label, "
+                "properties(r) AS properties",
+                element_id=element_id, prefix=prefix,
+            )
+        else:
+            incoming = self._run(
+                "MATCH (source)-[r]->(target) WHERE elementId(target) = $element_id "
+                "RETURN type(r) AS type, 'incoming' AS direction, "
+                "elementId(source) AS target_element_id, "
+                "source.name AS target_name, "
+                "labels(source)[0] AS target_label, "
+                "properties(r) AS properties",
+                element_id=element_id,
+            )
+            outgoing = self._run(
+                "MATCH (source)-[r]->(target) WHERE elementId(source) = $element_id "
+                "RETURN type(r) AS type, 'outgoing' AS direction, "
+                "elementId(target) AS target_element_id, "
+                "target.name AS target_name, "
+                "labels(target)[0] AS target_label, "
+                "properties(r) AS properties",
+                element_id=element_id,
+            )
+        all_rels = incoming + outgoing
+        # 去重：同一 (type, direction, target_name) 只保留一条
+        # 避免 Neo4j 中重复关系导致前端展示多次
+        seen: set = set()
+        unique: list[dict] = []
+        for r in all_rels:
+            key = (r.get("type", ""), r.get("direction", ""), r.get("target_name", ""))
+            if key not in seen:
+                seen.add(key)
+                unique.append(r)
+        return unique
 
     # ═══════════════════════════════════════════
     # 图谱查询（prefix 隔离）
@@ -220,6 +294,8 @@ class Neo4jRepository:
         return self._run(
             "MATCH (a)-[r]->(b) "
             "WHERE type(r) STARTS WITH $prefix "
+            "AND ANY(label IN labels(a) WHERE label STARTS WITH $prefix) "
+            "AND ANY(label IN labels(b) WHERE label STARTS WITH $prefix) "
             "RETURN elementId(r) AS id, "
             "elementId(a) AS source, elementId(b) AS target, "
             "type(r) AS type "
@@ -227,23 +303,31 @@ class Neo4jRepository:
             prefix=prefix, limit=limit,
         )
 
-    def get_neighborhood(self, element_id: str, depth: int = 1) -> dict:
-        """获取某节点的 N 跳邻居子图."""
+    def get_neighborhood(self, element_id: str, prefix: str, depth: int = 1) -> dict:
+        """获取某节点的 N 跳邻居子图（仅限同 prefix 系统）."""
+        # 1) 查邻居节点：按 prefix 过滤 label，防止跨系统
         nodes = self._run(
             f"MATCH (center)-[r*1..{depth}]-(neighbor) "
             "WHERE elementId(center) = $element_id "
+            "AND ANY(label IN labels(neighbor) WHERE label STARTS WITH $prefix) "
             "RETURN DISTINCT elementId(neighbor) AS id, "
-            "neighbor.name AS label, labels(neighbor)[0] AS type",
-            element_id=element_id,
+            "neighbor.name AS label, "
+            "[l IN labels(neighbor) WHERE l STARTS WITH $prefix][0] AS type",
+            element_id=element_id, prefix=prefix,
         )
+        # 2) 查邻居间的边：直接在 node_ids 集合内查边，按 prefix 过滤
+        #    （不再在变长路径 r 上用 type()，那会导致 Cypher 报错使 edges 为空）
+        node_ids = [n["id"] for n in nodes] + [element_id]
         edges = self._run(
-            f"MATCH (center)-[r*1..{depth}]-(neighbor) "
-            "WHERE elementId(center) = $element_id "
-            "MATCH (a)-[rel]-(b) WHERE elementId(a) IN [n IN $node_ids | n] "
+            "MATCH (a)-[rel]-(b) "
+            "WHERE elementId(a) IN $node_ids "
+            "AND elementId(b) IN $node_ids "
+            "AND type(rel) STARTS WITH $prefix "
+            "AND ANY(label IN labels(a) WHERE label STARTS WITH $prefix) "
+            "AND ANY(label IN labels(b) WHERE label STARTS WITH $prefix) "
             "RETURN DISTINCT elementId(rel) AS id, "
             "elementId(a) AS source, elementId(b) AS target, type(rel) AS type",
-            element_id=element_id,
-            node_ids=[n["id"] for n in nodes] + [element_id],
+            prefix=prefix, node_ids=node_ids,
         )
         return {"nodes": nodes, "edges": edges}
 
@@ -325,15 +409,26 @@ class Neo4jRepository:
                                    limit: int = 100) -> list[dict]:
         """获取关系实例摘要（编辑器用）。rel_type 为短类型名."""
         full_type = f"{prefix}{rel_type}"
-        return self._run(
+        results = self._run(
             f"MATCH (a)-[r:`{full_type}`]->(b) "
             "RETURN elementId(r) AS element_id, "
+            "elementId(a) AS source_id, "
             "a.name AS source_name, labels(a)[0] AS source_label, "
+            "elementId(b) AS target_id, "
             "b.name AS target_name, labels(b)[0] AS target_label "
             "ORDER BY a.name "
             "LIMIT $limit",
             limit=limit,
         )
+        # 去重：同一 (source_name, target_name) 只保留一条
+        seen: set = set()
+        unique: list[dict] = []
+        for r in results:
+            key = (r.get("source_name", ""), r.get("target_name", ""))
+            if key not in seen:
+                seen.add(key)
+                unique.append(r)
+        return unique
 
     # ═══════════════════════════════════════════
     # 原始查询（供 QueryService 内部使用）
@@ -372,7 +467,7 @@ class Neo4jRepository:
         return records[0] if records else None
 
     def set_node_name(self, element_id: str, name: str) -> dict | None:
-        """更新节点名称."""
+        """更新节点名称."""  
         records = self._run(
             "MATCH (n) WHERE elementId(n) = $eid "
             "SET n.name = $name "
@@ -617,20 +712,68 @@ class Neo4jRepository:
         return [r["relationshipType"] for r in records]
 
     # ═══════════════════════════════════════════
+    # 冲突检测（v3.5 验证器用）
+    # ═══════════════════════════════════════════
+
+    def get_node_by_name(self, name: str, label: str) -> dict | None:
+        """按名称和标签查找实体。"""
+        records = self._run(
+            f"MATCH (n:`{label}` {{name: $name}}) RETURN properties(n) AS properties",
+            name=name,
+        )
+        return records[0] if records else None
+
+    def get_relationship_by_names(
+        self, source_name: str, target_name: str, full_type: str
+    ) -> dict | None:
+        """按源、目标、类型查找关系。"""
+        records = self._run(
+            "MATCH (src {name: $source_name})-[r]->(tgt {name: $target_name}) "
+            "WHERE type(r) = $full_type "
+            "RETURN elementId(r) AS elementId, properties(r) AS properties",
+            source_name=source_name,
+            target_name=target_name,
+            full_type=full_type,
+        )
+        return records[0] if records else None
+
+    def get_all_nodes_by_prefix(self, prefix: str) -> list[dict]:
+        """获取指定 prefix 下所有节点（备份用）。"""
+        records = self._run(
+            "MATCH (n) WHERE ANY(label IN labels(n) WHERE label STARTS WITH $prefix) "
+            "RETURN elementId(n) AS elementId, labels(n) AS labels, properties(n) AS properties",
+            prefix=prefix,
+        )
+        return [dict(r) for r in records]
+
+    def get_all_relationships_by_prefix(self, prefix: str) -> list[dict]:
+        """获取指定 prefix 下所有关系（备份用）。"""
+        records = self._run(
+            "MATCH ()-[r]->() WHERE type(r) STARTS WITH $prefix "
+            "RETURN elementId(r) AS elementId, type(r) AS type, "
+            "elementId(startNode(r)) AS startNodeElementId, "
+            "elementId(endNode(r)) AS endNodeElementId, "
+            "properties(r) AS properties",
+            prefix=prefix,
+        )
+        return [dict(r) for r in records]
+
+    # ═══════════════════════════════════════════
     # 批量写入（v3.0 导入引擎用，prefix 驱动）
     # ═══════════════════════════════════════════
 
     def batch_create_nodes(self, nodes: list[dict], prefix: str) -> int:
-        """批量创建节点（UNWIND 优化）。nodes: [{label: 短名, name, ...properties}]."""
+        """批量创建节点（UNWIND + APOC merge，按 name 去重）。nodes: [{label: 短名, name, ...properties}]."""
         if not nodes:
             return 0
         result = self._run_write(
             "UNWIND $nodes AS row "
-            "CALL apoc.create.node([row.full_label], row.props) YIELD node "
+            "CALL apoc.merge.node([row.full_label], {name: row.name}, row.props, {}) YIELD node "
             "RETURN count(node) AS created",
             {"nodes": [
                 {
                     "full_label": f"{prefix}{n['label']}",
+                    "name": n["name"],
                     "props": {"name": n["name"], **(n.get("properties", {}))},
                 }
                 for n in nodes
@@ -639,24 +782,29 @@ class Neo4jRepository:
         return result[0]["created"] if result else 0
 
     def batch_create_relationships(self, rels: list[dict], prefix: str) -> int:
-        """批量创建关系（UNWIND 优化）。rels: [{type: 短名, source_name, target_name}]."""
+        """批量创建关系（UNWIND + APOC merge，动态类型，按端点+类型去重，仅限同 prefix 系统）。
+
+        rels: [{type: 短名, source_name, target_name, ...props}].
+        """
         if not rels:
             return 0
         result = self._run_write(
             "UNWIND $rels AS row "
             "MATCH (src {name: row.source_name}) "
+            "WHERE ANY(label IN labels(src) WHERE label STARTS WITH $prefix) "
             "MATCH (tgt {name: row.target_name}) "
-            f"CREATE (src)-[r:`{prefix}`]->(tgt) "  # placeholder, 每行用 row.full_type
-            "SET r = {type: row.full_type} "
-            "RETURN count(r) AS created",
+            "WHERE ANY(label IN labels(tgt) WHERE label STARTS WITH $prefix) "
+            "CALL apoc.merge.relationship(src, row.full_type, {}, row.props, tgt, {}) YIELD rel "
+            "RETURN count(rel) AS created",
             {"rels": [
                 {
                     "full_type": f"{prefix}{r['type']}",
                     "source_name": r["source_name"],
                     "target_name": r["target_name"],
+                    "props": r.get("props", {}),
                 }
                 for r in rels
-            ]},
+            ], "prefix": prefix},
         )
         return result[0]["created"] if result else 0
 
@@ -664,28 +812,77 @@ class Neo4jRepository:
     # 系统清理（v3.0: 按 prefix 删除所有业务数据）
     # ═══════════════════════════════════════════
 
+    def get_relation_types_by_prefix(self, prefix: str) -> list[str]:
+        """v3.6: 获取指定 prefix 下的所有关系类型名称（去重，如 ['TREATS', 'HAS_SIDE_EFFECT']）。"""
+        try:
+            result = self._run(
+                "MATCH ()-[r]->() "
+                "WHERE type(r) STARTS WITH $prefix "
+                "RETURN DISTINCT type(r) AS rel_type "
+                "ORDER BY rel_type",
+                prefix=prefix,
+            )
+            return [row["rel_type"] for row in result]
+        except Exception:
+            return []
+
+    def get_system_stats(self, prefix: str) -> dict:
+        """获取指定前缀系统的详细统计信息（用于删除前展示）。"""
+        # 节点标签及数量
+        node_labels = self._run(
+            "MATCH (n) "
+            "WHERE ANY(label IN labels(n) WHERE label STARTS WITH $prefix) "
+            "WITH [l IN labels(n) WHERE l STARTS WITH $prefix][0] AS label, count(*) AS cnt "
+            "RETURN label, cnt ORDER BY cnt DESC",
+            prefix=prefix,
+        )
+        # 关系类型及数量
+        rel_types = self._run(
+            "MATCH ()-[r]->() WHERE type(r) STARTS WITH $prefix "
+            "RETURN type(r) AS rel_type, count(*) AS cnt "
+            "ORDER BY cnt DESC",
+            prefix=prefix,
+        )
+        # 总节点数
+        total_nodes = self.count_system_nodes(prefix)
+        # 总关系数
+        total_rels = self.count_system_relationships(prefix)
+        return {
+            "node_count": total_nodes,
+            "relationship_count": total_rels,
+            "node_labels": [{"label": r["label"], "count": r["cnt"]} for r in node_labels],
+            "relationship_types": [{"type": r["rel_type"], "count": r["cnt"]} for r in rel_types],
+        }
+
     def delete_system_data(self, prefix: str) -> dict:
         """删除指定前缀系统的所有节点和关系.
 
         注意：此方法仅删除 Neo4j 业务数据，SQLite 系统记录由调用方处理。
+        使用"先计数再删除"模式，确保返回准确的删除数量。
         """
-        # 先删除关系，再删除节点
-        rel_count = self._run_write(
-            "MATCH ()-[r]->() WHERE type(r) STARTS WITH $prefix "
-            "DELETE r "
-            "RETURN count(r) AS deleted",
-            {"prefix": prefix},
-        )
-        node_count = self._run_write(
-            "MATCH (n) "
-            "WHERE ANY(label IN labels(n) WHERE label STARTS WITH $prefix) "
-            "DETACH DELETE n "
-            "RETURN count(n) AS deleted",
-            {"prefix": prefix},
-        )
+        # 先统计（只读查询）
+        rel_total = self.count_system_relationships(prefix)
+        node_total = self.count_system_nodes(prefix)
+
+        # 删除关系（写操作，不依赖 RETURN count）
+        if rel_total > 0:
+            self._run_write(
+                "MATCH ()-[r]->() WHERE type(r) STARTS WITH $prefix DELETE r",
+                {"prefix": prefix},
+            )
+
+        # 删除节点（DETACH DELETE 会清理残留关系）
+        if node_total > 0:
+            self._run_write(
+                "MATCH (n) "
+                "WHERE ANY(label IN labels(n) WHERE label STARTS WITH $prefix) "
+                "DETACH DELETE n",
+                {"prefix": prefix},
+            )
+
         return {
-            "deleted_nodes": node_count[0].get("deleted", 0) if node_count else 0,
-            "deleted_relationships": rel_count[0].get("deleted", 0) if rel_count else 0,
+            "deleted_nodes": node_total,
+            "deleted_relationships": rel_total,
         }
 
     def count_system_nodes(self, prefix: str) -> int:

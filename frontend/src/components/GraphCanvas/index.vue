@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import { ref, onMounted, watch, onUnmounted, nextTick } from 'vue'
 import { ReloadOutlined, PlusOutlined, MinusOutlined } from '@ant-design/icons-vue'
+import { message } from 'ant-design-vue'
 import { DataSet, Network } from 'vis-network/standalone'
 import { useAppStore } from '@/stores'
-import { fetchGraphOverview, fetchNeighborhood, fetchNodeDetail } from '@/api'
+import { fetchGraphOverview, fetchNeighborhood, fetchNodeDetail, fetchRelationship } from '@/api'
 
 const store = useAppStore()
 
@@ -13,6 +14,7 @@ const nodeCount = ref(0)
 const edgeCount = ref(0)
 const expandedNodes = ref<Set<string>>(new Set())
 let network: Network | null = null
+let currentNodesDS: DataSet<any> | null = null
 
 // v2.0: 缩放控制
 const currentScale = ref(1)
@@ -51,14 +53,35 @@ function handleZoomOut() {
   zoomTo(Math.max(SCALE_MIN, scale - ZOOM_STEP))
 }
 
-/** 节点类型颜色 - 工业专业配色 */
+/** 节点类型颜色 - 与后端 NODE_COLORS 完全同步 */
 const nodeTypeColors: Record<string, string> = {
   Disease: '#f5222d',
   Symptom: '#fa8c16',
   Drug: '#1890ff',
   BodyPart: '#52c41a',
   SideEffect: '#722ed1',
+  Department: '#eb2f96',
+  Student: '#13c2c2',
+  Teacher: '#2f54eb',
+  Subject: '#faad14',
+  Course: '#a0d911',
+  Patient: '#f759ab',
+  Hospital: '#722ed1',
+  Doctor: '#1677ff',
+  Test: '#bfbfbf',
+  Exam: '#ff7a45',
+  Treatment: '#52c41a',
+  Prescription: '#1890ff',
+  Diagnosis: '#fa541c',
 }
+
+/** 动态备用色板（与后端 _FALLBACK_COLORS 对齐） */
+const fallbackColors = [
+  '#f5222d', '#fa8c16', '#1890ff', '#52c41a', '#722ed1',
+  '#eb2f96', '#13c2c2', '#2f54eb', '#faad14', '#a0d911',
+  '#f759ab', '#1677ff', '#ff7a45', '#fa541c', '#9254de',
+  '#36cfc9', '#d4380d', '#0958d9', '#389e0d', '#c41d7f',
+]
 
 /** 关系类型颜色（按后端原始 type 映射）- 工业配色 */
 const edgeTypeColors: Record<string, string> = {
@@ -72,7 +95,18 @@ const edgeTypeColors: Record<string, string> = {
 }
 
 function getNodeBg(type: string, fallback?: string): string {
-  return fallback || nodeTypeColors[type] || '#95a5a6'
+  // 后端分配的颜色优先
+  if (fallback && fallback !== '#999999' && fallback !== '#95a5a6') return fallback
+  // 前端已知类型映射
+  if (nodeTypeColors[type]) return nodeTypeColors[type]
+  // 动态分配：基于类型名哈希从备用色板选取
+  let hash = 0
+  for (let i = 0; i < type.length; i++) {
+    hash = ((hash << 5) - hash) + type.charCodeAt(i)
+    hash |= 0
+  }
+  const idx = Math.abs(hash) % fallbackColors.length
+  return fallbackColors[idx]
 }
 
 function getEdgeClr(rawType?: string): string {
@@ -84,31 +118,46 @@ function renderGraph(nodesData: any[], edgesData: any[]) {
   if (!containerRef.value) return
 
   nodeCount.value = nodesData.length
-  edgeCount.value = edgesData.length
+  const validNodesData = nodesData.filter((n: any) => n && n.id)
+  const nodeIds = new Set(validNodesData.map((n: any) => n.id))
+  const validEdgesData = edgesData.filter((e: any) => {
+    const sourceId = e?.source || e?.from
+    const targetId = e?.target || e?.to
+    return e?.id && sourceId && targetId && nodeIds.has(sourceId) && nodeIds.has(targetId)
+  })
+
+  nodeCount.value = validNodesData.length
+  edgeCount.value = validEdgesData.length
+  updateLegend(validNodesData)
 
   const nodes = new DataSet(
-    nodesData.map((n: any) => ({
+    validNodesData.map((n: any) => { 
+      const bg = getNodeBg(n.type, n.color)
+      return {
       id: n.id,
       label: n.label || n.name || '',
       color: {
-        background: getNodeBg(n.type, n.color),
-        border: '#ffffff',
-        highlight: { background: getNodeBg(n.type, n.color), border: '#333333' },
-        hover: { background: getNodeBg(n.type, n.color), border: '#555555' },
+        background: bg,
+        border: bg,           // 未选中：边框=背景色，视觉无缝
+        highlight: { background: bg, border: '#000000' },  // 选中：黑色边框
+        hover: { background: bg, border: '#000000' },
       },
       font: { size: 13, color: '#ffffff', strokeWidth: 1, strokeColor: 'rgba(0,0,0,0.25)' },
       borderWidth: 1.5,
+      borderWidthSelected: 8,
       shape: 'box',
       shapeProperties: { borderRadius: 4 },
       size: Math.max(n.size || 16, 12),
-      title: `<div style="padding:4px 8px;font-size:13px"><b>${n.label || n.name}</b><br/><span style="font-size:11px;opacity:0.8">${n.type || ''}</span></div>`,
+      title: `${n.label || n.name} (${n.type || '未知'})`,
       margin: 8,
       _type: n.type,
-    })),
+      }
+    }),
   )
+  currentNodesDS = nodes
 
   const edges = new DataSet(
-    edgesData.map((e: any) => {
+    validEdgesData.map((e: any) => {
       const sourceId = e.source || e.from
       const targetId = e.target || e.to
       return {
@@ -184,18 +233,31 @@ function renderGraph(nodesData: any[], edgesData: any[]) {
     // 初始化缩放值
     currentScale.value = network.getScale()
 
-    // ---- 单击节点：选中 → 触发 watch ----
-    network.on('click', (params: any) => {
+    // ---- 单击节点/边：选中 → 触发详情展示 ----
+    network.on('click', async (params: any) => {
+      // 优先处理节点点击
       if (params.nodes.length > 0) {
         const nodeId = params.nodes[0]
-        const node = nodes.get(nodeId) as any
+        const node = currentNodesDS?.get(nodeId) as any
         if (node) {
           store.selectNode(node._type || '', node.label || '', nodeId)
         }
-      } else {
-        // 点击空白取消选中
-        store.clearSelection()
+        return
       }
+      // 其次处理边点击：获取关系详情（源实体→关系→目标实体）并展示
+      if (params.edges.length > 0) {
+        const edgeId = params.edges[0]
+        try {
+          const rel = await fetchRelationship(edgeId)
+          store.selectRelationship(rel)
+        } catch (e: any) {
+          console.error('加载关系详情失败:', e)
+          message.error(e?.response?.data?.detail || '加载关系详情失败，请重试')
+        }
+        return
+      }
+      // 点击空白取消选中
+      store.clearSelection()
     })
 
     // ---- 启动自定义带边界约束的平移 ----
@@ -292,9 +354,26 @@ function teardownCustomPan() {
   window.removeEventListener('mouseup', onMouseUp)
 }
 
+/** 动态图例：从当前节点数据中提取去重类型 */
+const legendItems = ref<{ type: string; color: string }[]>([])
+
+function updateLegend(nodesData: any[]) {
+  const seen = new Map<string, string>()
+  for (const n of nodesData) {
+    const t = n.type || 'Unknown'
+    if (!seen.has(t)) {
+      seen.set(t, getNodeBg(t, n.color))
+    }
+  }
+  legendItems.value = Array.from(seen.entries()).map(([type, color]) => ({ type, color }))
+}
+
 // ===== 图谱全局数据（可渐进扩展） =====
 let mergedNodes: any[] = []
 let mergedEdges: any[] = []
+
+/** 系统切换代数计数器，用于取消过期的异步邻域请求 */
+let loadGeneration = 0
 
 async function loadData() {
   loading.value = true
@@ -319,13 +398,66 @@ function handleRefresh() {
   loadData()
 }
 
+// ===== 选中节点心跳动画 =====
+let heartbeatTimer: ReturnType<typeof setInterval> | null = null
+let heartbeatNodeId: string | null = null
+let heartbeatPhase = false
+
+function startHeartbeat(nodeId: string) {
+  stopHeartbeat()
+  heartbeatNodeId = nodeId
+  heartbeatPhase = false
+  // 每 500ms 节点大小+阴影脉冲交替，模拟心脏跳动
+  heartbeatTimer = setInterval(() => {
+    if (!network || !heartbeatNodeId) return
+    heartbeatPhase = !heartbeatPhase
+    const nodesDS = (network as any).body?.data?.nodes
+    if (!nodesDS) return
+    nodesDS.update({
+      id: heartbeatNodeId,
+      margin: heartbeatPhase ? 16 : 6,
+      font: { size: heartbeatPhase ? 16 : 13, color: '#ffffff', strokeWidth: 1, strokeColor: 'rgba(0,0,0,0.25)' },
+      shadow: {
+        enabled: true,
+        color: heartbeatPhase ? 'rgba(250, 84, 28, 0.9)' : 'rgba(250, 84, 28, 0.1)',
+        size: heartbeatPhase ? 45 : 12,
+        x: 0,
+        y: 0,
+      },
+    })
+  }, 500)
+}
+
+function stopHeartbeat() {
+  if (heartbeatTimer) {
+    clearInterval(heartbeatTimer)
+    heartbeatTimer = null
+  }
+  // 恢复节点原始样式
+  if (network && heartbeatNodeId) {
+    const nodesDS = (network as any).body?.data?.nodes
+    if (nodesDS) {
+      nodesDS.update({
+        id: heartbeatNodeId,
+        margin: 8,
+        font: { size: 13, color: '#ffffff', strokeWidth: 1, strokeColor: 'rgba(0,0,0,0.25)' },
+        shadow: { enabled: false },
+      })
+    }
+  }
+  heartbeatNodeId = null
+}
+
 // ===== 监听选中节点：展开邻域 + 聚焦 + 设置详情 =====
 let pendingElementId: string | null = null
 
 watch(
   () => store.selectedNode,
   async (node) => {
-    if (!network || !node || !node.elementId) return
+    if (!network || !node || !node.elementId) {
+      stopHeartbeat()
+      return
+    }
 
     // 防止重复触发
     if (pendingElementId === node.elementId) return
@@ -333,10 +465,14 @@ watch(
 
     try {
       // 并行请求详情和邻域
+      const myGen = loadGeneration
       const [detail, neighborData] = await Promise.all([
-        fetchNodeDetail(node.elementId),
-        fetchNeighborhood(node.elementId, 1).catch(() => null),
+        fetchNodeDetail(node.elementId, store.currentSystemId),
+        fetchNeighborhood(node.elementId, 1, store.currentSystemId).catch(() => null),
       ])
+
+      // 系统切换后取消过期的邻域合并，防止跨系统节点泄露
+      if (myGen !== loadGeneration) return
 
       // 更新详情到 store
       store.selectedNodeDetail = detail
@@ -359,6 +495,7 @@ watch(
       // 高亮并聚焦到目标节点
       await nextTick()
       network.selectNodes([node.elementId])
+      startHeartbeat(node.elementId)
       network.focus(node.elementId, {
         scale: 1.5,
         animation: { duration: 500, easingFunction: 'easeInOutQuad' },
@@ -381,9 +518,13 @@ watch(
 watch(
   () => store.currentSystemId,
   () => {
+    // 递增代数，使进行中的邻域请求失效
+    loadGeneration++
     mergedNodes = []
     mergedEdges = []
     expandedNodes.value = new Set()
+    // 清除选中状态，防止旧系统节点残留
+    store.clearSelection()
     loadData()
   },
 )
@@ -391,6 +532,7 @@ watch(
 onMounted(loadData)
 
 onUnmounted(() => {
+  stopHeartbeat()
   teardownCustomPan()
   if (network) {
     network.destroy()
@@ -417,11 +559,11 @@ onUnmounted(() => {
       </div>
     </div>
 
-    <!-- 图例 -->
+    <!-- 图例（动态生成） -->
     <div class="graph-legend">
-      <span v-for="(color, type) in nodeTypeColors" :key="type" class="legend-item">
-        <i class="legend-dot" :style="{ background: color }"></i>
-        {{ type }}
+      <span v-for="item in legendItems" :key="item.type" class="legend-item">
+        <i class="legend-dot" :style="{ background: item.color }"></i>
+        {{ item.type }}
       </span>
     </div>
 

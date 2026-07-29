@@ -9,6 +9,7 @@ venv/
 # Node
 node_modules/
 frontend/dist/
+frontend/tsconfig.tsbuildinfo
 
 # Environment
 .env
@@ -26,3 +27,6 @@ Thumbs.db
 
 # Logs
 *.log
+
+# Test databases
+knowledge_graph.db

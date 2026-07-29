@@ -1,0 +1,636 @@
+{
+  "snapshot_id": "20260728_102801_TUR_",
+  "prefix": "TUR_",
+  "created_at": "2026-07-28T10:28:01.769591",
+  "node_count": 32,
+  "relationship_count": 39,
+  "nodes_backup": [
+    {
+      "elementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:113",
+      "labels": [
+        "TUR_Turbine"
+      ],
+      "properties": {
+        "name": "陆上直驱风机",
+        "别名": "陆上直驱",
+        "实体描述": "2MW，直驱永磁，陆上"
+      }
+    },
+    {
+      "elementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:114",
+      "labels": [
+        "TUR_Turbine"
+      ],
+      "properties": {
+        "name": "海上半直驱风机",
+        "别名": "海上半直驱",
+        "实体描述": "6MW，半直驱，海上"
+      }
+    },
+    {
+      "elementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:115",
+      "labels": [
+        "TUR_Turbine"
+      ],
+      "properties": {
+        "name": "双馈异步风机",
+        "别名": "双馈",
+        "实体描述": "1.5MW，双馈变速"
+      }
+    },
+    {
+      "elementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:116",
+      "labels": [
+        "TUR_Component"
+      ],
+      "properties": {
+        "别名": "齿轮箱",
+        "name": "齿轮箱",
+        "实体描述": "增速齿轮箱，1:100"
+      }
+    },
+    {
+      "elementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:117",
+      "labels": [
+        "TUR_Component"
+      ],
+      "properties": {
+        "别名": "发电机",
+        "name": "发电机",
+        "实体描述": "永磁同步发电机"
+      }
+    },
+    {
+      "elementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:118",
+      "labels": [
+        "TUR_Component"
+      ],
+      "properties": {
+        "别名": "叶片",
+        "name": "叶片",
+        "实体描述": "玻璃纤维叶片，60m"
+      }
+    },
+    {
+      "elementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:119",
+      "labels": [
+        "TUR_Component"
+      ],
+      "properties": {
+        "name": "偏航系统",
+        "别名": "偏航",
+        "实体描述": "偏航轴承+齿轮电机"
+      }
+    },
+    {
+      "elementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:120",
+      "labels": [
+        "TUR_Component"
+      ],
+      "properties": {
+        "name": "变桨系统",
+        "别名": "变桨",
+        "实体描述": "电动变桨，3叶片独立"
+      }
+    },
+    {
+      "elementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:121",
+      "labels": [
+        "TUR_Component"
+      ],
+      "properties": {
+        "别名": "SCADA",
+        "name": "SCADA系统",
+        "实体描述": "数据采集与监控系统"
+      }
+    },
+    {
+      "elementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:122",
+      "labels": [
+        "TUR_Fault"
+      ],
+      "properties": {
+        "name": "齿轮箱油温过高",
+        "别名": "油温高",
+        "实体描述": "油温>75°C告警"
+      }
+    },
+    {
+      "elementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:123",
+      "labels": [
+        "TUR_Fault"
+      ],
+      "properties": {
+        "name": "发电机绝缘下降",
+        "别名": "绝缘低",
+        "实体描述": "绝缘电阻<10MΩ"
+      }
+    },
+    {
+      "elementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:124",
+      "labels": [
+        "TUR_Fault"
+      ],
+      "properties": {
+        "name": "叶片雷击损伤",
+        "别名": "雷击",
+        "实体描述": "叶尖复合材料烧蚀"
+      }
+    },
+    {
+      "elementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:125",
+      "labels": [
+        "TUR_Fault"
+      ],
+      "properties": {
+        "name": "偏航偏移",
+        "别名": "偏航偏",
+        "实体描述": "机舱角度偏差>5°"
+      }
+    },
+    {
+      "elementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:126",
+      "labels": [
+        "TUR_Fault"
+      ],
+      "properties": {
+        "name": "变桨电池故障",
+        "别名": "电池坏",
+        "实体描述": "后备电池电压不足"
+      }
+    },
+    {
+      "elementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:127",
+      "labels": [
+        "TUR_Cause"
+      ],
+      "properties": {
+        "name": "齿轮油变质",
+        "别名": "油变质",
+        "实体描述": "油品运动粘度超标"
+      }
+    },
+    {
+      "elementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:128",
+      "labels": [
+        "TUR_Cause"
+      ],
+      "properties": {
+        "name": "冷却风扇停转",
+        "别名": "风扇坏",
+        "实体描述": "散热风扇电机烧毁"
+      }
+    },
+    {
+      "elementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:129",
+      "labels": [
+        "TUR_Cause"
+      ],
+      "properties": {
+        "name": "绝缘老化",
+        "别名": "老化",
+        "实体描述": "绕组绝缘热老化"
+      }
+    },
+    {
+      "elementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:130",
+      "labels": [
+        "TUR_Cause"
+      ],
+      "properties": {
+        "name": "雷电直击叶尖",
+        "别名": "直击雷",
+        "实体描述": "未及时接闪"
+      }
+    },
+    {
+      "elementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:131",
+      "labels": [
+        "TUR_Cause"
+      ],
+      "properties": {
+        "name": "偏航编码器失灵",
+        "别名": "编码器坏",
+        "实体描述": "绝对值编码器漂移"
+      }
+    },
+    {
+      "elementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:132",
+      "labels": [
+        "TUR_Cause"
+      ],
+      "properties": {
+        "name": "后备电池寿命到期",
+        "别名": "电池旧",
+        "实体描述": "锂电池循环>500次"
+      }
+    },
+    {
+      "elementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:133",
+      "labels": [
+        "TUR_Action"
+      ],
+      "properties": {
+        "name": "更换齿轮油",
+        "别名": "换油",
+        "实体描述": "Mobil SHC XMP 320"
+      }
+    },
+    {
+      "elementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:134",
+      "labels": [
+        "TUR_Action"
+      ],
+      "properties": {
+        "name": "更换冷却风扇",
+        "别名": "换风扇",
+        "实体描述": "24V直流风扇总成"
+      }
+    },
+    {
+      "elementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:135",
+      "labels": [
+        "TUR_Action"
+      ],
+      "properties": {
+        "name": "重做绝缘处理",
+        "别名": "重做绝缘",
+        "实体描述": "VPI真空浸漆"
+      }
+    },
+    {
+      "elementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:136",
+      "labels": [
+        "TUR_Action"
+      ],
+      "properties": {
+        "name": "叶片修复",
+        "别名": "补叶片",
+        "实体描述": "复合材料局部补强"
+      }
+    },
+    {
+      "elementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:137",
+      "labels": [
+        "TUR_Action"
+      ],
+      "properties": {
+        "name": "校准偏航编码器",
+        "别名": "校编码器",
+        "实体描述": "零位重新对齐"
+      }
+    },
+    {
+      "elementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:138",
+      "labels": [
+        "TUR_Action"
+      ],
+      "properties": {
+        "name": "更换变桨电池",
+        "别名": "换电池",
+        "实体描述": "3.2V磷酸铁锂"
+      }
+    },
+    {
+      "elementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:139",
+      "labels": [
+        "TUR_Maintenance"
+      ],
+      "properties": {
+        "name": "半年定检",
+        "别名": "半年检",
+        "实体描述": "6个月周期维护任务"
+      }
+    },
+    {
+      "elementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:140",
+      "labels": [
+        "TUR_Maintenance"
+      ],
+      "properties": {
+        "name": "全年定检",
+        "别名": "全年检",
+        "实体描述": "12个月周期维护任务"
+      }
+    },
+    {
+      "elementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:141",
+      "labels": [
+        "TUR_Maintenance"
+      ],
+      "properties": {
+        "name": "齿轮油更换任务",
+        "别名": "换油任务",
+        "实体描述": "2年周期专项"
+      }
+    },
+    {
+      "elementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:142",
+      "labels": [
+        "TUR_Engineer"
+      ],
+      "properties": {
+        "别名": "孙工",
+        "name": "孙工",
+        "实体描述": "齿轮箱专长，10年风电运维"
+      }
+    },
+    {
+      "elementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:143",
+      "labels": [
+        "TUR_Engineer"
+      ],
+      "properties": {
+        "别名": "钱工",
+        "name": "钱工",
+        "实体描述": "电气绝缘专长"
+      }
+    },
+    {
+      "elementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:144",
+      "labels": [
+        "TUR_Engineer"
+      ],
+      "properties": {
+        "别名": "周工",
+        "name": "周工",
+        "实体描述": "叶片与复合材料专长"
+      }
+    }
+  ],
+  "relationships_backup": [
+    {
+      "elementId": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:260",
+      "type": "TUR_HAS_COMPONENT",
+      "startNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:113",
+      "endNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:117",
+      "properties": {}
+    },
+    {
+      "elementId": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:261",
+      "type": "TUR_HAS_COMPONENT",
+      "startNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:113",
+      "endNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:118",
+      "properties": {}
+    },
+    {
+      "elementId": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:262",
+      "type": "TUR_HAS_COMPONENT",
+      "startNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:113",
+      "endNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:119",
+      "properties": {}
+    },
+    {
+      "elementId": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:263",
+      "type": "TUR_HAS_COMPONENT",
+      "startNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:113",
+      "endNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:120",
+      "properties": {}
+    },
+    {
+      "elementId": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:264",
+      "type": "TUR_HAS_COMPONENT",
+      "startNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:113",
+      "endNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:121",
+      "properties": {}
+    },
+    {
+      "elementId": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:265",
+      "type": "TUR_HAS_COMPONENT",
+      "startNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:114",
+      "endNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:116",
+      "properties": {}
+    },
+    {
+      "elementId": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:266",
+      "type": "TUR_HAS_COMPONENT",
+      "startNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:114",
+      "endNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:117",
+      "properties": {}
+    },
+    {
+      "elementId": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:267",
+      "type": "TUR_HAS_COMPONENT",
+      "startNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:114",
+      "endNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:118",
+      "properties": {}
+    },
+    {
+      "elementId": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:268",
+      "type": "TUR_HAS_COMPONENT",
+      "startNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:114",
+      "endNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:121",
+      "properties": {}
+    },
+    {
+      "elementId": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:269",
+      "type": "TUR_HAS_COMPONENT",
+      "startNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:115",
+      "endNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:116",
+      "properties": {}
+    },
+    {
+      "elementId": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:270",
+      "type": "TUR_HAS_COMPONENT",
+      "startNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:115",
+      "endNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:117",
+      "properties": {}
+    },
+    {
+      "elementId": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:271",
+      "type": "TUR_HAS_COMPONENT",
+      "startNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:115",
+      "endNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:118",
+      "properties": {}
+    },
+    {
+      "elementId": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:272",
+      "type": "TUR_CAUSED_BY",
+      "startNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:122",
+      "endNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:127",
+      "properties": {}
+    },
+    {
+      "elementId": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:273",
+      "type": "TUR_CAUSED_BY",
+      "startNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:122",
+      "endNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:128",
+      "properties": {}
+    },
+    {
+      "elementId": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:274",
+      "type": "TUR_CAUSED_BY",
+      "startNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:123",
+      "endNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:129",
+      "properties": {}
+    },
+    {
+      "elementId": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:275",
+      "type": "TUR_CAUSED_BY",
+      "startNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:124",
+      "endNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:130",
+      "properties": {}
+    },
+    {
+      "elementId": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:276",
+      "type": "TUR_CAUSED_BY",
+      "startNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:125",
+      "endNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:131",
+      "properties": {}
+    },
+    {
+      "elementId": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:277",
+      "type": "TUR_CAUSED_BY",
+      "startNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:126",
+      "endNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:132",
+      "properties": {}
+    },
+    {
+      "elementId": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:278",
+      "type": "TUR_REPAIRED_BY",
+      "startNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:122",
+      "endNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:133",
+      "properties": {}
+    },
+    {
+      "elementId": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:279",
+      "type": "TUR_REPAIRED_BY",
+      "startNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:122",
+      "endNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:134",
+      "properties": {}
+    },
+    {
+      "elementId": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:280",
+      "type": "TUR_REPAIRED_BY",
+      "startNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:123",
+      "endNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:135",
+      "properties": {}
+    },
+    {
+      "elementId": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:281",
+      "type": "TUR_REPAIRED_BY",
+      "startNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:124",
+      "endNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:136",
+      "properties": {}
+    },
+    {
+      "elementId": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:282",
+      "type": "TUR_REPAIRED_BY",
+      "startNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:125",
+      "endNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:137",
+      "properties": {}
+    },
+    {
+      "elementId": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:283",
+      "type": "TUR_REPAIRED_BY",
+      "startNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:126",
+      "endNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:138",
+      "properties": {}
+    },
+    {
+      "elementId": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:284",
+      "type": "TUR_SCHEDULED_FOR",
+      "startNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:139",
+      "endNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:137",
+      "properties": {}
+    },
+    {
+      "elementId": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:285",
+      "type": "TUR_SCHEDULED_FOR",
+      "startNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:140",
+      "endNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:135",
+      "properties": {}
+    },
+    {
+      "elementId": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:286",
+      "type": "TUR_SCHEDULED_FOR",
+      "startNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:141",
+      "endNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:133",
+      "properties": {}
+    },
+    {
+      "elementId": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:287",
+      "type": "TUR_ASSIGNED_TO",
+      "startNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:133",
+      "endNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:142",
+      "properties": {}
+    },
+    {
+      "elementId": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:288",
+      "type": "TUR_ASSIGNED_TO",
+      "startNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:134",
+      "endNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:142",
+      "properties": {}
+    },
+    {
+      "elementId": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:289",
+      "type": "TUR_ASSIGNED_TO",
+      "startNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:135",
+      "endNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:143",
+      "properties": {}
+    },
+    {
+      "elementId": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:290",
+      "type": "TUR_ASSIGNED_TO",
+      "startNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:136",
+      "endNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:144",
+      "properties": {}
+    },
+    {
+      "elementId": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:291",
+      "type": "TUR_ASSIGNED_TO",
+      "startNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:137",
+      "endNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:144",
+      "properties": {}
+    },
+    {
+      "elementId": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:292",
+      "type": "TUR_ASSIGNED_TO",
+      "startNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:138",
+      "endNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:143",
+      "properties": {}
+    },
+    {
+      "elementId": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:293",
+      "type": "TUR_MONITORED_BY",
+      "startNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:122",
+      "endNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:121",
+      "properties": {}
+    },
+    {
+      "elementId": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:294",
+      "type": "TUR_MONITORED_BY",
+      "startNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:123",
+      "endNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:121",
+      "properties": {}
+    },
+    {
+      "elementId": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:295",
+      "type": "TUR_MONITORED_BY",
+      "startNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:125",
+      "endNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:121",
+      "properties": {}
+    },
+    {
+      "elementId": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:296",
+      "type": "TUR_PRECEDES",
+      "startNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:127",
+      "endNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:122",
+      "properties": {}
+    },
+    {
+      "elementId": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:297",
+      "type": "TUR_PRECEDES",
+      "startNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:128",
+      "endNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:122",
+      "properties": {}
+    },
+    {
+      "elementId": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:298",
+      "type": "TUR_PRECEDES",
+      "startNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:132",
+      "endNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:126",
+      "properties": {}
+    }
+  ]
+}

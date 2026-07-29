@@ -1,0 +1,26 @@
+{
+  "version": "1.0",
+  "name": "医疗数据备份基线",
+  "snapshot_id": "c767ad18",
+  "created_at": "2026-07-26T15:52:34.496428",
+  "description": "疾病诊疗知识图谱（MED_前缀）的基础备份，包含 55 个节点（疾病、药物、症状等）和 112 条关系。作为数据恢复的基础版本。",
+  "prefix": "MED_",
+  "node_count": 55,
+  "relationship_count": 112,
+  "node_labels": [
+    "MED_Drug",
+    "MED_Disease",
+    "MED_SideEffect",
+    "MED_Symptom",
+    "MED_BodyPart"
+  ],
+  "relationship_types": [
+    "MED_MANIFESTS_IN",
+    "MED_CONTRAINDICATED_WITH",
+    "MED_TREATS",
+    "MED_AFFECTS",
+    "MED_CAN_SUBSTITUTE",
+    "MED_HAS_SIDE_EFFECT",
+    "MED_SUB_CLASS_OF"
+  ]
+}

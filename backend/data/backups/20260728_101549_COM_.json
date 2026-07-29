@@ -1,0 +1,532 @@
+{
+  "snapshot_id": "20260728_101549_COM_",
+  "prefix": "COM_",
+  "created_at": "2026-07-28T10:15:49.172821",
+  "node_count": 27,
+  "relationship_count": 32,
+  "nodes_backup": [
+    {
+      "elementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:86",
+      "labels": [
+        "COM_Server"
+      ],
+      "properties": {
+        "name": "Web服务器01",
+        "别名": "web01",
+        "实体描述": "8C32G，Nginx前端"
+      }
+    },
+    {
+      "elementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:87",
+      "labels": [
+        "COM_Server"
+      ],
+      "properties": {
+        "name": "应用服务器02",
+        "别名": "app02",
+        "实体描述": "16C64G，Java应用"
+      }
+    },
+    {
+      "elementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:88",
+      "labels": [
+        "COM_Server"
+      ],
+      "properties": {
+        "name": "数据库服务器03",
+        "别名": "db03",
+        "实体描述": "32C128G，MySQL 8.0"
+      }
+    },
+    {
+      "elementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:89",
+      "labels": [
+        "COM_Server"
+      ],
+      "properties": {
+        "name": "缓存服务器04",
+        "别名": "redis04",
+        "实体描述": "8C16G，Redis 7"
+      }
+    },
+    {
+      "elementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:90",
+      "labels": [
+        "COM_Service"
+      ],
+      "properties": {
+        "别名": "order",
+        "name": "订单服务",
+        "实体描述": "微服务，订单核心"
+      }
+    },
+    {
+      "elementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:91",
+      "labels": [
+        "COM_Service"
+      ],
+      "properties": {
+        "别名": "pay",
+        "name": "支付服务",
+        "实体描述": "微服务，对接支付宝/微信"
+      }
+    },
+    {
+      "elementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:92",
+      "labels": [
+        "COM_Service"
+      ],
+      "properties": {
+        "别名": "user",
+        "name": "用户服务",
+        "实体描述": "微服务，账户中心"
+      }
+    },
+    {
+      "elementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:93",
+      "labels": [
+        "COM_Service"
+      ],
+      "properties": {
+        "别名": "kafka",
+        "name": "消息队列",
+        "实体描述": "Kafka，3节点集群"
+      }
+    },
+    {
+      "elementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:94",
+      "labels": [
+        "COM_Service"
+      ],
+      "properties": {
+        "别名": "es",
+        "name": "搜索引擎",
+        "实体描述": "Elasticsearch，日志检索"
+      }
+    },
+    {
+      "elementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:95",
+      "labels": [
+        "COM_Fault"
+      ],
+      "properties": {
+        "name": "接口超时",
+        "别名": "超时",
+        "实体描述": "API响应>3s"
+      }
+    },
+    {
+      "elementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:96",
+      "labels": [
+        "COM_Fault"
+      ],
+      "properties": {
+        "别名": "OOM",
+        "name": "内存溢出",
+        "实体描述": "OOM，Java堆溢出"
+      }
+    },
+    {
+      "elementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:97",
+      "labels": [
+        "COM_Fault"
+      ],
+      "properties": {
+        "name": "数据库慢查询",
+        "别名": "慢SQL",
+        "实体描述": "SQL>5s"
+      }
+    },
+    {
+      "elementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:98",
+      "labels": [
+        "COM_Fault"
+      ],
+      "properties": {
+        "name": "缓存击穿",
+        "别名": "击穿",
+        "实体描述": "热点key过期+高并发"
+      }
+    },
+    {
+      "elementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:99",
+      "labels": [
+        "COM_Fault"
+      ],
+      "properties": {
+        "name": "日志无法检索",
+        "别名": "日志丢",
+        "实体描述": "ES索引失败"
+      }
+    },
+    {
+      "elementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:100",
+      "labels": [
+        "COM_Cause"
+      ],
+      "properties": {
+        "name": "下游服务依赖慢",
+        "别名": "依赖慢",
+        "实体描述": "pay服务响应慢"
+      }
+    },
+    {
+      "elementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:101",
+      "labels": [
+        "COM_Cause"
+      ],
+      "properties": {
+        "name": "JVM堆配置不足",
+        "别名": "堆小",
+        "实体描述": "Xmx 2G 过小"
+      }
+    },
+    {
+      "elementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:102",
+      "labels": [
+        "COM_Cause"
+      ],
+      "properties": {
+        "别名": "无索引",
+        "name": "缺索引",
+        "实体描述": "SQL缺少复合索引"
+      }
+    },
+    {
+      "elementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:103",
+      "labels": [
+        "COM_Cause"
+      ],
+      "properties": {
+        "name": "热点key无互斥锁",
+        "别名": "无锁",
+        "实体描述": "重建时未加锁"
+      }
+    },
+    {
+      "elementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:104",
+      "labels": [
+        "COM_Cause"
+      ],
+      "properties": {
+        "别名": "盘满",
+        "name": "ES磁盘满",
+        "实体描述": "磁盘使用率>95%"
+      }
+    },
+    {
+      "elementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:105",
+      "labels": [
+        "COM_Resolution"
+      ],
+      "properties": {
+        "name": "限流降级",
+        "别名": "降级",
+        "实体描述": "Sentinel+开关降级"
+      }
+    },
+    {
+      "elementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:106",
+      "labels": [
+        "COM_Resolution"
+      ],
+      "properties": {
+        "name": "扩容JVM堆",
+        "别名": "扩堆",
+        "实体描述": "Xmx调至4G+GC调优"
+      }
+    },
+    {
+      "elementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:107",
+      "labels": [
+        "COM_Resolution"
+      ],
+      "properties": {
+        "name": "添加复合索引",
+        "别名": "加索引",
+        "实体描述": "联合索引+执行计划"
+      }
+    },
+    {
+      "elementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:108",
+      "labels": [
+        "COM_Resolution"
+      ],
+      "properties": {
+        "name": "加互斥锁重建",
+        "别名": "加锁",
+        "实体描述": "单飞重建缓存"
+      }
+    },
+    {
+      "elementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:109",
+      "labels": [
+        "COM_Resolution"
+      ],
+      "properties": {
+        "name": "扩容ES磁盘",
+        "别名": "扩ES",
+        "实体描述": "新增数据节点+迁移"
+      }
+    },
+    {
+      "elementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:110",
+      "labels": [
+        "COM_Engineer"
+      ],
+      "properties": {
+        "name": "架构师张",
+        "别名": "架构张",
+        "实体描述": "全栈+架构，10年经验"
+      }
+    },
+    {
+      "elementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:111",
+      "labels": [
+        "COM_Engineer"
+      ],
+      "properties": {
+        "别名": "SRE李",
+        "name": "SRE李",
+        "实体描述": "稳定性保障+监控告警"
+      }
+    },
+    {
+      "elementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:112",
+      "labels": [
+        "COM_Engineer"
+      ],
+      "properties": {
+        "别名": "DBA王",
+        "name": "DBA王",
+        "实体描述": "MySQL+ES专长"
+      }
+    }
+  ],
+  "relationships_backup": [
+    {
+      "elementId": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:12",
+      "type": "COM_RUNS_SERVICE",
+      "startNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:86",
+      "endNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:90",
+      "properties": {}
+    },
+    {
+      "elementId": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:15",
+      "type": "COM_RUNS_SERVICE",
+      "startNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:86",
+      "endNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:92",
+      "properties": {}
+    },
+    {
+      "elementId": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:79",
+      "type": "COM_RUNS_SERVICE",
+      "startNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:87",
+      "endNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:90",
+      "properties": {}
+    },
+    {
+      "elementId": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:115",
+      "type": "COM_RUNS_SERVICE",
+      "startNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:87",
+      "endNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:91",
+      "properties": {}
+    },
+    {
+      "elementId": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:168",
+      "type": "COM_RUNS_SERVICE",
+      "startNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:88",
+      "endNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:93",
+      "properties": {}
+    },
+    {
+      "elementId": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:169",
+      "type": "COM_RUNS_SERVICE",
+      "startNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:89",
+      "endNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:94",
+      "properties": {}
+    },
+    {
+      "elementId": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:170",
+      "type": "COM_DEPENDS_ON",
+      "startNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:90",
+      "endNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:91",
+      "properties": {}
+    },
+    {
+      "elementId": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:171",
+      "type": "COM_DEPENDS_ON",
+      "startNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:90",
+      "endNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:92",
+      "properties": {}
+    },
+    {
+      "elementId": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:172",
+      "type": "COM_DEPENDS_ON",
+      "startNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:90",
+      "endNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:93",
+      "properties": {}
+    },
+    {
+      "elementId": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:173",
+      "type": "COM_DEPENDS_ON",
+      "startNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:91",
+      "endNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:93",
+      "properties": {}
+    },
+    {
+      "elementId": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:174",
+      "type": "COM_DEPENDS_ON",
+      "startNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:92",
+      "endNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:94",
+      "properties": {}
+    },
+    {
+      "elementId": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:175",
+      "type": "COM_CAUSED_BY",
+      "startNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:95",
+      "endNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:100",
+      "properties": {}
+    },
+    {
+      "elementId": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:176",
+      "type": "COM_CAUSED_BY",
+      "startNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:96",
+      "endNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:101",
+      "properties": {}
+    },
+    {
+      "elementId": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:177",
+      "type": "COM_CAUSED_BY",
+      "startNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:97",
+      "endNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:102",
+      "properties": {}
+    },
+    {
+      "elementId": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:178",
+      "type": "COM_CAUSED_BY",
+      "startNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:98",
+      "endNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:103",
+      "properties": {}
+    },
+    {
+      "elementId": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:179",
+      "type": "COM_CAUSED_BY",
+      "startNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:99",
+      "endNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:104",
+      "properties": {}
+    },
+    {
+      "elementId": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:180",
+      "type": "COM_RESOLVED_BY",
+      "startNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:95",
+      "endNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:105",
+      "properties": {}
+    },
+    {
+      "elementId": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:181",
+      "type": "COM_RESOLVED_BY",
+      "startNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:96",
+      "endNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:106",
+      "properties": {}
+    },
+    {
+      "elementId": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:182",
+      "type": "COM_RESOLVED_BY",
+      "startNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:97",
+      "endNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:107",
+      "properties": {}
+    },
+    {
+      "elementId": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:183",
+      "type": "COM_RESOLVED_BY",
+      "startNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:98",
+      "endNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:108",
+      "properties": {}
+    },
+    {
+      "elementId": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:184",
+      "type": "COM_RESOLVED_BY",
+      "startNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:99",
+      "endNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:109",
+      "properties": {}
+    },
+    {
+      "elementId": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:185",
+      "type": "COM_OWNED_BY",
+      "startNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:90",
+      "endNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:110",
+      "properties": {}
+    },
+    {
+      "elementId": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:186",
+      "type": "COM_OWNED_BY",
+      "startNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:91",
+      "endNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:111",
+      "properties": {}
+    },
+    {
+      "elementId": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:187",
+      "type": "COM_OWNED_BY",
+      "startNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:92",
+      "endNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:110",
+      "properties": {}
+    },
+    {
+      "elementId": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:188",
+      "type": "COM_OWNED_BY",
+      "startNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:93",
+      "endNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:111",
+      "properties": {}
+    },
+    {
+      "elementId": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:189",
+      "type": "COM_OWNED_BY",
+      "startNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:94",
+      "endNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:112",
+      "properties": {}
+    },
+    {
+      "elementId": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:190",
+      "type": "COM_AFFECTS",
+      "startNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:91",
+      "endNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:90",
+      "properties": {}
+    },
+    {
+      "elementId": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:191",
+      "type": "COM_AFFECTS",
+      "startNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:93",
+      "endNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:90",
+      "properties": {}
+    },
+    {
+      "elementId": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:192",
+      "type": "COM_AFFECTS",
+      "startNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:92",
+      "endNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:90",
+      "properties": {}
+    },
+    {
+      "elementId": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:193",
+      "type": "COM_PRECEDES",
+      "startNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:100",
+      "endNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:95",
+      "properties": {}
+    },
+    {
+      "elementId": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:194",
+      "type": "COM_PRECEDES",
+      "startNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:101",
+      "endNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:96",
+      "properties": {}
+    },
+    {
+      "elementId": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:195",
+      "type": "COM_PRECEDES",
+      "startNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:104",
+      "endNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:99",
+      "properties": {}
+    }
+  ]
+}

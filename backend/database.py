@@ -50,9 +50,9 @@ def init_database(db_path: str) -> None:
     init_session_factory(engine)
 
     # 延迟导入避免循环依赖
-    from backend.models.system import Base, SystemModel
+    from backend.models.system import Base, SystemModel, RelationSemanticModel
 
-    # 创建表（幂等）
+    # 创建表（幂等 —— 包含 v3.6 新表 relation_semantics）
     Base.metadata.create_all(bind=engine)
 
     # 种子数据：默认的疾病诊疗系统
@@ -77,3 +77,60 @@ def init_database(db_path: str) -> None:
             print(f"✅ SQLite: 默认系统已存在")
     finally:
         session.close()
+
+    # v3.6: 为已有系统自动初始化关系语义（仅对 MED_ 等有预置语义的系统生效）
+    try:
+        _auto_seed_semantics(db_path)
+    except Exception:
+        pass  # 语义种子失败不阻塞启动
+
+
+def _auto_seed_semantics(db_path: str) -> None:
+    """v3.6: 为已有系统的关系类型自动填充预置语义（不覆盖已有配置）。"""
+    from backend.services.system_service import SystemService
+    from backend.repositories.neo4j_repository import Neo4jRepository
+    from backend.models.system import UpsertRelationSemanticRequest
+    from backend.config import settings as s  # noqa: N812
+
+    # 只在 Neo4j 可用且系统有数据时才执行
+    try:
+        repo = Neo4jRepository(
+            s.neo4j_uri, s.neo4j_user, s.neo4j_password,
+        )
+    except Exception:
+        return
+
+    system_svc = SystemService()
+
+    # 获取所有系统及其关系类型
+    session = get_session()
+    try:
+        systems = session.query(SystemModel).all()
+    finally:
+        session.close()
+
+    from backend.services.query_service import get_preset_semantics
+
+    for sys_row in systems:
+        prefix = sys_row.prefix
+        try:
+            rel_types = repo.get_relation_types_by_prefix(prefix)
+            if not rel_types:
+                continue
+            # 先填充预置语义
+            preset_count = 0
+            for rt in rel_types:
+                preset = get_preset_semantics(rt)
+                if preset:
+                    system_svc.upsert_relation_semantic(
+                        prefix,
+                        UpsertRelationSemanticRequest(rel_type=rt, **preset),
+                    )
+                    preset_count += 1
+            # 初始化其余类型
+            count = system_svc.init_semantics_from_neo4j(prefix, rel_types)
+            if preset_count > 0 or count > 0:
+                total = preset_count + count
+                print(f"  ✅ v3.6: 为 '{sys_row.name}' 初始化 {total} 条关系语义")
+        except Exception as e:
+            print(f"  ⚠️  语义种子 '{prefix}' 失败: {e}")

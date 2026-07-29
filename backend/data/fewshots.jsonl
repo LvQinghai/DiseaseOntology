@@ -1,0 +1,11 @@
+{"prefix": "MED_", "question": "阿司匹林治疗什么疾病", "cypher": "MATCH (d:MED_Drug)-[r:MED_TREATS]->(dis:MED_Disease) WHERE d.name CONTAINS '阿司匹林' RETURN DISTINCT dis.name AS disease"}
+{"prefix": "MED_", "question": "高血压有什么症状", "cypher": "MATCH (s:MED_Symptom)-[r:MED_MANIFESTS_IN]->(dis:MED_Disease) WHERE dis.name CONTAINS '高血压' RETURN DISTINCT s.name AS symptom"}
+{"prefix": "MED_", "question": "什么疾病有乏力的症状", "cypher": "MATCH (s:MED_Symptom)-[r:MED_MANIFESTS_IN]->(dis:MED_Disease) WHERE s.name CONTAINS '乏力' RETURN DISTINCT dis.name AS disease"}
+{"prefix": "MED_", "question": "急性胃肠炎影响身体的什么部位", "cypher": "MATCH (dis:MED_Disease)-[r:MED_AFFECTS]->(b:MED_BodyPart) WHERE dis.name CONTAINS '急性胃肠炎' RETURN DISTINCT b.name AS body_part"}
+{"prefix": "MED_", "question": "布洛芬有哪些副作用", "cypher": "MATCH (d:MED_Drug)-[r:MED_HAS_SIDE_EFFECT]->(se:MED_SideEffect) WHERE d.name CONTAINS '布洛芬' RETURN DISTINCT se.name AS side_effect"}
+{"prefix": "MED_", "question": "什么药物可以治疗感冒", "cypher": "MATCH (d:MED_Drug)-[r:MED_TREATS]->(dis:MED_Disease) WHERE dis.name CONTAINS '感冒' RETURN DISTINCT d.name AS drug"}
+{"prefix": "MED_", "question": "图谱中有多少种疾病", "cypher": "MATCH (dis:MED_Disease) RETURN count(dis) AS disease_count"}
+{"prefix": "MED_", "question": "感冒和发烧有什么关系", "cypher": "MATCH (a)-[r]-(b) WHERE a.name CONTAINS '感冒' AND b.name CONTAINS '发烧' RETURN a.name AS source, type(r) AS rel_type, b.name AS target LIMIT 10"}
+{"prefix": "MED_", "question": "哪些疾病属于消化系统疾病", "cypher": "MATCH (sub:MED_Disease)-[r:MED_SUB_CLASS_OF]->(parent:MED_Disease) WHERE parent.name CONTAINS '消化系统疾病' RETURN DISTINCT sub.name AS disease"}
+{"prefix": "MED_", "question": "什么药物治疗心血管疾病", "cypher": "MATCH (d:MED_Drug)-[r:MED_TREATS]->(dis:MED_Disease)-[:MED_SUB_CLASS_OF]->(cat:MED_Disease) WHERE cat.name CONTAINS '心血管疾病' RETURN DISTINCT d.name AS drug, dis.name AS treats_disease"}
+{"prefix": "MED_", "question": "消化系统疾病有哪些症状", "cypher": "MATCH (s:MED_Symptom)-[r:MED_MANIFESTS_IN]->(dis:MED_Disease)-[:MED_SUB_CLASS_OF]->(cat:MED_Disease) WHERE cat.name CONTAINS '消化系统疾病' RETURN DISTINCT s.name AS symptom"}

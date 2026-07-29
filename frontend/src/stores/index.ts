@@ -1,6 +1,11 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
-import type { NodeDetail, GraphData, EntityResponse, RelationshipResponse, SystemInfo } from '@/types'
+import type {
+  NodeDetail, GraphData, EntityResponse, RelationshipResponse, SystemInfo,
+  ValidationReport, ExecuteResult,
+  RelationSemanticInfo, SystemSemanticsResponse,
+} from '@/types'
+import { fetchRelationSemantics } from '@/api'
 
 export const useAppStore = defineStore('app', () => {
   // 当前选中的节点
@@ -33,19 +38,42 @@ export const useAppStore = defineStore('app', () => {
   // v2.0: 关系详情（选中关系时的展示）
   const selectedRelationship = ref<RelationshipResponse | null>(null)
 
+  // 图谱点击后的左侧树联动选中项（关系点击时保留关系详情，同时同步树选中）
+  const selectedTreeNode = ref<{ type: string; name: string; elementId: string } | null>(null)
+
   // 本体树刷新计数器
   const treeRefreshKey = ref(0)
 
   // ==================== v2.0 状态操作方法 ====================
 
   function selectNode(type: string, name: string, elementId = '') {
-    selectedNode.value = { type, name, elementId }
+    const node = { type, name, elementId }
+    selectedNode.value = node
+    selectedTreeNode.value = node
+    // 选中实体时清空关系选中，避免详情面板冲突
+    selectedRelationship.value = null
+  }
+
+  function selectRelationship(rel: RelationshipResponse) {
+    selectedRelationship.value = rel
+    // 关系详情仍由中间面板展示；selectedTreeNode 用于左侧树联动选中
+    selectedTreeNode.value = {
+      type: '__RELATIONSHIP__',
+      name: rel.type,
+      elementId: '',
+    }
+    selectedNode.value = null
+    selectedNodeDetail.value = null
   }
 
   function clearSelection() {
     selectedNode.value = null
     selectedNodeDetail.value = null
     selectedRelationship.value = null
+    // 同时关闭关系编辑器，防止旧系统数据残留
+    relationshipEditorVisible.value = false
+    presetRelationshipType.value = ''
+    editingRelationship.value = null
   }
 
   function setGraphData(data: GraphData) {
@@ -110,6 +138,7 @@ export const useAppStore = defineStore('app', () => {
   function closeRelationshipEditor() {
     relationshipEditorVisible.value = false
     presetRelationshipType.value = ''
+    editingRelationship.value = null
   }
 
   function triggerTreeRefresh() {
@@ -148,8 +177,93 @@ export const useAppStore = defineStore('app', () => {
   /** 导入来源类型 */
   const importSource = ref<'excel' | 'database'>('excel')
 
+  // ==================== v3.5 导入向导状态 ====================
+
+  /** 导入模式: 'new' 创建全新图谱 / 'append' 追加到已有图谱 */
+  const importMode = ref<'new' | 'append'>('new')
+
+  /** 追加模式的目标系统ID */
+  const appendTargetSystemId = ref('')
+
+  /** 新建模式下的自定义前缀 */
+  const newSystemPrefix = ref('')
+
+  /** 新建模式下的系统名称（临时表单） */
+  const newSystemName = ref('')
+
+  /** 新建模式下的系统描述（临时表单） */
+  const newSystemDesc = ref('')
+
+  /** 当前导入步骤 (0-4) */
+  const importStep = ref(0)
+
+  /** ★ v3.5: 验证报告 */
+  const validationReport = ref<ValidationReport | null>(null)
+
+  /** ★ v3.5: 导入执行结果 */
+  const executeResult = ref<ExecuteResult | null>(null)
+
+  /** ★ v3.5: 追加模式冲突处理策略: 'skip' | 'merge' | 'overwrite' */
+  const conflictStrategy = ref<'skip' | 'merge' | 'overwrite'>('merge')
+
+  /** ★ v3.5: 上次操作的快照ID（供回滚使用） */
+  const lastSnapshotId = ref<string | null>(null)
+
+  // ==================== 编辑器中的节点标签 ====================
+
+  /** 编辑器可用标签（用于下拉选择） */
+  const editorLabels = ref<string[]>([])
+
   /** 系统管理对话框可见性 */
   const systemManagerVisible = ref(false)
+
+  // ==================== v3.6 关系语义 ====================
+
+  /** 当前系统的关系语义配置 */
+  const relationSemantics = ref<RelationSemanticInfo[]>([])
+
+  /** 关系语义编辑抽屉可见性 */
+  const semanticsDrawerVisible = ref(false)
+
+  /** 关系语义加载中 */
+  const semanticsLoading = ref(false)
+
+  async function loadRelationSemantics(prefix: string) {
+    semanticsLoading.value = true
+    try {
+      const resp: SystemSemanticsResponse = await fetchRelationSemantics(prefix)
+      relationSemantics.value = resp.semantics
+    } catch {
+      relationSemantics.value = []
+    } finally {
+      semanticsLoading.value = false
+    }
+  }
+
+  function openSemanticsDrawer() {
+    semanticsDrawerVisible.value = true
+  }
+
+  function closeSemanticsDrawer() {
+    semanticsDrawerVisible.value = false
+  }
+
+  function updateRelationSemanticInStore(sem: RelationSemanticInfo) {
+    const idx = relationSemantics.value.findIndex(
+      s => s.rel_type === sem.rel_type,
+    )
+    if (idx >= 0) {
+      relationSemantics.value[idx] = sem
+    } else {
+      relationSemantics.value.push(sem)
+    }
+  }
+
+  function removeRelationSemanticFromStore(relType: string) {
+    relationSemantics.value = relationSemantics.value.filter(
+      s => s.rel_type !== relType,
+    )
+  }
 
   function setCurrentSystem(systemId: string) {
     currentSystemId.value = systemId
@@ -180,11 +294,26 @@ export const useAppStore = defineStore('app', () => {
 
   function openImportWizard(source: 'excel' | 'database') {
     importSource.value = source
+    // v3.5: 重置所有向导状态
+    importMode.value = 'new'
+    appendTargetSystemId.value = ''
+    newSystemPrefix.value = ''
+    newSystemName.value = ''
+    newSystemDesc.value = ''
+    importStep.value = 0
+    validationReport.value = null
+    executeResult.value = null
+    conflictStrategy.value = 'merge'
+    lastSnapshotId.value = null
     importWizardVisible.value = true
   }
 
   function closeImportWizard() {
     importWizardVisible.value = false
+    // v3.5: 重置步骤
+    importStep.value = 0
+    validationReport.value = null
+    executeResult.value = null
   }
 
   function openSystemManager() {
@@ -215,8 +344,10 @@ export const useAppStore = defineStore('app', () => {
     editingRelationshipSourceName,
     presetRelationshipType,
     selectedRelationship,
+    selectedTreeNode,
     treeRefreshKey,
     selectNode,
+    selectRelationship,
     clearSelection,
     setGraphData,
     toggleLeft,
@@ -246,5 +377,26 @@ export const useAppStore = defineStore('app', () => {
     closeImportWizard,
     openSystemManager,
     closeSystemManager,
+    // v3.5
+    importMode,
+    appendTargetSystemId,
+    newSystemPrefix,
+    newSystemName,
+    newSystemDesc,
+    importStep,
+    validationReport,
+    executeResult,
+    conflictStrategy,
+    lastSnapshotId,
+    editorLabels,
+    // v3.6 关系语义
+    relationSemantics,
+    semanticsDrawerVisible,
+    semanticsLoading,
+    loadRelationSemantics,
+    openSemanticsDrawer,
+    closeSemanticsDrawer,
+    updateRelationSemanticInStore,
+    removeRelationSemanticFromStore,
   }
 })

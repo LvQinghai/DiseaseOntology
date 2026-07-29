@@ -1,0 +1,637 @@
+{
+  "nodes": [
+    {
+      "id": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:0",
+      "labels": [
+        "MED_Symptom"
+      ],
+      "props": {
+        "severity": "轻-中",
+        "body_region": "下肢/全身",
+        "name": "水肿",
+        "description": "组织间隙液体积聚"
+      }
+    },
+    {
+      "id": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:1",
+      "labels": [
+        "MED_Drug"
+      ],
+      "props": {
+        "dosage": "500mg",
+        "max_daily": "2000mg",
+        "generic_name": "Paracetamol",
+        "name": "对乙酰氨基酚",
+        "brand_name": "泰诺/扑热息痛",
+        "category": "解热镇痛药",
+        "dosage_form": "片剂",
+        "frequency": "每4-6小时一次"
+      }
+    },
+    {
+      "id": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:2",
+      "labels": [
+        "MED_Drug"
+      ],
+      "props": {
+        "dosage": "400mg",
+        "max_daily": "1200mg",
+        "generic_name": "Ibuprofen",
+        "name": "布洛芬",
+        "brand_name": "芬必得/美林",
+        "category": "解热镇痛药(NSAIDs)",
+        "dosage_form": "片剂",
+        "frequency": "每6-8小时一次"
+      }
+    },
+    {
+      "id": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:3",
+      "labels": [
+        "MED_Drug"
+      ],
+      "props": {
+        "dosage": "500mg",
+        "max_daily": "1500mg",
+        "generic_name": "Amoxicillin",
+        "name": "阿莫西林",
+        "brand_name": "阿莫仙",
+        "category": "抗生素(β-内酰胺类)",
+        "dosage_form": "胶囊",
+        "frequency": "每8小时一次"
+      }
+    },
+    {
+      "id": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:4",
+      "labels": [
+        "MED_Drug"
+      ],
+      "props": {
+        "dosage": "500mg",
+        "max_daily": "500mg",
+        "generic_name": "Azithromycin",
+        "name": "阿奇霉素",
+        "brand_name": "希舒美",
+        "category": "抗生素(大环内酯类)",
+        "dosage_form": "片剂",
+        "frequency": "每日一次"
+      }
+    },
+    {
+      "id": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:5",
+      "labels": [
+        "MED_Drug"
+      ],
+      "props": {
+        "dosage": "5mg",
+        "max_daily": "10mg",
+        "generic_name": "Amlodipine",
+        "name": "氨氯地平",
+        "brand_name": "络活喜",
+        "category": "降压药(CCB)",
+        "dosage_form": "片剂",
+        "frequency": "每日一次"
+      }
+    },
+    {
+      "id": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:6",
+      "labels": [
+        "MED_Drug"
+      ],
+      "props": {
+        "dosage": "50mg",
+        "max_daily": "200mg",
+        "generic_name": "Metoprolol",
+        "name": "美托洛尔",
+        "brand_name": "倍他乐克",
+        "category": "降压药(β受体阻滞剂)",
+        "dosage_form": "片剂",
+        "frequency": "每日一次"
+      }
+    },
+    {
+      "id": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:7",
+      "labels": [
+        "MED_Drug"
+      ],
+      "props": {
+        "dosage": "20mg",
+        "max_daily": "40mg",
+        "generic_name": "Omeprazole",
+        "name": "奥美拉唑",
+        "brand_name": "洛赛克",
+        "category": "抑酸药(PPI)",
+        "dosage_form": "胶囊",
+        "frequency": "每日一次"
+      }
+    },
+    {
+      "id": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:8",
+      "labels": [
+        "MED_Drug"
+      ],
+      "props": {
+        "dosage": "3g",
+        "max_daily": "9g",
+        "generic_name": "Smectite",
+        "name": "蒙脱石散",
+        "brand_name": "思密达",
+        "category": "止泻药",
+        "dosage_form": "散剂",
+        "frequency": "每日三次"
+      }
+    },
+    {
+      "id": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:9",
+      "labels": [
+        "MED_Disease"
+      ],
+      "props": {
+        "icd_code": "Z88.0",
+        "severity": "重",
+        "prevalence": "低",
+        "name": "青霉素过敏",
+        "definition": "对青霉素类药物的过敏反应"
+      }
+    },
+    {
+      "id": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:10",
+      "labels": [
+        "MED_Disease"
+      ],
+      "props": {
+        "severity": "重",
+        "name": "严重主动脉瓣狭窄",
+        "definition": "主动脉瓣口严重狭窄"
+      }
+    },
+    {
+      "id": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:11",
+      "labels": [
+        "MED_BodyPart"
+      ],
+      "props": {
+        "name": "肺",
+        "location": "胸部"
+      }
+    },
+    {
+      "id": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:12",
+      "labels": [
+        "MED_BodyPart"
+      ],
+      "props": {
+        "name": "咽喉",
+        "location": "颈部"
+      }
+    },
+    {
+      "id": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:13",
+      "labels": [
+        "MED_BodyPart"
+      ],
+      "props": {
+        "name": "胃",
+        "location": "上腹部"
+      }
+    },
+    {
+      "id": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:14",
+      "labels": [
+        "MED_BodyPart"
+      ],
+      "props": {
+        "name": "肠道",
+        "location": "腹部"
+      }
+    },
+    {
+      "id": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:15",
+      "labels": [
+        "MED_BodyPart"
+      ],
+      "props": {
+        "name": "心脏",
+        "location": "胸部"
+      }
+    },
+    {
+      "id": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:16",
+      "labels": [
+        "MED_BodyPart"
+      ],
+      "props": {
+        "name": "鼻腔",
+        "location": "面部"
+      }
+    },
+    {
+      "id": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:17",
+      "labels": [
+        "MED_BodyPart"
+      ],
+      "props": {
+        "name": "血管",
+        "location": "全身"
+      }
+    },
+    {
+      "id": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:18",
+      "labels": [
+        "MED_SideEffect"
+      ],
+      "props": {
+        "severity": "轻",
+        "name": "胃不适",
+        "frequency": "常见"
+      }
+    },
+    {
+      "id": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:19",
+      "labels": [
+        "MED_SideEffect"
+      ],
+      "props": {
+        "severity": "轻",
+        "name": "头晕",
+        "frequency": "偶见"
+      }
+    },
+    {
+      "id": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:20",
+      "labels": [
+        "MED_SideEffect"
+      ],
+      "props": {
+        "severity": "重",
+        "name": "过敏反应",
+        "frequency": "罕见"
+      }
+    },
+    {
+      "id": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:21",
+      "labels": [
+        "MED_SideEffect"
+      ],
+      "props": {
+        "severity": "重",
+        "name": "肝损伤",
+        "frequency": "罕见"
+      }
+    },
+    {
+      "id": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:22",
+      "labels": [
+        "MED_SideEffect"
+      ],
+      "props": {
+        "severity": "重",
+        "name": "肾损伤",
+        "frequency": "罕见"
+      }
+    },
+    {
+      "id": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:23",
+      "labels": [
+        "MED_SideEffect"
+      ],
+      "props": {
+        "severity": "中-重",
+        "name": "心律失常",
+        "frequency": "偶见"
+      }
+    },
+    {
+      "id": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:24",
+      "labels": [
+        "MED_SideEffect"
+      ],
+      "props": {
+        "severity": "轻",
+        "name": "便秘",
+        "frequency": "常见"
+      }
+    },
+    {
+      "id": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:25",
+      "labels": [
+        "EDU_Subject"
+      ],
+      "props": {
+        "描述(description)": "一级学科，学科代码 07",
+        "name": "数学"
+      }
+    },
+    {
+      "id": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:26",
+      "labels": [
+        "EDU_Subject"
+      ],
+      "props": {
+        "描述(description)": "一级学科，学科代码 08",
+        "name": "计算机科学",
+        "别名(alias)": "CS,计算机"
+      }
+    },
+    {
+      "id": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:27",
+      "labels": [
+        "EDU_Subject"
+      ],
+      "props": {
+        "描述(description)": "二级学科，学科代码 07.1，隶属数学",
+        "name": "应用数学"
+      }
+    },
+    {
+      "id": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:28",
+      "labels": [
+        "EDU_Subject"
+      ],
+      "props": {
+        "描述(description)": "二级学科，学科代码 07.2，隶属数学",
+        "name": "统计学",
+        "别名(alias)": "统计"
+      }
+    },
+    {
+      "id": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:29",
+      "labels": [
+        "EDU_Subject"
+      ],
+      "props": {
+        "描述(description)": "二级学科，学科代码 08.1，隶属计算机科学",
+        "name": "人工智能",
+        "别名(alias)": "AI"
+      }
+    },
+    {
+      "id": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:30",
+      "labels": [
+        "EDU_Subject"
+      ],
+      "props": {
+        "描述(description)": "二级学科，学科代码 08.2，隶属计算机科学",
+        "name": "算法理论",
+        "别名(alias)": "算法"
+      }
+    },
+    {
+      "id": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:31",
+      "labels": [
+        "EDU_Course"
+      ],
+      "props": {
+        "描述(description)": "学分:4 | 层次:本科 | 学期:大一上 | 微积分、极限、导数",
+        "name": "高等数学",
+        "别名(alias)": "高数,微积分"
+      }
+    },
+    {
+      "id": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:32",
+      "labels": [
+        "EDU_Course"
+      ],
+      "props": {
+        "描述(description)": "学分:3 | 层次:本科 | 学期:大一下 | 矩阵、向量空间、线性变换",
+        "name": "线性代数",
+        "别名(alias)": "线代"
+      }
+    },
+    {
+      "id": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:33",
+      "labels": [
+        "EDU_Course"
+      ],
+      "props": {
+        "描述(description)": "学分:3 | 层次:本科 | 学期:大二上 | 随机变量、概率分布、大数定律",
+        "name": "概率论",
+        "别名(alias)": "概率"
+      }
+    },
+    {
+      "id": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:34",
+      "labels": [
+        "EDU_Course"
+      ],
+      "props": {
+        "描述(description)": "学分:3 | 层次:本科 | 学期:大二下 | 参数估计、假设检验、回归分析",
+        "name": "数理统计",
+        "别名(alias)": "统计学"
+      }
+    },
+    {
+      "id": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:35",
+      "labels": [
+        "EDU_Course"
+      ],
+      "props": {
+        "描述(description)": "学分:4 | 层次:本科 | 学期:大二上 | 链表、树、图、排序算法",
+        "name": "数据结构",
+        "别名(alias)": "DS"
+      }
+    },
+    {
+      "id": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:36",
+      "labels": [
+        "EDU_Course"
+      ],
+      "props": {
+        "描述(description)": "学分:3 | 层次:本科 | 学期:大三上 | 动态规划、贪心、分治",
+        "name": "算法设计",
+        "别名(alias)": "算法"
+      }
+    },
+    {
+      "id": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:37",
+      "labels": [
+        "EDU_Course"
+      ],
+      "props": {
+        "描述(description)": "学分:3 | 层次:研究生 | 学期:研一上 | 监督学习、无监督学习、模型评估",
+        "name": "机器学习",
+        "别名(alias)": "ML"
+      }
+    },
+    {
+      "id": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:38",
+      "labels": [
+        "EDU_Course"
+      ],
+      "props": {
+        "描述(description)": "学分:3 | 层次:研究生 | 学期:研一下 | 神经网络、CNN、RNN、Transformer",
+        "name": "深度学习",
+        "别名(alias)": "DL"
+      }
+    },
+    {
+      "id": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:39",
+      "labels": [
+        "EDU_Course"
+      ],
+      "props": {
+        "描述(description)": "学分:2 | 层次:研究生 | 学期:研一下 | 图像识别、目标检测、语义分割",
+        "name": "计算机视觉",
+        "别名(alias)": "CV"
+      }
+    },
+    {
+      "id": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:40",
+      "labels": [
+        "EDU_Course"
+      ],
+      "props": {
+        "描述(description)": "学分:2 | 层次:研究生 | 学期:研一下 | 文本分类、命名实体识别、大语言模型",
+        "name": "自然语言处理",
+        "别名(alias)": "NLP"
+      }
+    },
+    {
+      "id": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:41",
+      "labels": [
+        "EDU_Teacher"
+      ],
+      "props": {
+        "描述(description)": "教授 | 研究方向:微分方程",
+        "name": "张明"
+      }
+    },
+    {
+      "id": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:42",
+      "labels": [
+        "EDU_Teacher"
+      ],
+      "props": {
+        "描述(description)": "副教授 | 研究方向:数理统计",
+        "name": "李华"
+      }
+    },
+    {
+      "id": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:43",
+      "labels": [
+        "EDU_Teacher"
+      ],
+      "props": {
+        "描述(description)": "教授 | 研究方向:算法理论",
+        "name": "王强"
+      }
+    },
+    {
+      "id": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:44",
+      "labels": [
+        "EDU_Teacher"
+      ],
+      "props": {
+        "描述(description)": "副教授 | 研究方向:数据结构",
+        "name": "赵雷"
+      }
+    },
+    {
+      "id": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:45",
+      "labels": [
+        "EDU_Teacher"
+      ],
+      "props": {
+        "描述(description)": "教授 | 研究方向:深度学习",
+        "name": "陈东"
+      }
+    },
+    {
+      "id": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:46",
+      "labels": [
+        "EDU_Teacher"
+      ],
+      "props": {
+        "描述(description)": "副教授 | 研究方向:计算机视觉",
+        "name": "刘洋"
+      }
+    },
+    {
+      "id": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:47",
+      "labels": [
+        "EDU_Department"
+      ],
+      "props": {
+        "描述(description)": "办公楼:理科楼 | 电话:6278-1001",
+        "name": "数学学院"
+      }
+    },
+    {
+      "id": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:48",
+      "labels": [
+        "EDU_Department"
+      ],
+      "props": {
+        "描述(description)": "办公楼:信息楼 | 电话:6278-2001",
+        "name": "计算机学院",
+        "别名(alias)": "计院"
+      }
+    },
+    {
+      "id": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:49",
+      "labels": [
+        "EDU_Department"
+      ],
+      "props": {
+        "描述(description)": "办公楼:AI楼 | 电话:6278-3001",
+        "name": "人工智能学院",
+        "别名(alias)": "AI学院"
+      }
+    },
+    {
+      "id": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:50",
+      "labels": [
+        "EDU_Student"
+      ],
+      "props": {
+        "描述(description)": "学号:2021010001 | 年级:大三 | 专业:数学",
+        "name": "学生甲"
+      }
+    },
+    {
+      "id": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:51",
+      "labels": [
+        "EDU_Student"
+      ],
+      "props": {
+        "描述(description)": "学号:2021010002 | 年级:大三 | 专业:计算机",
+        "name": "学生乙"
+      }
+    },
+    {
+      "id": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:52",
+      "labels": [
+        "EDU_Student"
+      ],
+      "props": {
+        "描述(description)": "学号:2022010003 | 年级:大四 | 专业:计算机",
+        "name": "学生丙"
+      }
+    },
+    {
+      "id": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:53",
+      "labels": [
+        "EDU_Student"
+      ],
+      "props": {
+        "描述(description)": "学号:2023010004 | 年级:研一 | 专业:人工智能",
+        "name": "学生丁"
+      }
+    },
+    {
+      "id": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:54",
+      "labels": [
+        "EDU_Student"
+      ],
+      "props": {
+        "描述(description)": "学号:2023010005 | 年级:研一 | 专业:人工智能",
+        "name": "学生戊"
+      }
+    },
+    {
+      "id": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:55",
+      "labels": [
+        "System"
+      ],
+      "props": {
+        "name": "疾病本体知识图谱",
+        "created_at": 

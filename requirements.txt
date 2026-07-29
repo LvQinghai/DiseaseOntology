@@ -1,19 +1,47 @@
-neo4j>=5.0.0
-fastapi>=0.104.0
-uvicorn[standard]>=0.24.0
-pydantic>=2.0.0
-pydantic-settings>=2.0.0
+# ═══════════════════════════════════════════════════════════════
+# DiseaseOntology v4.0 - Python 依赖清单
+# ═══════════════════════════════════════════════════════════════
+# 安装方式：
+#   pip install -r requirements.txt
+#
+# Python 版本要求：>= 3.10（使用了 X | Y 类型语法）
+# ═══════════════════════════════════════════════════════════════
 
-# LLM
-openai>=1.0.0
-fake-useragent>=1.4.0
+# ── Web 框架 ──────────────────────────────────────────────────
+fastapi>=0.110.0            # Web API 框架
+uvicorn[standard]>=0.27.0  # ASGI 服务器（含 uvloop 加速）
+python-multipart>=0.0.9     # FastAPI 文件上传支持（UploadFile 必需）
 
-# v3.0 新增：数据导入
-openpyxl>=3.1.0
-SQLAlchemy>=2.0.0
-pymysql>=1.1.0
+# ── 数据验证与配置 ────────────────────────────────────────────
+pydantic>=2.6.0             # 数据模型验证（随 FastAPI 安装，此处显式声明）
+pydantic-settings>=2.1.0    # .env 环境变量读取（config.py 使用）
 
-# 可选数据库驱动（按需安装）
-# psycopg2-binary>=2.9.0  # PostgreSQL
-# pyodbc>=5.0.0           # SQL Server
-# cx_Oracle>=8.3.0        # Oracle
+# ── 图数据库 ──────────────────────────────────────────────────
+neo4j>=5.14.0               # Neo4j Python 官方驱动
+
+# ── 关系型数据库（SQLite 元数据存储）─────────────────────────
+sqlalchemy>=2.0.0           # ORM 引擎（SQLite 系统元数据）
+
+# ── Excel 解析 ────────────────────────────────────────────────
+openpyxl>=3.1.0             # .xlsx 文件读写（Excel 导入功能）
+
+# ── HTTP 客户端（LLM API 调用）───────────────────────────────
+requests>=2.31.0            # HTTP 请求库（GraphRAG / Cypher 生成调用 LLM）
+
+# ═══════════════════════════════════════════════════════════════
+# 以下为可选依赖：仅在需要从关系型数据库导入数据时安装
+# 安装方式：pip install pymysql psycopg2-binary pyodbc cx_Oracle
+# ═══════════════════════════════════════════════════════════════
+
+# pymysql>=1.1.0            # MySQL 导入（可选）
+# psycopg2-binary>=2.9.0    # PostgreSQL 导入（可选）
+# pyodbc>=5.0.0             # SQL Server 导入（可选）
+# cx_Oracle>=8.3.0          # Oracle 导入（可选）
+
+# ═══════════════════════════════════════════════════════════════
+# 以下为开发/测试依赖：仅在运行 GraphRAG 测试时需要
+# 安装方式：pip install langchain-community langchain-openai
+# ═══════════════════════════════════════════════════════════════
+
+# langchain-community>=0.0.20  # GraphRAG Neo4j 集成（可选，仅 test_graphrag.py）
+# langchain-openai>=0.1.0      # OpenAI/兼容 API 调用（可选，仅 GraphRAG）

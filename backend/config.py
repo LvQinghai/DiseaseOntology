@@ -16,6 +16,16 @@ class Settings(BaseSettings):
     llm_api_key: str = "sk-xxx"
     llm_model: str = "qwen3.7-max"
     llm_mode: str = ""
+    # 推理型模型（如 deepseek-v4-pro）reasoning 会消耗大量 token，
+    # max_tokens 需预留充足思考空间；超时适当放大
+    llm_max_tokens: int = 20480
+    llm_timeout: int = 120
+
+    # GraphRAG 上下文预算（v3.8）—— prompt 各段落的裁剪上限
+    prompt_result_max_chars: int = 3000   # 答案合成时结果 JSON 最大字符数
+    answer_max_rows: int = 20             # 答案合成时最多展示的结果行数
+    fewshot_top_k: int = 2                # Cypher 生成时注入的 Few-shot 示例数
+    prompt_token_warn: int = 8000         # Prompt 估算 token 超过此值打警告
 
     # v3.0 迁移（Neo4j 标签/关系前缀迁移）
     run_migration: bool = True

@@ -220,8 +220,10 @@ export interface DeletionCheckResult {
 /** 关系实例摘要（编辑器中展示所有源-目标对） */
 export interface RelationshipInstanceSummary {
   element_id: string
+  source_id: string
   source_name: string
   source_label: string
+  target_id: string
   target_name: string
   target_label: string
 }
@@ -293,3 +295,202 @@ export interface ImportResult {
   message: string
   errors: string[]
 }
+
+// ==================== v3.5 Sheet 检测 ====================
+
+/** Sheet 信息 */
+export interface SheetInfo {
+  name: string
+  type: 'entity' | 'relationship' | 'unknown'
+  headers: string[]
+  row_count: number
+}
+
+/** Sheet 检测结果 */
+export interface SheetDetectionResult {
+  entity_sheet: string | null
+  relationship_sheet: string | null
+  sheets: SheetInfo[]
+  unmatched: string[]
+  errors: string[]
+}
+
+// ==================== v3.5 数据验证 ====================
+
+/** 验证严重等级 */
+export type ValidationSeverity = 'error' | 'warning' | 'info'
+
+/** 单个验证问题 */
+export interface ValidationIssue {
+  severity: ValidationSeverity
+  code: string
+  message: string
+  sheet_type: string
+  row_index: number | null
+  field: string | null
+  detail: Record<string, unknown> | null
+}
+
+/** v3.5 实体/关系预览项 */
+export interface EntityPreviewItem {
+  label: string
+  name: string
+  properties: Record<string, unknown>
+  _row?: number
+}
+
+export interface RelationshipPreviewItem {
+  source_name: string
+  type: string
+  target_name: string
+  properties: Record<string, unknown>
+  _row?: number
+}
+
+/** 冲突实体 */
+export interface ConflictEntity {
+  label: string
+  name: string
+  existing_props: Record<string, unknown>
+  new_props: Record<string, unknown>
+  row_index?: number
+}
+
+/** 冲突关系 */
+export interface ConflictRelationship {
+  source_name: string
+  type: string
+  target_name: string
+  row_index?: number
+  existing_element_id?: string
+}
+
+/** 验证报告 */
+export interface DetectionMapping {
+  sheet_name: string
+  row_count: number
+  column_mapping: Record<string, string>  // {原始表头: 标准字段名 or '属性'}
+}
+
+export interface DetectionSummary {
+  entity_sheet: DetectionMapping | null
+  relationship_sheet: DetectionMapping | null
+  unmatched_sheets: string[]
+}
+
+export interface ValidationReport {
+  is_valid: boolean
+  entity_count: number
+  relationship_count: number
+  error_count: number
+  warning_count: number
+  issues: ValidationIssue[]
+  preview: {
+    entities: EntityPreviewItem[]
+    relationships: RelationshipPreviewItem[]
+    entity_count: number
+    relationship_count: number
+  }
+  conflict_entities: ConflictEntity[]
+  conflict_relationships: ConflictRelationship[]
+  detection_summary?: DetectionSummary
+}
+
+// ==================== v3.5 Cypher 预览 ====================
+
+export interface CypherPreviewItem {
+  statement: string
+  description: string
+}
+
+export interface CypherPreview {
+  entity_cypher: CypherPreviewItem[]
+  relationship_cypher: CypherPreviewItem[]
+  total_entity_statements: number
+  total_relationship_statements: number
+  total_operations: number
+}
+
+// ==================== v3.5 执行结果 ====================
+
+export interface ExecuteResult {
+  success: boolean
+  entities_created: number
+  relationships_created: number
+  snapshot_id: string | null
+  backup_available: boolean
+  errors: string[]
+  message: string
+}
+
+// ==================== v3.5 备份快照 ====================
+
+export interface BackupSnapshot {
+  snapshot_id: string
+  prefix: string
+  created_at: string
+  node_count: number
+  relationship_count: number
+  file_size: number
+}
+
+// ==================== v3.6 关系语义 ====================
+
+/** 单条关系语义 */
+export interface RelationSemanticInfo {
+  id: number
+  prefix: string
+  rel_type: string
+  display_name: string
+  description: string
+  source_hint: string
+  target_hint: string
+  cardinality: string      // one_to_one / one_to_many / many_to_many
+  symmetry: string          // symmetric / asymmetric / reflexive
+  transitivity: string      // transitive / intransitive / none
+  created_at: string
+  updated_at: string
+}
+
+/** 创建/更新关系语义请求 */
+export interface UpsertRelationSemanticRequest {
+  rel_type: string
+  display_name: string
+  description: string
+  source_hint: string
+  target_hint: string
+  cardinality: string
+  symmetry: string
+  transitivity: string
+}
+
+/** 系统的全部语义配置 */
+export interface SystemSemanticsResponse {
+  prefix: string
+  domain_description: string
+  semantics: RelationSemanticInfo[]
+}
+
+/** 基数选项 */
+export const CARDINALITY_OPTIONS = [
+  { value: '', label: '未指定' },
+  { value: 'one_to_one', label: '一对一 (1:1)' },
+  { value: 'one_to_many', label: '一对多 (1:N)' },
+  { value: 'many_to_many', label: '多对多 (M:N)' },
+]
+
+/** 对称性选项 */
+export const SYMMETRY_OPTIONS = [
+  { value: '', label: '未指定' },
+  { value: 'symmetric', label: '对称 (A→B 则 B→A)' },
+  { value: 'asymmetric', label: '非对称 (A→B 不一定 B→A)' },
+  { value: 'reflexive', label: '自反 (A→A)' },
+]
+
+/** 传递性选项 */
+export const TRANSITIVITY_OPTIONS = [
+  { value: '', label: '未指定' },
+  { value: 'transitive', label: '传递 (A→B, B→C 则 A→C)' },
+  { value: 'intransitive', label: '非传递' },
+  { value: 'none', label: '不适用' },
+]

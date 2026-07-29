@@ -36,6 +36,28 @@ class SystemModel(Base):
 
 
 # ═══════════════════════════════════════════
+# v3.6: 关系语义配置 (SQLite ORM)
+# ═══════════════════════════════════════════
+
+class RelationSemanticModel(Base):
+    """relation_semantics 表的 ORM 映射 —— 存储每条关系的语义说明."""
+    __tablename__ = "relation_semantics"
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    prefix = Column(String(10), nullable=False, index=True, comment="关联 systems.prefix")
+    rel_type = Column(String(200), nullable=False, comment="关系类型原名，如 TREATS")
+    display_name = Column(String(200), default="", comment="显示名，如 治疗")
+    description = Column(Text, default="", comment="语义描述文本")
+    source_hint = Column(String(200), default="", comment="典型源实体标签")
+    target_hint = Column(String(200), default="", comment="典型目标实体标签")
+    cardinality = Column(String(30), default="", comment="映射基数: one_to_one / one_to_many / many_to_many")
+    symmetry = Column(String(30), default="", comment="对称性: symmetric / asymmetric / reflexive")
+    transitivity = Column(String(30), default="", comment="传递性: transitive / intransitive / none")
+    created_at = Column(String(30), default="")
+    updated_at = Column(String(30), default="")
+
+
+# ═══════════════════════════════════════════
 # Pydantic 数据传输模型
 # ═══════════════════════════════════════════
 
@@ -62,3 +84,42 @@ class CreateSystemRequest(BaseModel):
 class DeleteSystemRequest(BaseModel):
     """删除系统请求"""
     system_id: str
+
+
+# ═══════════════════════════════════════════
+# v3.6: 关系语义 Pydantic 模型
+# ═══════════════════════════════════════════
+
+class RelationSemanticInfo(BaseModel):
+    """单条关系语义（API 响应）"""
+    id: int = 0
+    prefix: str = ""
+    rel_type: str = ""
+    display_name: str = ""
+    description: str = ""
+    source_hint: str = ""
+    target_hint: str = ""
+    cardinality: str = ""      # one_to_one / one_to_many / many_to_many
+    symmetry: str = ""         # symmetric / asymmetric / reflexive
+    transitivity: str = ""     # transitive / intransitive / none
+    created_at: str = ""
+    updated_at: str = ""
+
+
+class UpsertRelationSemanticRequest(BaseModel):
+    """创建或更新单条关系语义"""
+    rel_type: str
+    display_name: str = ""
+    description: str = ""
+    source_hint: str = ""
+    target_hint: str = ""
+    cardinality: str = ""
+    symmetry: str = ""
+    transitivity: str = ""
+
+
+class SystemSemanticsResponse(BaseModel):
+    """系统的全部关系语义配置"""
+    prefix: str
+    domain_description: str = ""
+    semantics: list[RelationSemanticInfo] = []

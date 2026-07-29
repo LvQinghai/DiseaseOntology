@@ -169,13 +169,34 @@ async function loadData() {
   }
 }
 
+function findTreeKey(node: { type: string; name: string; elementId: string }): string {
+  let result = ''
+  const visit = (items: TreeNode[]) => {
+    for (const item of items) {
+      if (
+        (node.elementId && item.elementId === node.elementId)
+        || (item.nodeType === node.type && item.nodeName === node.name)
+        || (item.nodeName === node.name && node.type === '__RELATIONSHIP__')
+      ) {
+        result = item.key
+        return true
+      }
+      if (item.children?.length && visit(item.children)) return true
+    }
+    return false
+  }
+  visit(treeNodeData.value)
+  return result || `${node.type}::${node.name}`
+}
+
 watch(
-  () => store.selectedNode,
+  () => store.selectedTreeNode,
   (node) => {
     if (node) {
-      selectedKeys.value = [`${node.type}::${node.name}`]
+      selectedKeys.value = [findTreeKey(node)]
     }
   },
+  { deep: true },
 )
 
 // v2.0: 监听树刷新信号

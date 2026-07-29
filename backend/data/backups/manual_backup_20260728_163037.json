@@ -1,0 +1,3519 @@
+{
+  "metadata": {
+    "backup_time": "2026-07-28T16:30:37.465180",
+    "node_count": 145,
+    "rel_count": 235
+  },
+  "nodes": [
+    {
+      "id": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:0",
+      "labels": [
+        "MED_Symptom"
+      ],
+      "props": {
+        "severity": "轻-中",
+        "body_region": "下肢/全身",
+        "name": "水肿",
+        "description": "组织间隙液体积聚"
+      }
+    },
+    {
+      "id": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:1",
+      "labels": [
+        "MED_Drug"
+      ],
+      "props": {
+        "dosage": "500mg",
+        "max_daily": "2000mg",
+        "generic_name": "Paracetamol",
+        "name": "对乙酰氨基酚",
+        "brand_name": "泰诺/扑热息痛",
+        "category": "解热镇痛药",
+        "dosage_form": "片剂",
+        "frequency": "每4-6小时一次"
+      }
+    },
+    {
+      "id": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:2",
+      "labels": [
+        "MED_Drug"
+      ],
+      "props": {
+        "dosage": "400mg",
+        "max_daily": "1200mg",
+        "generic_name": "Ibuprofen",
+        "name": "布洛芬",
+        "brand_name": "芬必得/美林",
+        "category": "解热镇痛药(NSAIDs)",
+        "dosage_form": "片剂",
+        "frequency": "每6-8小时一次"
+      }
+    },
+    {
+      "id": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:3",
+      "labels": [
+        "MED_Drug"
+      ],
+      "props": {
+        "dosage": "500mg",
+        "max_daily": "1500mg",
+        "generic_name": "Amoxicillin",
+        "name": "阿莫西林",
+        "brand_name": "阿莫仙",
+        "category": "抗生素(β-内酰胺类)",
+        "dosage_form": "胶囊",
+        "frequency": "每8小时一次"
+      }
+    },
+    {
+      "id": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:4",
+      "labels": [
+        "MED_Drug"
+      ],
+      "props": {
+        "dosage": "500mg",
+        "max_daily": "500mg",
+        "generic_name": "Azithromycin",
+        "name": "阿奇霉素",
+        "brand_name": "希舒美",
+        "category": "抗生素(大环内酯类)",
+        "dosage_form": "片剂",
+        "frequency": "每日一次"
+      }
+    },
+    {
+      "id": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:5",
+      "labels": [
+        "MED_Drug"
+      ],
+      "props": {
+        "dosage": "5mg",
+        "max_daily": "10mg",
+        "generic_name": "Amlodipine",
+        "name": "氨氯地平",
+        "brand_name": "络活喜",
+        "category": "降压药(CCB)",
+        "dosage_form": "片剂",
+        "frequency": "每日一次"
+      }
+    },
+    {
+      "id": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:6",
+      "labels": [
+        "MED_Drug"
+      ],
+      "props": {
+        "dosage": "50mg",
+        "max_daily": "200mg",
+        "generic_name": "Metoprolol",
+        "name": "美托洛尔",
+        "brand_name": "倍他乐克",
+        "category": "降压药(β受体阻滞剂)",
+        "dosage_form": "片剂",
+        "frequency": "每日一次"
+      }
+    },
+    {
+      "id": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:7",
+      "labels": [
+        "MED_Drug"
+      ],
+      "props": {
+        "dosage": "20mg",
+        "max_daily": "40mg",
+        "generic_name": "Omeprazole",
+        "name": "奥美拉唑",
+        "brand_name": "洛赛克",
+        "category": "抑酸药(PPI)",
+        "dosage_form": "胶囊",
+        "frequency": "每日一次"
+      }
+    },
+    {
+      "id": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:8",
+      "labels": [
+        "MED_Drug"
+      ],
+      "props": {
+        "dosage": "3g",
+        "max_daily": "9g",
+        "generic_name": "Smectite",
+        "name": "蒙脱石散",
+        "brand_name": "思密达",
+        "category": "止泻药",
+        "dosage_form": "散剂",
+        "frequency": "每日三次"
+      }
+    },
+    {
+      "id": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:9",
+      "labels": [
+        "MED_Disease"
+      ],
+      "props": {
+        "icd_code": "Z88.0",
+        "severity": "重",
+        "prevalence": "低",
+        "name": "青霉素过敏",
+        "definition": "对青霉素类药物的过敏反应"
+      }
+    },
+    {
+      "id": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:10",
+      "labels": [
+        "MED_Disease"
+      ],
+      "props": {
+        "severity": "重",
+        "name": "严重主动脉瓣狭窄",
+        "definition": "主动脉瓣口严重狭窄"
+      }
+    },
+    {
+      "id": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:11",
+      "labels": [
+        "MED_BodyPart"
+      ],
+      "props": {
+        "name": "肺",
+        "location": "胸部"
+      }
+    },
+    {
+      "id": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:12",
+      "labels": [
+        "MED_BodyPart"
+      ],
+      "props": {
+        "name": "咽喉",
+        "location": "颈部"
+      }
+    },
+    {
+      "id": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:13",
+      "labels": [
+        "MED_BodyPart"
+      ],
+      "props": {
+        "name": "胃",
+        "location": "上腹部"
+      }
+    },
+    {
+      "id": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:14",
+      "labels": [
+        "MED_BodyPart"
+      ],
+      "props": {
+        "name": "肠道",
+        "location": "腹部"
+      }
+    },
+    {
+      "id": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:15",
+      "labels": [
+        "MED_BodyPart"
+      ],
+      "props": {
+        "name": "心脏",
+        "location": "胸部"
+      }
+    },
+    {
+      "id": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:16",
+      "labels": [
+        "MED_BodyPart"
+      ],
+      "props": {
+        "name": "鼻腔",
+        "location": "面部"
+      }
+    },
+    {
+      "id": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:17",
+      "labels": [
+        "MED_BodyPart"
+      ],
+      "props": {
+        "name": "血管",
+        "location": "全身"
+      }
+    },
+    {
+      "id": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:18",
+      "labels": [
+        "MED_SideEffect"
+      ],
+      "props": {
+        "severity": "轻",
+        "name": "胃不适",
+        "frequency": "常见"
+      }
+    },
+    {
+      "id": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:19",
+      "labels": [
+        "MED_SideEffect"
+      ],
+      "props": {
+        "severity": "轻",
+        "name": "头晕",
+        "frequency": "偶见"
+      }
+    },
+    {
+      "id": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:20",
+      "labels": [
+        "MED_SideEffect"
+      ],
+      "props": {
+        "severity": "重",
+        "name": "过敏反应",
+        "frequency": "罕见"
+      }
+    },
+    {
+      "id": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:21",
+      "labels": [
+        "MED_SideEffect"
+      ],
+      "props": {
+        "severity": "重",
+        "name": "肝损伤",
+        "frequency": "罕见"
+      }
+    },
+    {
+      "id": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:22",
+      "labels": [
+        "MED_SideEffect"
+      ],
+      "props": {
+        "severity": "重",
+        "name": "肾损伤",
+        "frequency": "罕见"
+      }
+    },
+    {
+      "id": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:23",
+      "labels": [
+        "MED_SideEffect"
+      ],
+      "props": {
+        "severity": "中-重",
+        "name": "心律失常",
+        "frequency": "偶见"
+      }
+    },
+    {
+      "id": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:24",
+      "labels": [
+        "MED_SideEffect"
+      ],
+      "props": {
+        "severity": "轻",
+        "name": "便秘",
+        "frequency": "常见"
+      }
+    },
+    {
+      "id": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:25",
+      "labels": [
+        "EDU_Subject"
+      ],
+      "props": {
+        "描述(description)": "一级学科，学科代码 07",
+        "name": "数学"
+      }
+    },
+    {
+      "id": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:26",
+      "labels": [
+        "EDU_Subject"
+      ],
+      "props": {
+        "描述(description)": "一级学科，学科代码 08",
+        "name": "计算机科学",
+        "别名(alias)": "CS,计算机"
+      }
+    },
+    {
+      "id": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:27",
+      "labels": [
+        "EDU_Subject"
+      ],
+      "props": {
+        "描述(description)": "二级学科，学科代码 07.1，隶属数学",
+        "name": "应用数学"
+      }
+    },
+    {
+      "id": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:28",
+      "labels": [
+        "EDU_Subject"
+      ],
+      "props": {
+        "描述(description)": "二级学科，学科代码 07.2，隶属数学",
+        "name": "统计学",
+        "别名(alias)": "统计"
+      }
+    },
+    {
+      "id": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:29",
+      "labels": [
+        "EDU_Subject"
+      ],
+      "props": {
+        "描述(description)": "二级学科，学科代码 08.1，隶属计算机科学",
+        "name": "人工智能",
+        "别名(alias)": "AI"
+      }
+    },
+    {
+      "id": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:30",
+      "labels": [
+        "EDU_Subject"
+      ],
+      "props": {
+        "描述(description)": "二级学科，学科代码 08.2，隶属计算机科学",
+        "name": "算法理论",
+        "别名(alias)": "算法"
+      }
+    },
+    {
+      "id": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:31",
+      "labels": [
+        "EDU_Course"
+      ],
+      "props": {
+        "描述(description)": "学分:4 | 层次:本科 | 学期:大一上 | 微积分、极限、导数",
+        "name": "高等数学",
+        "别名(alias)": "高数,微积分"
+      }
+    },
+    {
+      "id": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:32",
+      "labels": [
+        "EDU_Course"
+      ],
+      "props": {
+        "描述(description)": "学分:3 | 层次:本科 | 学期:大一下 | 矩阵、向量空间、线性变换",
+        "name": "线性代数",
+        "别名(alias)": "线代"
+      }
+    },
+    {
+      "id": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:33",
+      "labels": [
+        "EDU_Course"
+      ],
+      "props": {
+        "描述(description)": "学分:3 | 层次:本科 | 学期:大二上 | 随机变量、概率分布、大数定律",
+        "name": "概率论",
+        "别名(alias)": "概率"
+      }
+    },
+    {
+      "id": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:34",
+      "labels": [
+        "EDU_Course"
+      ],
+      "props": {
+        "描述(description)": "学分:3 | 层次:本科 | 学期:大二下 | 参数估计、假设检验、回归分析",
+        "name": "数理统计",
+        "别名(alias)": "统计学"
+      }
+    },
+    {
+      "id": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:35",
+      "labels": [
+        "EDU_Course"
+      ],
+      "props": {
+        "描述(description)": "学分:4 | 层次:本科 | 学期:大二上 | 链表、树、图、排序算法",
+        "name": "数据结构",
+        "别名(alias)": "DS"
+      }
+    },
+    {
+      "id": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:36",
+      "labels": [
+        "EDU_Course"
+      ],
+      "props": {
+        "描述(description)": "学分:3 | 层次:本科 | 学期:大三上 | 动态规划、贪心、分治",
+        "name": "算法设计",
+        "别名(alias)": "算法"
+      }
+    },
+    {
+      "id": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:37",
+      "labels": [
+        "EDU_Course"
+      ],
+      "props": {
+        "描述(description)": "学分:3 | 层次:研究生 | 学期:研一上 | 监督学习、无监督学习、模型评估",
+        "name": "机器学习",
+        "别名(alias)": "ML"
+      }
+    },
+    {
+      "id": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:38",
+      "labels": [
+        "EDU_Course"
+      ],
+      "props": {
+        "描述(description)": "学分:3 | 层次:研究生 | 学期:研一下 | 神经网络、CNN、RNN、Transformer",
+        "name": "深度学习",
+        "别名(alias)": "DL"
+      }
+    },
+    {
+      "id": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:39",
+      "labels": [
+        "EDU_Course"
+      ],
+      "props": {
+        "描述(description)": "学分:2 | 层次:研究生 | 学期:研一下 | 图像识别、目标检测、语义分割",
+        "name": "计算机视觉",
+        "别名(alias)": "CV"
+      }
+    },
+    {
+      "id": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:40",
+      "labels": [
+        "EDU_Course"
+      ],
+      "props": {
+        "描述(description)": "学分:2 | 层次:研究生 | 学期:研一下 | 文本分类、命名实体识别、大语言模型",
+        "name": "自然语言处理",
+        "别名(alias)": "NLP"
+      }
+    },
+    {
+      "id": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:41",
+      "labels": [
+        "EDU_Teacher"
+      ],
+      "props": {
+        "描述(description)": "教授 | 研究方向:微分方程",
+        "name": "张明"
+      }
+    },
+    {
+      "id": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:42",
+      "labels": [
+        "EDU_Teacher"
+      ],
+      "props": {
+        "描述(description)": "副教授 | 研究方向:数理统计",
+        "name": "李华"
+      }
+    },
+    {
+      "id": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:43",
+      "labels": [
+        "EDU_Teacher"
+      ],
+      "props": {
+        "描述(description)": "教授 | 研究方向:算法理论",
+        "name": "王强"
+      }
+    },
+    {
+      "id": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:44",
+      "labels": [
+        "EDU_Teacher"
+      ],
+      "props": {
+        "描述(description)": "副教授 | 研究方向:数据结构",
+        "name": "赵雷"
+      }
+    },
+    {
+      "id": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:45",
+      "labels": [
+        "EDU_Teacher"
+      ],
+      "props": {
+        "描述(description)": "教授 | 研究方向:深度学习",
+        "name": "陈东"
+      }
+    },
+    {
+      "id": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:46",
+      "labels": [
+        "EDU_Teacher"
+      ],
+      "props": {
+        "描述(description)": "副教授 | 研究方向:计算机视觉",
+        "name": "刘洋"
+      }
+    },
+    {
+      "id": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:47",
+      "labels": [
+        "EDU_Department"
+      ],
+      "props": {
+        "描述(description)": "办公楼:理科楼 | 电话:6278-1001",
+        "name": "数学学院"
+      }
+    },
+    {
+      "id": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:48",
+      "labels": [
+        "EDU_Department"
+      ],
+      "props": {
+        "描述(description)": "办公楼:信息楼 | 电话:6278-2001",
+        "name": "计算机学院",
+        "别名(alias)": "计院"
+      }
+    },
+    {
+      "id": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:49",
+      "labels": [
+        "EDU_Department"
+      ],
+      "props": {
+        "描述(description)": "办公楼:AI楼 | 电话:6278-3001",
+        "name": "人工智能学院",
+        "别名(alias)": "AI学院"
+      }
+    },
+    {
+      "id": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:50",
+      "labels": [
+        "EDU_Student"
+      ],
+      "props": {
+        "描述(description)": "学号:2021010001 | 年级:大三 | 专业:数学",
+        "name": "学生甲"
+      }
+    },
+    {
+      "id": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:51",
+      "labels": [
+        "EDU_Student"
+      ],
+      "props": {
+        "描述(description)": "学号:2021010002 | 年级:大三 | 专业:计算机",
+        "name": "学生乙"
+      }
+    },
+    {
+      "id": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:52",
+      "labels": [
+        "EDU_Student"
+      ],
+      "props": {
+        "描述(description)": "学号:2022010003 | 年级:大四 | 专业:计算机",
+        "name": "学生丙"
+      }
+    },
+    {
+      "id": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:53",
+      "labels": [
+        "EDU_Student"
+      ],
+      "props": {
+        "描述(description)": "学号:2023010004 | 年级:研一 | 专业:人工智能",
+        "name": "学生丁"
+      }
+    },
+    {
+      "id": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:54",
+      "labels": [
+        "EDU_Student"
+      ],
+      "props": {
+        "描述(description)": "学号:2023010005 | 年级:研一 | 专业:人工智能",
+        "name": "学生戊"
+      }
+    },
+    {
+      "id": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:55",
+      "labels": [
+        "System"
+      ],
+      "props": {
+        "name": "疾病本体知识图谱",
+        "created_at": "2026-07-24T05:26:31.581000000+00:00",
+        "description": "包含疾病、药物、症状、副作用、身体部位及其关系的疾病本体知识图谱",
+        "node_count": 55,
+        "import_source": "系统初始数据",
+        "relationship_count": 112
+      }
+    },
+    {
+      "id": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:56",
+      "labels": [
+        "MED_Disease"
+      ],
+      "props": {
+        "icd_prefix": "A-Z",
+        "name": "疾病",
+        "definition": "对人体健康异常状态的统称"
+      }
+    },
+    {
+      "id": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:57",
+      "labels": [
+        "MED_Disease"
+      ],
+      "props": {
+        "icd_prefix": "A-B",
+        "name": "感染性疾病",
+        "definition": "由病原微生物引起的疾病"
+      }
+    },
+    {
+      "id": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:58",
+      "labels": [
+        "MED_Disease"
+      ],
+      "props": {
+        "icd_prefix": "I",
+        "name": "心血管疾病",
+        "definition": "心脏和血管系统的疾病"
+      }
+    },
+    {
+      "id": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:59",
+      "labels": [
+        "MED_Disease"
+      ],
+      "props": {
+        "icd_prefix": "K",
+        "name": "消化系统疾病",
+        "definition": "消化器官的疾病"
+      }
+    },
+    {
+      "id": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:60",
+      "labels": [
+        "MED_Disease"
+      ],
+      "props": {
+        "icd_prefix": "J00-J06",
+        "name": "上呼吸道感染",
+        "definition": "鼻腔、咽、喉的急性感染"
+      }
+    },
+    {
+      "id": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:61",
+      "labels": [
+        "MED_Disease"
+      ],
+      "props": {
+        "icd_prefix": "J09-J18",
+        "name": "下呼吸道感染",
+        "definition": "气管、支气管、肺的急性感染"
+      }
+    },
+    {
+      "id": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:62",
+      "labels": [
+        "MED_Disease"
+      ],
+      "props": {
+        "icd_prefix": "A00-A09",
+        "name": "消化道感染",
+        "definition": "胃肠道急性感染"
+      }
+    },
+    {
+      "id": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:63",
+      "labels": [
+        "MED_Disease"
+      ],
+      "props": {
+        "severity": "轻",
+        "icd_code": "J00",
+        "prevalence": "极高",
+        "name": "普通感冒",
+        "definition": "鼻病毒等引起的上呼吸道轻度感染"
+      }
+    },
+    {
+      "id": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:64",
+      "labels": [
+        "MED_Disease"
+      ],
+      "props": {
+        "icd_code": "J02",
+        "severity": "轻",
+        "prevalence": "高",
+        "name": "急性咽炎",
+        "definition": "咽部黏膜的急性炎症"
+      }
+    },
+    {
+      "id": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:65",
+      "labels": [
+        "MED_Disease"
+      ],
+      "props": {
+        "icd_code": "J18",
+        "severity": "重",
+        "prevalence": "中",
+        "name": "肺炎",
+        "definition": "肺实质的急性感染性炎症"
+      }
+    },
+    {
+      "id": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:66",
+      "labels": [
+        "MED_Disease"
+      ],
+      "props": {
+        "icd_code": "J20",
+        "severity": "中",
+        "prevalence": "高",
+        "name": "急性支气管炎",
+        "definition": "支气管黏膜的急性炎症"
+      }
+    },
+    {
+      "id": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:67",
+      "labels": [
+        "MED_Disease"
+      ],
+      "props": {
+        "icd_code": "A09",
+        "severity": "中",
+        "prevalence": "高",
+        "name": "急性胃肠炎",
+        "definition": "胃肠道急性感染性炎症"
+      }
+    },
+    {
+      "id": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:68",
+      "labels": [
+        "MED_Disease"
+      ],
+      "props": {
+        "icd_code": "A05",
+        "severity": "中",
+        "prevalence": "中",
+        "name": "细菌性食物中毒",
+        "definition": "细菌污染食品引起的急性中毒"
+      }
+    },
+    {
+      "id": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:69",
+      "labels": [
+        "MED_Disease"
+      ],
+      "props": {
+        "severity": "中-重",
+        "icd_code": "I10",
+        "prevalence": "极高",
+        "name": "高血压",
+        "is_chronic": true,
+        "definition": "动脉血压持续升高的慢性病"
+      }
+    },
+    {
+      "id": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:70",
+      "labels": [
+        "MED_Disease"
+      ],
+      "props": {
+        "icd_code": "I25",
+        "severity": "重",
+        "prevalence": "高",
+        "name": "冠心病",
+        "is_chronic": true,
+        "definition": "冠状动脉粥样硬化性心脏病"
+      }
+    },
+    {
+      "id": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:71",
+      "labels": [
+        "MED_Disease"
+      ],
+      "props": {
+        "icd_code": "K25",
+        "severity": "中",
+        "prevalence": "中",
+        "name": "胃溃疡",
+        "is_chronic": true,
+        "definition": "胃黏膜被胃酸侵蚀形成的溃疡"
+      }
+    },
+    {
+      "id": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:72",
+      "labels": [
+        "MED_Disease"
+      ],
+      "props": {
+        "icd_code": "K29.0",
+        "severity": "轻-中",
+        "prevalence": "高",
+        "name": "急性胃炎",
+        "definition": "胃黏膜的急性炎症"
+      }
+    },
+    {
+      "id": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:73",
+      "labels": [
+        "MED_Symptom"
+      ],
+      "props": {
+        "severity": "轻-重",
+        "body_region": "全身",
+        "name": "发热",
+        "description": "体温超过37.3°C"
+      }
+    },
+    {
+      "id": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:74",
+      "labels": [
+        "MED_Symptom"
+      ],
+      "props": {
+        "severity": "轻",
+        "body_region": "全身",
+        "name": "乏力",
+        "description": "体力下降、精神不振"
+      }
+    },
+    {
+      "id": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:75",
+      "labels": [
+        "MED_Symptom"
+      ],
+      "props": {
+        "severity": "轻-中",
+        "body_region": "头部",
+        "name": "头痛",
+        "description": "头部疼痛"
+      }
+    },
+    {
+      "id": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:76",
+      "labels": [
+        "MED_Symptom"
+      ],
+      "props": {
+        "severity": "轻-重",
+        "body_region": "呼吸系统",
+        "name": "咳嗽",
+        "description": "呼吸道刺激引起的排痰反射"
+      }
+    },
+    {
+      "id": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:77",
+      "labels": [
+        "MED_Symptom"
+      ],
+      "props": {
+        "severity": "轻-中",
+        "body_region": "咽部",
+        "name": "咽痛",
+        "description": "咽喉部疼痛"
+      }
+    },
+    {
+      "id": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:78",
+      "labels": [
+        "MED_Symptom"
+      ],
+      "props": {
+        "severity": "轻",
+        "body_region": "鼻腔",
+        "name": "鼻塞流涕",
+        "description": "鼻腔阻塞和分泌物增多"
+      }
+    },
+    {
+      "id": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:79",
+      "labels": [
+        "MED_Symptom"
+      ],
+      "props": {
+        "severity": "中-重",
+        "body_region": "胸部",
+        "name": "胸闷胸痛",
+        "description": "胸部压迫感或疼痛"
+      }
+    },
+    {
+      "id": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:80",
+      "labels": [
+        "MED_Symptom"
+      ],
+      "props": {
+        "severity": "中-重",
+        "body_region": "呼吸系统",
+        "name": "呼吸困难",
+        "description": "呼吸费力、气短"
+      }
+    },
+    {
+      "id": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:81",
+      "labels": [
+        "MED_Symptom"
+      ],
+      "props": {
+        "severity": "轻-重",
+        "body_region": "腹部",
+        "name": "腹痛",
+        "description": "腹部疼痛"
+      }
+    },
+    {
+      "id": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:82",
+      "labels": [
+        "MED_Symptom"
+      ],
+      "props": {
+        "severity": "轻-重",
+        "body_region": "肠道",
+        "name": "腹泻",
+        "description": "排便次数增多、粪便稀薄"
+      }
+    },
+    {
+      "id": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:83",
+      "labels": [
+        "MED_Symptom"
+      ],
+      "props": {
+        "severity": "轻-中",
+        "body_region": "胃部",
+        "name": "恶心呕吐",
+        "description": "胃部不适引起的呕吐感或实际呕吐"
+      }
+    },
+    {
+      "id": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:84",
+      "labels": [
+        "MED_Symptom"
+      ],
+      "props": {
+        "severity": "轻-中",
+        "body_region": "头部",
+        "name": "头晕",
+        "description": "头部昏沉、视物旋转"
+      }
+    },
+    {
+      "id": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:85",
+      "labels": [
+        "MED_Symptom"
+      ],
+      "props": {
+        "severity": "轻-中",
+        "body_region": "心脏",
+        "name": "心悸",
+        "description": "心跳异常感知，心慌感"
+      }
+    },
+    {
+      "id": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:86",
+      "labels": [
+        "COM_Server"
+      ],
+      "props": {
+        "name": "Web服务器01",
+        "别名": "web01",
+        "实体描述": "8C32G，Nginx前端"
+      }
+    },
+    {
+      "id": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:87",
+      "labels": [
+        "COM_Server"
+      ],
+      "props": {
+        "name": "应用服务器02",
+        "别名": "app02",
+        "实体描述": "16C64G，Java应用"
+      }
+    },
+    {
+      "id": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:88",
+      "labels": [
+        "COM_Server"
+      ],
+      "props": {
+        "name": "数据库服务器03",
+        "别名": "db03",
+        "实体描述": "32C128G，MySQL 8.0"
+      }
+    },
+    {
+      "id": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:89",
+      "labels": [
+        "COM_Server"
+      ],
+      "props": {
+        "name": "缓存服务器04",
+        "别名": "redis04",
+        "实体描述": "8C16G，Redis 7"
+      }
+    },
+    {
+      "id": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:90",
+      "labels": [
+        "COM_Service"
+      ],
+      "props": {
+        "别名": "order",
+        "name": "订单服务",
+        "实体描述": "微服务，订单核心"
+      }
+    },
+    {
+      "id": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:91",
+      "labels": [
+        "COM_Service"
+      ],
+      "props": {
+        "别名": "pay",
+        "name": "支付服务",
+        "实体描述": "微服务，对接支付宝/微信"
+      }
+    },
+    {
+      "id": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:92",
+      "labels": [
+        "COM_Service"
+      ],
+      "props": {
+        "别名": "user",
+        "name": "用户服务",
+        "实体描述": "微服务，账户中心"
+      }
+    },
+    {
+      "id": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:93",
+      "labels": [
+        "COM_Service"
+      ],
+      "props": {
+        "别名": "kafka",
+        "name": "消息队列",
+        "实体描述": "Kafka，3节点集群"
+      }
+    },
+    {
+      "id": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:94",
+      "labels": [
+        "COM_Service"
+      ],
+      "props": {
+        "别名": "es",
+        "name": "搜索引擎",
+        "实体描述": "Elasticsearch，日志检索"
+      }
+    },
+    {
+      "id": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:95",
+      "labels": [
+        "COM_Fault"
+      ],
+      "props": {
+        "name": "接口超时",
+        "别名": "超时",
+        "实体描述": "API响应>3s"
+      }
+    },
+    {
+      "id": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:96",
+      "labels": [
+        "COM_Fault"
+      ],
+      "props": {
+        "别名": "OOM",
+        "name": "内存溢出",
+        "实体描述": "OOM，Java堆溢出"
+      }
+    },
+    {
+      "id": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:97",
+      "labels": [
+        "COM_Fault"
+      ],
+      "props": {
+        "name": "数据库慢查询",
+        "别名": "慢SQL",
+        "实体描述": "SQL>5s"
+      }
+    },
+    {
+      "id": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:98",
+      "labels": [
+        "COM_Fault"
+      ],
+      "props": {
+        "name": "缓存击穿",
+        "别名": "击穿",
+        "实体描述": "热点key过期+高并发"
+      }
+    },
+    {
+      "id": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:99",
+      "labels": [
+        "COM_Fault"
+      ],
+      "props": {
+        "name": "日志无法检索",
+        "别名": "日志丢",
+        "实体描述": "ES索引失败"
+      }
+    },
+    {
+      "id": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:100",
+      "labels": [
+        "COM_Cause"
+      ],
+      "props": {
+        "name": "下游服务依赖慢",
+        "别名": "依赖慢",
+        "实体描述": "pay服务响应慢"
+      }
+    },
+    {
+      "id": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:101",
+      "labels": [
+        "COM_Cause"
+      ],
+      "props": {
+        "name": "JVM堆配置不足",
+        "别名": "堆小",
+        "实体描述": "Xmx 2G 过小"
+      }
+    },
+    {
+      "id": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:102",
+      "labels": [
+        "COM_Cause"
+      ],
+      "props": {
+        "别名": "无索引",
+        "name": "缺索引",
+        "实体描述": "SQL缺少复合索引"
+      }
+    },
+    {
+      "id": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:103",
+      "labels": [
+        "COM_Cause"
+      ],
+      "props": {
+        "name": "热点key无互斥锁",
+        "别名": "无锁",
+        "实体描述": "重建时未加锁"
+      }
+    },
+    {
+      "id": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:104",
+      "labels": [
+        "COM_Cause"
+      ],
+      "props": {
+        "别名": "盘满",
+        "name": "ES磁盘满",
+        "实体描述": "磁盘使用率>95%"
+      }
+    },
+    {
+      "id": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:105",
+      "labels": [
+        "COM_Resolution"
+      ],
+      "props": {
+        "name": "限流降级",
+        "别名": "降级",
+        "实体描述": "Sentinel+开关降级"
+      }
+    },
+    {
+      "id": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:106",
+      "labels": [
+        "COM_Resolution"
+      ],
+      "props": {
+        "name": "扩容JVM堆",
+        "别名": "扩堆",
+        "实体描述": "Xmx调至4G+GC调优"
+      }
+    },
+    {
+      "id": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:107",
+      "labels": [
+        "COM_Resolution"
+      ],
+      "props": {
+        "name": "添加复合索引",
+        "别名": "加索引",
+        "实体描述": "联合索引+执行计划"
+      }
+    },
+    {
+      "id": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:108",
+      "labels": [
+        "COM_Resolution"
+      ],
+      "props": {
+        "name": "加互斥锁重建",
+        "别名": "加锁",
+        "实体描述": "单飞重建缓存"
+      }
+    },
+    {
+      "id": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:109",
+      "labels": [
+        "COM_Resolution"
+      ],
+      "props": {
+        "name": "扩容ES磁盘",
+        "别名": "扩ES",
+        "实体描述": "新增数据节点+迁移"
+      }
+    },
+    {
+      "id": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:110",
+      "labels": [
+        "COM_Engineer"
+      ],
+      "props": {
+        "name": "架构师张",
+        "别名": "架构张",
+        "实体描述": "全栈+架构，10年经验"
+      }
+    },
+    {
+      "id": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:111",
+      "labels": [
+        "COM_Engineer"
+      ],
+      "props": {
+        "别名": "SRE李",
+        "name": "SRE李",
+        "实体描述": "稳定性保障+监控告警"
+      }
+    },
+    {
+      "id": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:112",
+      "labels": [
+        "COM_Engineer"
+      ],
+      "props": {
+        "别名": "DBA王",
+        "name": "DBA王",
+        "实体描述": "MySQL+ES专长"
+      }
+    },
+    {
+      "id": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:113",
+      "labels": [
+        "TUR_Turbine"
+      ],
+      "props": {
+        "name": "陆上直驱风机",
+        "别名": "陆上直驱",
+        "实体描述": "2MW，直驱永磁，陆上"
+      }
+    },
+    {
+      "id": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:114",
+      "labels": [
+        "TUR_Turbine"
+      ],
+      "props": {
+        "name": "海上半直驱风机",
+        "别名": "海上半直驱",
+        "实体描述": "6MW，半直驱，海上"
+      }
+    },
+    {
+      "id": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:115",
+      "labels": [
+        "TUR_Turbine"
+      ],
+      "props": {
+        "name": "双馈异步风机",
+        "别名": "双馈",
+        "实体描述": "1.5MW，双馈变速"
+      }
+    },
+    {
+      "id": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:116",
+      "labels": [
+        "TUR_Component"
+      ],
+      "props": {
+        "别名": "齿轮箱",
+        "name": "齿轮箱",
+        "实体描述": "增速齿轮箱，1:100"
+      }
+    },
+    {
+      "id": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:117",
+      "labels": [
+        "TUR_Component"
+      ],
+      "props": {
+        "别名": "发电机",
+        "name": "发电机",
+        "实体描述": "永磁同步发电机"
+      }
+    },
+    {
+      "id": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:118",
+      "labels": [
+        "TUR_Component"
+      ],
+      "props": {
+        "别名": "叶片",
+        "name": "叶片",
+        "实体描述": "玻璃纤维叶片，60m"
+      }
+    },
+    {
+      "id": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:119",
+      "labels": [
+        "TUR_Component"
+      ],
+      "props": {
+        "name": "偏航系统",
+        "别名": "偏航",
+        "实体描述": "偏航轴承+齿轮电机"
+      }
+    },
+    {
+      "id": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:120",
+      "labels": [
+        "TUR_Component"
+      ],
+      "props": {
+        "name": "变桨系统",
+        "别名": "变桨",
+        "实体描述": "电动变桨，3叶片独立"
+      }
+    },
+    {
+      "id": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:121",
+      "labels": [
+        "TUR_Component"
+      ],
+      "props": {
+        "别名": "SCADA",
+        "name": "SCADA系统",
+        "实体描述": "数据采集与监控系统"
+      }
+    },
+    {
+      "id": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:122",
+      "labels": [
+        "TUR_Fault"
+      ],
+      "props": {
+        "name": "齿轮箱油温过高",
+        "别名": "油温高",
+        "实体描述": "油温>75°C告警"
+      }
+    },
+    {
+      "id": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:123",
+      "labels": [
+        "TUR_Fault"
+      ],
+      "props": {
+        "name": "发电机绝缘下降",
+        "别名": "绝缘低",
+        "实体描述": "绝缘电阻<10MΩ"
+      }
+    },
+    {
+      "id": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:124",
+      "labels": [
+        "TUR_Fault"
+      ],
+      "props": {
+        "name": "叶片雷击损伤",
+        "别名": "雷击",
+        "实体描述": "叶尖复合材料烧蚀"
+      }
+    },
+    {
+      "id": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:125",
+      "labels": [
+        "TUR_Fault"
+      ],
+      "props": {
+        "name": "偏航偏移",
+        "别名": "偏航偏",
+        "实体描述": "机舱角度偏差>5°"
+      }
+    },
+    {
+      "id": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:126",
+      "labels": [
+        "TUR_Fault"
+      ],
+      "props": {
+        "name": "变桨电池故障",
+        "别名": "电池坏",
+        "实体描述": "后备电池电压不足"
+      }
+    },
+    {
+      "id": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:127",
+      "labels": [
+        "TUR_Cause"
+      ],
+      "props": {
+        "name": "齿轮油变质",
+        "别名": "油变质",
+        "实体描述": "油品运动粘度超标"
+      }
+    },
+    {
+      "id": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:128",
+      "labels": [
+        "TUR_Cause"
+      ],
+      "props": {
+        "name": "冷却风扇停转",
+        "别名": "风扇坏",
+        "实体描述": "散热风扇电机烧毁"
+      }
+    },
+    {
+      "id": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:129",
+      "labels": [
+        "TUR_Cause"
+      ],
+      "props": {
+        "name": "绝缘老化",
+        "别名": "老化",
+        "实体描述": "绕组绝缘热老化"
+      }
+    },
+    {
+      "id": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:130",
+      "labels": [
+        "TUR_Cause"
+      ],
+      "props": {
+        "name": "雷电直击叶尖",
+        "别名": "直击雷",
+        "实体描述": "未及时接闪"
+      }
+    },
+    {
+      "id": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:131",
+      "labels": [
+        "TUR_Cause"
+      ],
+      "props": {
+        "name": "偏航编码器失灵",
+        "别名": "编码器坏",
+        "实体描述": "绝对值编码器漂移"
+      }
+    },
+    {
+      "id": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:132",
+      "labels": [
+        "TUR_Cause"
+      ],
+      "props": {
+        "name": "后备电池寿命到期",
+        "别名": "电池旧",
+        "实体描述": "锂电池循环>500次"
+      }
+    },
+    {
+      "id": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:133",
+      "labels": [
+        "TUR_Action"
+      ],
+      "props": {
+        "name": "更换齿轮油",
+        "别名": "换油",
+        "实体描述": "Mobil SHC XMP 320"
+      }
+    },
+    {
+      "id": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:134",
+      "labels": [
+        "TUR_Action"
+      ],
+      "props": {
+        "name": "更换冷却风扇",
+        "别名": "换风扇",
+        "实体描述": "24V直流风扇总成"
+      }
+    },
+    {
+      "id": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:135",
+      "labels": [
+        "TUR_Action"
+      ],
+      "props": {
+        "name": "重做绝缘处理",
+        "别名": "重做绝缘",
+        "实体描述": "VPI真空浸漆"
+      }
+    },
+    {
+      "id": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:136",
+      "labels": [
+        "TUR_Action"
+      ],
+      "props": {
+        "name": "叶片修复",
+        "别名": "补叶片",
+        "实体描述": "复合材料局部补强"
+      }
+    },
+    {
+      "id": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:137",
+      "labels": [
+        "TUR_Action"
+      ],
+      "props": {
+        "name": "校准偏航编码器",
+        "别名": "校编码器",
+        "实体描述": "零位重新对齐"
+      }
+    },
+    {
+      "id": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:138",
+      "labels": [
+        "TUR_Action"
+      ],
+      "props": {
+        "name": "更换变桨电池",
+        "别名": "换电池",
+        "实体描述": "3.2V磷酸铁锂"
+      }
+    },
+    {
+      "id": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:139",
+      "labels": [
+        "TUR_Maintenance"
+      ],
+      "props": {
+        "name": "半年定检",
+        "别名": "半年检",
+        "实体描述": "6个月周期维护任务"
+      }
+    },
+    {
+      "id": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:140",
+      "labels": [
+        "TUR_Maintenance"
+      ],
+      "props": {
+        "name": "全年定检",
+        "别名": "全年检",
+        "实体描述": "12个月周期维护任务"
+      }
+    },
+    {
+      "id": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:141",
+      "labels": [
+        "TUR_Maintenance"
+      ],
+      "props": {
+        "name": "齿轮油更换任务",
+        "别名": "换油任务",
+        "实体描述": "2年周期专项"
+      }
+    },
+    {
+      "id": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:142",
+      "labels": [
+        "TUR_Engineer"
+      ],
+      "props": {
+        "别名": "孙工",
+        "name": "孙工",
+        "实体描述": "齿轮箱专长，10年风电运维"
+      }
+    },
+    {
+      "id": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:143",
+      "labels": [
+        "TUR_Engineer"
+      ],
+      "props": {
+        "别名": "钱工",
+        "name": "钱工",
+        "实体描述": "电气绝缘专长"
+      }
+    },
+    {
+      "id": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:144",
+      "labels": [
+        "TUR_Engineer"
+      ],
+      "props": {
+        "别名": "周工",
+        "name": "周工",
+        "实体描述": "叶片与复合材料专长"
+      }
+    }
+  ],
+  "relationships": [
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:0",
+      "type": "MED_CONTRAINDICATED_WITH",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:2",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:72",
+      "props": {
+        "severity": "中度",
+        "reason": "NSAIDs刺激胃黏膜"
+      }
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:1",
+      "type": "MED_CONTRAINDICATED_WITH",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:3",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:9",
+      "props": {
+        "severity": "严重",
+        "reason": "β-内酰胺类抗生素，青霉素过敏者禁用"
+      }
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:2",
+      "type": "MED_CONTRAINDICATED_WITH",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:6",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:80",
+      "props": {
+        "severity": "严重",
+        "reason": "β受体阻滞剂可加重支气管痉挛"
+      }
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:3",
+      "type": "MED_CONTRAINDICATED_WITH",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:5",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:10",
+      "props": {
+        "severity": "严重",
+        "reason": "CCB可能加重心输出量不足"
+      }
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:4",
+      "type": "MED_AFFECTS",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:70",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:15",
+      "props": {}
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:5",
+      "type": "MED_HAS_SIDE_EFFECT",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:2",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:18",
+      "props": {
+        "note": "NSAIDs常见副作用"
+      }
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:6",
+      "type": "MED_HAS_SIDE_EFFECT",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:2",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:22",
+      "props": {
+        "note": "长期大量使用风险"
+      }
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:7",
+      "type": "MED_HAS_SIDE_EFFECT",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:1",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:21",
+      "props": {
+        "note": "超量使用风险"
+      }
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:8",
+      "type": "MED_HAS_SIDE_EFFECT",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:1",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:20",
+      "props": {
+        "note": "罕见"
+      }
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:9",
+      "type": "MED_HAS_SIDE_EFFECT",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:3",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:20",
+      "props": {
+        "note": "青霉素类过敏风险"
+      }
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:10",
+      "type": "MED_HAS_SIDE_EFFECT",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:3",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:18",
+      "props": {
+        "note": "抗生素常见"
+      }
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:11",
+      "type": "MED_HAS_SIDE_EFFECT",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:5",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:19",
+      "props": {
+        "note": "CCB常见"
+      }
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:12",
+      "type": "COM_RUNS_SERVICE",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:86",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:90",
+      "props": {}
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:13",
+      "type": "MED_HAS_SIDE_EFFECT",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:5",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:24",
+      "props": {
+        "note": "偶见"
+      }
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:14",
+      "type": "MED_HAS_SIDE_EFFECT",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:6",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:19",
+      "props": {
+        "note": "β阻滞剂常见"
+      }
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:15",
+      "type": "COM_RUNS_SERVICE",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:86",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:92",
+      "props": {}
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:16",
+      "type": "MED_CAN_SUBSTITUTE",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:1",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:2",
+      "props": {
+        "note": "布洛芬有抗炎作用，对乙酰氨基酚更安全",
+        "condition": "轻中度疼痛和退热",
+        "similarity": "高"
+      }
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:17",
+      "type": "MED_CAN_SUBSTITUTE",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:2",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:1",
+      "props": {
+        "note": "对乙酰氨基酚对胃更友好",
+        "condition": "轻中度疼痛和退热",
+        "similarity": "高"
+      }
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:18",
+      "type": "MED_CAN_SUBSTITUTE",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:3",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:4",
+      "props": {
+        "note": "阿奇霉素适用于青霉素过敏者",
+        "condition": "呼吸道感染",
+        "similarity": "中"
+      }
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:19",
+      "type": "MED_CAN_SUBSTITUTE",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:4",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:3",
+      "props": {
+        "note": "阿莫西林为一线选择",
+        "condition": "呼吸道感染",
+        "similarity": "中"
+      }
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:20",
+      "type": "MED_CAN_SUBSTITUTE",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:5",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:6",
+      "props": {
+        "note": "CCB和β阻滞剂是不同机制",
+        "condition": "高血压",
+        "similarity": "中"
+      }
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:21",
+      "type": "MED_CAN_SUBSTITUTE",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:6",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:5",
+      "props": {
+        "note": "各有优势场景",
+        "condition": "高血压",
+        "similarity": "中"
+      }
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:22",
+      "type": "MED_AFFECTS",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:65",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:11",
+      "props": {}
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:23",
+      "type": "MED_AFFECTS",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:66",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:11",
+      "props": {}
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:24",
+      "type": "MED_AFFECTS",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:64",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:12",
+      "props": {}
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:25",
+      "type": "MED_AFFECTS",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:63",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:16",
+      "props": {}
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:26",
+      "type": "MED_AFFECTS",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:63",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:12",
+      "props": {}
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:27",
+      "type": "MED_AFFECTS",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:67",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:13",
+      "props": {}
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:28",
+      "type": "MED_AFFECTS",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:67",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:14",
+      "props": {}
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:29",
+      "type": "MED_AFFECTS",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:71",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:13",
+      "props": {}
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:30",
+      "type": "MED_AFFECTS",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:72",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:13",
+      "props": {}
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:31",
+      "type": "MED_AFFECTS",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:69",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:17",
+      "props": {}
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:32",
+      "type": "MED_SUB_CLASS_OF",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:57",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:56",
+      "props": {}
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:33",
+      "type": "MED_SUB_CLASS_OF",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:58",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:56",
+      "props": {}
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:34",
+      "type": "MED_SUB_CLASS_OF",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:59",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:56",
+      "props": {}
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:35",
+      "type": "MED_SUB_CLASS_OF",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:60",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:57",
+      "props": {}
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:36",
+      "type": "MED_SUB_CLASS_OF",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:61",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:57",
+      "props": {}
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:37",
+      "type": "MED_SUB_CLASS_OF",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:62",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:57",
+      "props": {}
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:38",
+      "type": "MED_SUB_CLASS_OF",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:63",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:60",
+      "props": {}
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:39",
+      "type": "MED_SUB_CLASS_OF",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:64",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:60",
+      "props": {}
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:40",
+      "type": "MED_SUB_CLASS_OF",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:65",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:61",
+      "props": {}
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:41",
+      "type": "MED_SUB_CLASS_OF",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:66",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:61",
+      "props": {}
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:42",
+      "type": "MED_SUB_CLASS_OF",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:67",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:62",
+      "props": {}
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:43",
+      "type": "MED_SUB_CLASS_OF",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:68",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:62",
+      "props": {}
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:44",
+      "type": "MED_SUB_CLASS_OF",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:69",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:58",
+      "props": {}
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:45",
+      "type": "MED_SUB_CLASS_OF",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:70",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:58",
+      "props": {}
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:46",
+      "type": "MED_SUB_CLASS_OF",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:71",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:59",
+      "props": {}
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:47",
+      "type": "MED_SUB_CLASS_OF",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:72",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:59",
+      "props": {}
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:48",
+      "type": "MED_MANIFESTS_IN",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:73",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:63",
+      "props": {
+        "frequency": "偶见"
+      }
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:49",
+      "type": "MED_MANIFESTS_IN",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:74",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:63",
+      "props": {
+        "frequency": "常见"
+      }
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:50",
+      "type": "MED_MANIFESTS_IN",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:75",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:63",
+      "props": {
+        "frequency": "偶见"
+      }
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:51",
+      "type": "MED_MANIFESTS_IN",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:76",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:63",
+      "props": {
+        "frequency": "常见"
+      }
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:52",
+      "type": "MED_MANIFESTS_IN",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:77",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:63",
+      "props": {
+        "frequency": "常见"
+      }
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:53",
+      "type": "MED_MANIFESTS_IN",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:78",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:63",
+      "props": {
+        "frequency": "极常见"
+      }
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:54",
+      "type": "MED_MANIFESTS_IN",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:73",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:65",
+      "props": {
+        "frequency": "极常见"
+      }
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:55",
+      "type": "MED_MANIFESTS_IN",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:74",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:65",
+      "props": {
+        "frequency": "偶见"
+      }
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:56",
+      "type": "MED_MANIFESTS_IN",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:76",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:65",
+      "props": {
+        "frequency": "极常见"
+      }
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:57",
+      "type": "MED_MANIFESTS_IN",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:79",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:65",
+      "props": {
+        "frequency": "常见"
+      }
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:58",
+      "type": "MED_MANIFESTS_IN",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:80",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:65",
+      "props": {
+        "frequency": "常见"
+      }
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:59",
+      "type": "MED_MANIFESTS_IN",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:73",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:64",
+      "props": {
+        "frequency": "常见"
+      }
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:60",
+      "type": "MED_MANIFESTS_IN",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:75",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:64",
+      "props": {
+        "frequency": "偶见"
+      }
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:61",
+      "type": "MED_MANIFESTS_IN",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:76",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:64",
+      "props": {
+        "frequency": "偶见"
+      }
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:62",
+      "type": "MED_MANIFESTS_IN",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:77",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:64",
+      "props": {
+        "frequency": "极常见"
+      }
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:63",
+      "type": "MED_MANIFESTS_IN",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:73",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:66",
+      "props": {
+        "frequency": "常见"
+      }
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:64",
+      "type": "MED_MANIFESTS_IN",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:74",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:66",
+      "props": {
+        "frequency": "偶见"
+      }
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:65",
+      "type": "MED_MANIFESTS_IN",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:76",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:66",
+      "props": {
+        "frequency": "极常见"
+      }
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:66",
+      "type": "MED_MANIFESTS_IN",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:79",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:66",
+      "props": {
+        "frequency": "偶见"
+      }
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:67",
+      "type": "MED_MANIFESTS_IN",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:73",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:67",
+      "props": {
+        "frequency": "偶见"
+      }
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:68",
+      "type": "MED_MANIFESTS_IN",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:74",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:67",
+      "props": {
+        "frequency": "偶见"
+      }
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:69",
+      "type": "MED_MANIFESTS_IN",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:81",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:67",
+      "props": {
+        "frequency": "极常见"
+      }
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:70",
+      "type": "MED_MANIFESTS_IN",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:82",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:67",
+      "props": {
+        "frequency": "极常见"
+      }
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:71",
+      "type": "MED_MANIFESTS_IN",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:83",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:67",
+      "props": {
+        "frequency": "常见"
+      }
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:72",
+      "type": "MED_MANIFESTS_IN",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:73",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:68",
+      "props": {
+        "frequency": "偶见"
+      }
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:73",
+      "type": "MED_MANIFESTS_IN",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:81",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:68",
+      "props": {
+        "frequency": "极常见"
+      }
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:74",
+      "type": "MED_MANIFESTS_IN",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:82",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:68",
+      "props": {
+        "frequency": "常见"
+      }
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:75",
+      "type": "MED_MANIFESTS_IN",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:83",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:68",
+      "props": {
+        "frequency": "极常见"
+      }
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:76",
+      "type": "MED_MANIFESTS_IN",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:74",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:69",
+      "props": {
+        "frequency": "偶见"
+      }
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:77",
+      "type": "MED_MANIFESTS_IN",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:75",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:69",
+      "props": {
+        "frequency": "偶见"
+      }
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:78",
+      "type": "MED_MANIFESTS_IN",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:19",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:69",
+      "props": {
+        "frequency": "常见"
+      }
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:79",
+      "type": "COM_RUNS_SERVICE",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:87",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:90",
+      "props": {}
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:80",
+      "type": "MED_MANIFESTS_IN",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:85",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:69",
+      "props": {
+        "frequency": "偶见"
+      }
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:81",
+      "type": "MED_MANIFESTS_IN",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:74",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:70",
+      "props": {
+        "frequency": "偶见"
+      }
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:82",
+      "type": "MED_MANIFESTS_IN",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:79",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:70",
+      "props": {
+        "frequency": "极常见"
+      }
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:83",
+      "type": "MED_MANIFESTS_IN",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:80",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:70",
+      "props": {
+        "frequency": "常见"
+      }
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:84",
+      "type": "MED_MANIFESTS_IN",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:85",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:70",
+      "props": {
+        "frequency": "常见"
+      }
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:85",
+      "type": "MED_MANIFESTS_IN",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:74",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:71",
+      "props": {
+        "frequency": "偶见"
+      }
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:86",
+      "type": "MED_MANIFESTS_IN",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:81",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:71",
+      "props": {
+        "frequency": "极常见"
+      }
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:87",
+      "type": "MED_MANIFESTS_IN",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:83",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:71",
+      "props": {
+        "frequency": "常见"
+      }
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:88",
+      "type": "MED_MANIFESTS_IN",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:73",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:72",
+      "props": {
+        "frequency": "偶见"
+      }
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:89",
+      "type": "MED_MANIFESTS_IN",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:81",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:72",
+      "props": {
+        "frequency": "极常见"
+      }
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:90",
+      "type": "MED_MANIFESTS_IN",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:83",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:72",
+      "props": {
+        "frequency": "极常见"
+      }
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:91",
+      "type": "MED_TREATS",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:1",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:63",
+      "props": {
+        "effectiveness": "对症缓解",
+        "is_primary": false
+      }
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:92",
+      "type": "MED_TREATS",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:1",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:64",
+      "props": {
+        "effectiveness": "对症缓解",
+        "is_primary": false
+      }
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:93",
+      "type": "MED_TREATS",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:1",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:69",
+      "props": {
+        "effectiveness": "辅助降压",
+        "is_primary": false
+      }
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:94",
+      "type": "MED_TREATS",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:2",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:63",
+      "props": {
+        "effectiveness": "对症缓解",
+        "is_primary": false
+      }
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:95",
+      "type": "MED_TREATS",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:2",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:64",
+      "props": {
+        "effectiveness": "对症缓解",
+        "is_primary": false
+      }
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:96",
+      "type": "MED_TREATS",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:2",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:66",
+      "props": {
+        "effectiveness": "抗炎退热",
+        "is_primary": false
+      }
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:97",
+      "type": "MED_TREATS",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:3",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:65",
+      "props": {
+        "effectiveness": "抗菌治疗",
+        "is_primary": true
+      }
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:98",
+      "type": "MED_TREATS",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:3",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:66",
+      "props": {
+        "effectiveness": "抗菌治疗",
+        "is_primary": true
+      }
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:99",
+      "type": "MED_TREATS",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:3",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:67",
+      "props": {
+        "effectiveness": "抗菌治疗",
+        "is_primary": true
+      }
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:100",
+      "type": "MED_TREATS",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:4",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:65",
+      "props": {
+        "effectiveness": "抗菌治疗",
+        "is_primary": true
+      }
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:101",
+      "type": "MED_TREATS",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:4",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:64",
+      "props": {
+        "effectiveness": "抗菌治疗",
+        "is_primary": true
+      }
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:102",
+      "type": "MED_TREATS",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:4",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:66",
+      "props": {
+        "effectiveness": "抗菌治疗",
+        "is_primary": false
+      }
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:103",
+      "type": "MED_TREATS",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:5",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:69",
+      "props": {
+        "effectiveness": "一线降压",
+        "is_primary": true
+      }
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:104",
+      "type": "MED_TREATS",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:5",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:70",
+      "props": {
+        "effectiveness": "辅助治疗",
+        "is_primary": false
+      }
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:105",
+      "type": "MED_TREATS",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:6",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:69",
+      "props": {
+        "effectiveness": "一线降压",
+        "is_primary": true
+      }
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:106",
+      "type": "MED_TREATS",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:6",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:70",
+      "props": {
+        "effectiveness": "一线治疗",
+        "is_primary": true
+      }
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:107",
+      "type": "MED_TREATS",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:7",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:71",
+      "props": {
+        "effectiveness": "一线抑酸",
+        "is_primary": true
+      }
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:108",
+      "type": "MED_TREATS",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:7",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:72",
+      "props": {
+        "effectiveness": "抑酸保护胃黏膜",
+        "is_primary": true
+      }
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:109",
+      "type": "MED_TREATS",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:8",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:67",
+      "props": {
+        "effectiveness": "对症止泻",
+        "is_primary": false
+      }
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:110",
+      "type": "MED_TREATS",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:8",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:68",
+      "props": {
+        "effectiveness": "对症止泻",
+        "is_primary": false
+      }
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:111",
+      "type": "MED_CONTRAINDICATED_WITH",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:2",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:71",
+      "props": {
+        "severity": "严重",
+        "reason": "NSAIDs刺激胃黏膜，加重溃疡和炎症"
+      }
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:112",
+      "type": "MED_HAS_SIDE_EFFECT",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:6",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:23",
+      "props": {
+        "note": "需监测心率"
+      }
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:113",
+      "type": "MED_HAS_SIDE_EFFECT",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:7",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:24",
+      "props": {
+        "note": "PPI偶见"
+      }
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:114",
+      "type": "MED_HAS_SIDE_EFFECT",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:7",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:19",
+      "props": {
+        "note": "偶见"
+      }
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:115",
+      "type": "COM_RUNS_SERVICE",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:87",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:91",
+      "props": {}
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:116",
+      "type": "EDU_SUBJECT_OF",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:27",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:25",
+      "props": {}
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:117",
+      "type": "EDU_SUBJECT_OF",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:28",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:25",
+      "props": {}
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:118",
+      "type": "EDU_SUBJECT_OF",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:29",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:26",
+      "props": {}
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:119",
+      "type": "EDU_SUBJECT_OF",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:30",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:26",
+      "props": {}
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:120",
+      "type": "EDU_BELONGS_TO",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:31",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:27",
+      "props": {}
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:121",
+      "type": "EDU_BELONGS_TO",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:32",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:27",
+      "props": {}
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:122",
+      "type": "EDU_BELONGS_TO",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:33",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:28",
+      "props": {}
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:123",
+      "type": "EDU_BELONGS_TO",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:34",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:28",
+      "props": {}
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:124",
+      "type": "EDU_BELONGS_TO",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:35",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:30",
+      "props": {}
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:125",
+      "type": "EDU_BELONGS_TO",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:36",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:30",
+      "props": {}
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:126",
+      "type": "EDU_BELONGS_TO",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:37",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:29",
+      "props": {}
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:127",
+      "type": "EDU_BELONGS_TO",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:38",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:29",
+      "props": {}
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:128",
+      "type": "EDU_BELONGS_TO",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:39",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:29",
+      "props": {}
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:129",
+      "type": "EDU_BELONGS_TO",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:40",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:29",
+      "props": {}
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:130",
+      "type": "EDU_PREREQUISITE_OF",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:32",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:31",
+      "props": {}
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:131",
+      "type": "EDU_PREREQUISITE_OF",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:33",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:32",
+      "props": {}
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:132",
+      "type": "EDU_PREREQUISITE_OF",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:34",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:33",
+      "props": {}
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:133",
+      "type": "EDU_PREREQUISITE_OF",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:37",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:32",
+      "props": {}
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:134",
+      "type": "EDU_PREREQUISITE_OF",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:37",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:33",
+      "props": {}
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:135",
+      "type": "EDU_PREREQUISITE_OF",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:38",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:37",
+      "props": {}
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:136",
+      "type": "EDU_PREREQUISITE_OF",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:39",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:37",
+      "props": {}
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:137",
+      "type": "EDU_PREREQUISITE_OF",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:40",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:37",
+      "props": {}
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:138",
+      "type": "EDU_PREREQUISITE_OF",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:36",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:35",
+      "props": {}
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:139",
+      "type": "EDU_TAUGHT_BY",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:31",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:41",
+      "props": {}
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:140",
+      "type": "EDU_TAUGHT_BY",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:32",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:42",
+      "props": {}
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:141",
+      "type": "EDU_TAUGHT_BY",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:33",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:42",
+      "props": {}
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:142",
+      "type": "EDU_TAUGHT_BY",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:34",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:41",
+      "props": {}
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:143",
+      "type": "EDU_TAUGHT_BY",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:35",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:43",
+      "props": {}
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:144",
+      "type": "EDU_TAUGHT_BY",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:36",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:44",
+      "props": {}
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:145",
+      "type": "EDU_TAUGHT_BY",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:37",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:45",
+      "props": {}
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:146",
+      "type": "EDU_TAUGHT_BY",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:38",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:45",
+      "props": {}
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:147",
+      "type": "EDU_TAUGHT_BY",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:39",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:46",
+      "props": {}
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:148",
+      "type": "EDU_TAUGHT_BY",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:40",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:46",
+      "props": {}
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:149",
+      "type": "EDU_WORKS_IN",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:41",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:47",
+      "props": {}
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:150",
+      "type": "EDU_WORKS_IN",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:42",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:47",
+      "props": {}
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:151",
+      "type": "EDU_WORKS_IN",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:43",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:48",
+      "props": {}
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:152",
+      "type": "EDU_WORKS_IN",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:44",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:48",
+      "props": {}
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:153",
+      "type": "EDU_WORKS_IN",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:45",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:49",
+      "props": {}
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:154",
+      "type": "EDU_WORKS_IN",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:46",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:49",
+      "props": {}
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:155",
+      "type": "EDU_ENROLLED_IN",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:50",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:31",
+      "props": {}
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:156",
+      "type": "EDU_ENROLLED_IN",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:50",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:32",
+      "props": {}
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:157",
+      "type": "EDU_ENROLLED_IN",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:51",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:31",
+      "props": {}
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:158",
+      "type": "EDU_ENROLLED_IN",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:51",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:35",
+      "props": {}
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:159",
+      "type": "EDU_ENROLLED_IN",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:52",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:33",
+      "props": {}
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:160",
+      "type": "EDU_ENROLLED_IN",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:52",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:37",
+      "props": {}
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:161",
+      "type": "EDU_ENROLLED_IN",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:53",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:38",
+      "props": {}
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:162",
+      "type": "EDU_ENROLLED_IN",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:53",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:39",
+      "props": {}
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:163",
+      "type": "EDU_ENROLLED_IN",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:54",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:40",
+      "props": {}
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:164",
+      "type": "EDU_ENROLLED_IN",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:54",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:36",
+      "props": {}
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:165",
+      "type": "EDU_CONFLICTS_WITH",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:37",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:38",
+      "props": {}
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:166",
+      "type": "EDU_CONFLICTS_WITH",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:33",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:35",
+      "props": {}
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:167",
+      "type": "EDU_CONFLICTS_WITH",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:39",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:40",
+      "props": {}
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:168",
+      "type": "COM_RUNS_SERVICE",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:88",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:93",
+      "props": {}
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:169",
+      "type": "COM_RUNS_SERVICE",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:89",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:94",
+      "props": {}
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:170",
+      "type": "COM_DEPENDS_ON",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:90",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:91",
+      "props": {}
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:171",
+      "type": "COM_DEPENDS_ON",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:90",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:92",
+      "props": {}
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:172",
+      "type": "COM_DEPENDS_ON",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:90",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:93",
+      "props": {}
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:173",
+      "type": "COM_DEPENDS_ON",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:91",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:93",
+      "props": {}
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:174",
+      "type": "COM_DEPENDS_ON",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:92",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:94",
+      "props": {}
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:175",
+      "type": "COM_CAUSED_BY",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:95",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:100",
+      "props": {}
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:176",
+      "type": "COM_CAUSED_BY",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:96",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:101",
+      "props": {}
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:177",
+      "type": "COM_CAUSED_BY",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:97",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:102",
+      "props": {}
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:178",
+      "type": "COM_CAUSED_BY",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:98",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:103",
+      "props": {}
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:179",
+      "type": "COM_CAUSED_BY",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:99",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:104",
+      "props": {}
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:180",
+      "type": "COM_RESOLVED_BY",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:95",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:105",
+      "props": {}
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:181",
+      "type": "COM_RESOLVED_BY",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:96",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:106",
+      "props": {}
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:182",
+      "type": "COM_RESOLVED_BY",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:97",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:107",
+      "props": {}
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:183",
+      "type": "COM_RESOLVED_BY",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:98",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:108",
+      "props": {}
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:184",
+      "type": "COM_RESOLVED_BY",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:99",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:109",
+      "props": {}
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:185",
+      "type": "COM_OWNED_BY",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:90",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:110",
+      "props": {}
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:186",
+      "type": "COM_OWNED_BY",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:91",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:111",
+      "props": {}
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:187",
+      "type": "COM_OWNED_BY",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:92",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:110",
+      "props": {}
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:188",
+      "type": "COM_OWNED_BY",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:93",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:111",
+      "props": {}
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:189",
+      "type": "COM_OWNED_BY",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:94",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:112",
+      "props": {}
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:190",
+      "type": "COM_AFFECTS",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:91",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:90",
+      "props": {}
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:191",
+      "type": "COM_AFFECTS",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:93",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:90",
+      "props": {}
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:192",
+      "type": "COM_AFFECTS",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:92",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:90",
+      "props": {}
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:193",
+      "type": "COM_PRECEDES",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:100",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:95",
+      "props": {}
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:194",
+      "type": "COM_PRECEDES",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:101",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:96",
+      "props": {}
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:195",
+      "type": "COM_PRECEDES",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:104",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:99",
+      "props": {}
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:260",
+      "type": "TUR_HAS_COMPONENT",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:113",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:117",
+      "props": {}
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:261",
+      "type": "TUR_HAS_COMPONENT",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:113",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:118",
+      "props": {}
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:262",
+      "type": "TUR_HAS_COMPONENT",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:113",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:119",
+      "props": {}
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:263",
+      "type": "TUR_HAS_COMPONENT",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:113",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:120",
+      "props": {}
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:264",
+      "type": "TUR_HAS_COMPONENT",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:113",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:121",
+      "props": {}
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:265",
+      "type": "TUR_HAS_COMPONENT",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:114",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:116",
+      "props": {}
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:266",
+      "type": "TUR_HAS_COMPONENT",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:114",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:117",
+      "props": {}
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:267",
+      "type": "TUR_HAS_COMPONENT",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:114",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:118",
+      "props": {}
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:268",
+      "type": "TUR_HAS_COMPONENT",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:114",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:121",
+      "props": {}
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:269",
+      "type": "TUR_HAS_COMPONENT",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:115",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:116",
+      "props": {}
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:270",
+      "type": "TUR_HAS_COMPONENT",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:115",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:117",
+      "props": {}
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:271",
+      "type": "TUR_HAS_COMPONENT",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:115",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:118",
+      "props": {}
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:272",
+      "type": "TUR_CAUSED_BY",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:122",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:127",
+      "props": {}
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:273",
+      "type": "TUR_CAUSED_BY",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:122",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:128",
+      "props": {}
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:274",
+      "type": "TUR_CAUSED_BY",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:123",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:129",
+      "props": {}
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:275",
+      "type": "TUR_CAUSED_BY",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:124",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:130",
+      "props": {}
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:276",
+      "type": "TUR_CAUSED_BY",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:125",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:131",
+      "props": {}
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:277",
+      "type": "TUR_CAUSED_BY",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:126",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:132",
+      "props": {}
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:278",
+      "type": "TUR_REPAIRED_BY",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:122",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:133",
+      "props": {}
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:279",
+      "type": "TUR_REPAIRED_BY",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:122",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:134",
+      "props": {}
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:280",
+      "type": "TUR_REPAIRED_BY",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:123",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:135",
+      "props": {}
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:281",
+      "type": "TUR_REPAIRED_BY",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:124",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:136",
+      "props": {}
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:282",
+      "type": "TUR_REPAIRED_BY",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:125",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:137",
+      "props": {}
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:283",
+      "type": "TUR_REPAIRED_BY",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:126",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:138",
+      "props": {}
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:284",
+      "type": "TUR_SCHEDULED_FOR",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:139",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:137",
+      "props": {}
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:285",
+      "type": "TUR_SCHEDULED_FOR",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:140",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:135",
+      "props": {}
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:286",
+      "type": "TUR_SCHEDULED_FOR",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:141",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:133",
+      "props": {}
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:287",
+      "type": "TUR_ASSIGNED_TO",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:133",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:142",
+      "props": {}
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:288",
+      "type": "TUR_ASSIGNED_TO",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:134",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:142",
+      "props": {}
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:289",
+      "type": "TUR_ASSIGNED_TO",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:135",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:143",
+      "props": {}
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:290",
+      "type": "TUR_ASSIGNED_TO",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:136",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:144",
+      "props": {}
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:291",
+      "type": "TUR_ASSIGNED_TO",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:137",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:144",
+      "props": {}
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:292",
+      "type": "TUR_ASSIGNED_TO",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:138",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:143",
+      "props": {}
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:293",
+      "type": "TUR_MONITORED_BY",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:122",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:121",
+      "props": {}
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:294",
+      "type": "TUR_MONITORED_BY",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:123",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:121",
+      "props": {}
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:295",
+      "type": "TUR_MONITORED_BY",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:125",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:121",
+      "props": {}
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:296",
+      "type": "TUR_PRECEDES",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:127",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:122",
+      "props": {}
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:297",
+      "type": "TUR_PRECEDES",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:128",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:122",
+      "props": {}
+    },
+    {
+      "id": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:298",
+      "type": "TUR_PRECEDES",
+      "source": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:132",
+      "target": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:126",
+      "props": {}
+    }
+  ]
+}

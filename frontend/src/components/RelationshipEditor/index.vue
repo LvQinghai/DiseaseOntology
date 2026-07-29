@@ -209,12 +209,15 @@ async function handleSave() {
       })
       message.success('关系更新成功')
     } else {
-      await createRelationship({
-        source_element_id: form.value.sourceId,
-        target_element_id: form.value.targetId,
-        type: form.value.type.trim(),
-        properties: props,
-      })
+      await createRelationship(
+        {
+          source_element_id: form.value.sourceId,
+          target_element_id: form.value.targetId,
+          type: form.value.type.trim(),
+          properties: props,
+        },
+        store.currentSystemId,
+      )
       message.success('关系创建成功')
     }
 

@@ -8,6 +8,7 @@ from backend.models.import_task import (
     TableMapping, RelationshipMapping,
 )
 from backend.services.system_service import SystemService
+from backend.models.system import UpsertRelationSemanticRequest
 
 
 class ImportService:
@@ -76,12 +77,14 @@ class ImportService:
         )
 
     def import_from_excel(
-        self, file_bytes: bytes, system_name: str, description: str
+        self, file_bytes: bytes, system_name: str, description: str,
+        prefix: str = "",
     ) -> ImportResult:
-        """从 Excel 导入创建新系统（v3.0: SQLite + Neo4j prefix）。"""
-        # 1. 在 SQLite 中创建系统记录（含自动生成的 prefix）
+        """从 Excel 导入创建新系统（v3.5: 支持自定义 prefix）。"""
+        # 1. 在 SQLite 中创建系统记录（prefix 为空则自动生成）
         system = self.system_service.create_system(
-            name=system_name, description=description, import_source="excel"
+            name=system_name, description=description, import_source="excel",
+            prefix=prefix,
         )
         prefix = system.prefix
 
@@ -95,12 +98,15 @@ class ImportService:
         # 4. 批量写入关系（使用 prefix）
         rel_count = 0
         if preview.relationships:
-            rel_count = self.repo.batch_create_relationships(preview.relationships)
+            rel_count = self.repo.batch_create_relationships(preview.relationships, prefix)
 
         # 5. 更新 SQLite 统计
         node_total = self.repo.count_system_nodes(prefix)
         rel_total = self.repo.count_system_relationships(prefix)
         self.system_service.update_counts(system.system_id, node_total, rel_total)
+
+        # 6. v3.6: 自动初始化关系语义
+        self._auto_init_semantics(prefix)
 
         return ImportResult(
             success=len(errors) == 0,
@@ -109,6 +115,51 @@ class ImportService:
             entities_created=entity_count,
             relationships_created=rel_count,
             message=f"成功导入 {entity_count} 个实体, {rel_count} 条关系",
+            errors=errors,
+        )
+
+    def append_from_excel(
+        self, file_bytes: bytes, target_system_id: str,
+    ) -> ImportResult:
+        """★ v3.5: 将 Excel 数据追加到已有系统（不创建新系统）。"""
+        # 1. 查询目标系统
+        system = self.system_service.get_system(target_system_id)
+        if not system:
+            return ImportResult(
+                success=False,
+                system_id=target_system_id,
+                system_name="",
+                message=f"目标系统 '{target_system_id}' 不存在",
+            )
+        prefix = system.prefix
+
+        # 2. 解析 Excel
+        preview = self.preview_excel(file_bytes)
+        errors = []
+
+        # 3. 批量写入 Neo4j（使用目标系统的 prefix）
+        entity_count = self.repo.batch_create_nodes(preview.entities, prefix)
+
+        # 4. 批量写入关系
+        rel_count = 0
+        if preview.relationships:
+            rel_count = self.repo.batch_create_relationships(preview.relationships, prefix)
+
+        # 5. 更新 SQLite 统计
+        node_total = self.repo.count_system_nodes(prefix)
+        rel_total = self.repo.count_system_relationships(prefix)
+        self.system_service.update_counts(system.system_id, node_total, rel_total)
+
+        # 6. v3.6: 自动初始化关系语义（追加模式也可能引入新关系类型）
+        self._auto_init_semantics(prefix)
+
+        return ImportResult(
+            success=len(errors) == 0,
+            system_id=system.system_id,
+            system_name=system.name,
+            entities_created=entity_count,
+            relationships_created=rel_count,
+            message=f"已向「{system.name}」追加 {entity_count} 个实体, {rel_count} 条关系",
             errors=errors,
         )
 
@@ -207,13 +258,15 @@ class ImportService:
         self, conn: DBConnection,
         entity_mappings: list[TableMapping],
         system_name: str, description: str,
+        prefix: str = "",
         relationship_mappings: list[RelationshipMapping] | None = None,
     ) -> ImportResult:
-        """从关系数据库导入创建新系统（v3.0: SQLite + Neo4j prefix）。"""
+        """从关系数据库导入创建新系统（v3.5: 支持自定义 prefix）。"""
         # 1. 在 SQLite 创建系统记录
         system = self.system_service.create_system(
             name=system_name, description=description,
             import_source=f"database ({conn.db_type})",
+            prefix=prefix,
         )
         prefix = system.prefix
 
@@ -228,7 +281,7 @@ class ImportService:
         # 4. 批量写入关系
         rel_count = 0
         if preview.relationships:
-            rel_count = self.repo.batch_create_relationships(preview.relationships)
+            rel_count = self.repo.batch_create_relationships(preview.relationships, prefix)
 
         # 5. 更新 SQLite 统计
         node_total = self.repo.count_system_nodes(prefix)
@@ -242,6 +295,52 @@ class ImportService:
             entities_created=entity_count,
             relationships_created=rel_count,
             message=f"成功导入 {entity_count} 个实体, {rel_count} 条关系",
+            errors=errors,
+        )
+
+    def append_from_db(
+        self, conn: DBConnection,
+        entity_mappings: list[TableMapping],
+        target_system_id: str,
+        relationship_mappings: list[RelationshipMapping] | None = None,
+    ) -> ImportResult:
+        """★ v3.5: 将数据库数据追加到已有系统（不创建新系统）。"""
+        # 1. 查询目标系统
+        system = self.system_service.get_system(target_system_id)
+        if not system:
+            return ImportResult(
+                success=False,
+                system_id=target_system_id,
+                system_name="",
+                message=f"目标系统 '{target_system_id}' 不存在",
+            )
+        prefix = system.prefix
+
+        # 2. 预览获取数据
+        preview = self.preview_db(conn, entity_mappings, relationship_mappings, limit=500000)
+
+        errors = []
+
+        # 3. 批量写入 Neo4j（使用目标系统的 prefix）
+        entity_count = self.repo.batch_create_nodes(preview.entities, prefix)
+
+        # 4. 批量写入关系
+        rel_count = 0
+        if preview.relationships:
+            rel_count = self.repo.batch_create_relationships(preview.relationships, prefix)
+
+        # 5. 更新 SQLite 统计
+        node_total = self.repo.count_system_nodes(prefix)
+        rel_total = self.repo.count_system_relationships(prefix)
+        self.system_service.update_counts(system.system_id, node_total, rel_total)
+
+        return ImportResult(
+            success=len(errors) == 0,
+            system_id=system.system_id,
+            system_name=system.name,
+            entities_created=entity_count,
+            relationships_created=rel_count,
+            message=f"已向「{system.name}」追加 {entity_count} 个实体, {rel_count} 条关系",
             errors=errors,
         )
 
@@ -469,3 +568,33 @@ class ImportService:
             result = c.execute(text(f"SELECT * FROM {table_name} LIMIT {limit}"))
             columns = result.keys()
             return [dict(zip(columns, row)) for row in result.fetchall()]
+
+    # ═══════════════════════════════════════════
+    # v3.6: 语义自动初始化
+    # ═══════════════════════════════════════════
+
+    def _auto_init_semantics(self, prefix: str) -> None:
+        """导入完成后自动从 Neo4j 扫描关系类型并初始化语义（不覆盖已有配置）。"""
+        try:
+            rel_types = self.repo.get_relation_types_by_prefix(prefix)
+            if not rel_types:
+                return
+            from backend.services.query_service import get_preset_semantics
+            # 先用预置语义填充已知类型
+            for rt in rel_types:
+                preset = get_preset_semantics(rt)
+                if preset:
+                    self.system_service.upsert_relation_semantic(
+                        prefix,
+                        UpsertRelationSemanticRequest(**preset, rel_type=rt),
+                    )
+            # 初始化其余未配置的类型
+            count = self.system_service.init_semantics_from_neo4j(prefix, rel_types)
+            if count > 0:
+                import logging
+                logger = logging.getLogger(__name__)
+                logger.info(f"v3.6: 自动初始化 {count} 条关系语义 (prefix={prefix})")
+        except Exception:
+            import logging
+            logger = logging.getLogger(__name__)
+            logger.warning(f"v3.6: 自动初始化语义失败，可忽略 (prefix={prefix})")

@@ -5,6 +5,7 @@ import re
 from fastapi import HTTPException
 
 from backend.repositories.neo4j_repository import Neo4jRepository
+from backend.services.system_service import SystemService
 from backend.utils.label_utils import strip_prefix
 from backend.models.editor import (
     CreateEntityRequest,
@@ -58,8 +59,9 @@ def _validate_properties(properties: dict) -> dict:
 class EditorService:
     """本体编辑器服务"""
 
-    def __init__(self, repo: Neo4jRepository):
+    def __init__(self, repo: Neo4jRepository, system_service: SystemService | None = None):
         self._repo = repo
+        self._system_svc = system_service
 
     # ==================== 实体 CRUD ====================
 
@@ -120,8 +122,8 @@ class EditorService:
             relationship_count=rel_count,
         )
 
-    def delete_entity(self, element_id: str) -> dict:
-        """删除实体节点."""
+    def delete_entity(self, element_id: str, force: bool = False, prefix: str = "") -> dict:
+        """删除实体节点。force=True 时级联删除所有关联关系后再删除节点。"""
         node = self._repo.get_node_by_id(element_id)
         if not node:
             raise HTTPException(status_code=404, detail=f"节点 {element_id} 不存在")
@@ -129,7 +131,7 @@ class EditorService:
         rel_count = self._repo.get_node_relationship_count(element_id)
         name = node["properties"].get("name", "")
 
-        if rel_count > 0:
+        if rel_count > 0 and not force:
             rel_details = self._repo.get_node_relationships_detail(element_id)
             rel_list = ", ".join(
                 f"{r['type']}(→{r['other_node_name']})" for r in rel_details[:5]
@@ -141,8 +143,20 @@ class EditorService:
                        f"或使用图谱视图删除关联关系后再重试。",
             )
 
-        self._repo.delete_node(element_id)
-        return {"deleted": True, "name": name, "relationship_count": 0}
+        # force=True 时，先收集受影响的关系类型（用于后续清理 SQLite 语义）
+        affected_types: set[str] = set()
+        if force and rel_count > 0:
+            rel_details = self._repo.get_node_relationships_detail(element_id)
+            affected_types = {r["type"] for r in rel_details if r.get("type")}
+
+        # force=True 时使用 DETACH DELETE 级联删除关联关系
+        self._repo.delete_node(element_id, force=force)
+
+        # 级联删除后，检查每个受影响的关系类型是否还有剩余实例
+        for full_type in affected_types:
+            self._cleanup_relation_semantic_if_empty(full_type, prefix)
+
+        return {"deleted": True, "name": name, "relationship_count": rel_count}
 
     def check_entity_deletion(self, element_id: str) -> DeletionCheckResult:
         """校验节点是否可删除."""
@@ -326,12 +340,38 @@ class EditorService:
             properties=result["properties"],
         )
 
-    def delete_relationship(self, rel_element_id: str) -> dict:
-        """删除关系."""
-        deleted = self._repo.delete_relationship(rel_element_id)
-        if not deleted:
+    def delete_relationship(self, rel_element_id: str, prefix: str = "") -> dict:
+        """删除关系，并同步清理 SQLite 中该类型的语义定义（当该类型无剩余实例时）."""
+        # 1. 先获取关系详情（用于后续判断类型）
+        rel = self._repo.get_relationship_by_id(rel_element_id)
+        if not rel:
             raise HTTPException(status_code=404, detail=f"关系 {rel_element_id} 不存在")
+
+        full_type = rel.get("type", "")  # e.g. "MED_CAUSES"
+
+        # 2. 删除关系
+        self._repo.delete_relationship(rel_element_id)
+
+        # 3. 检查该类型是否还有剩余实例，无则清理 SQLite 语义
+        self._cleanup_relation_semantic_if_empty(full_type, prefix)
+
         return {"deleted": True}
+
+    def _cleanup_relation_semantic_if_empty(self, full_type: str, prefix: str) -> None:
+        """当指定关系类型无剩余实例时，清理 SQLite 中的语义定义."""
+        if not self._system_svc or not full_type or not prefix:
+            return
+
+        if not full_type.startswith(prefix):
+            return
+
+        short_type = strip_prefix(full_type, prefix)
+
+        # 检查该类型是否还有实例
+        remaining = self._repo.get_relationship_instances(short_type, prefix, limit=1)
+        if not remaining:
+            # 无剩余实例，清理 SQLite 语义
+            self._system_svc.delete_relation_semantic(prefix, short_type)
 
     def get_relationship_instances(self, rel_type: str, prefix: str,
                                    limit: int = 200) -> list[RelationshipInstanceSummary]:
@@ -340,8 +380,10 @@ class EditorService:
         return [
             RelationshipInstanceSummary(
                 element_id=r.get("element_id", ""),
+                source_id=r.get("source_id", ""),
                 source_name=r.get("source_name", ""),
                 source_label=r.get("source_label", ""),
+                target_id=r.get("target_id", ""),
                 target_name=r.get("target_name", ""),
                 target_label=r.get("target_label", ""),
             )

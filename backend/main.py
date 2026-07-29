@@ -1,4 +1,4 @@
-"""FastAPI 应用入口 —— 疾病本体可视化系统后端 v3.0.
+"""FastAPI 应用入口 —— 疾病本体可视化系统后端 v4.0.
 
 两层存储架构：
   - SQLite: 系统元数据（系统列表、前缀映射）
@@ -88,9 +88,9 @@ async def lifespan(app: FastAPI):
 
     # ── 步骤 4: 初始化业务 Service ──
     _ontology_svc = OntologyService(_repo)
-    _graph_svc = GraphService(_repo)
-    _query_svc = QueryService(_repo)
-    _editor_svc = EditorService(_repo)
+    _graph_svc = GraphService(_repo, _system_svc)
+    _query_svc = QueryService(_repo, _system_svc)
+    _editor_svc = EditorService(_repo, _system_svc)
     _import_svc = ImportService(_repo, _system_svc)
 
     # ── 步骤 5: 运行 Neo4j 前缀迁移 ──
@@ -111,7 +111,7 @@ async def lifespan(app: FastAPI):
     except Exception as e:
         print(f"⚠️ 统计更新失败（可忽略）: {e}")
 
-    print("✅ 服务初始化完成 (v3.0)")
+    print("✅ 服务初始化完成 (v4.0)")
     yield
 
     if _repo:
@@ -122,10 +122,23 @@ async def lifespan(app: FastAPI):
 # ---- 应用 ----
 app = FastAPI(
     title="疾病本体知识图谱可视化系统",
-    description="基于 Neo4j 的多系统本体浏览、图谱可视化、数据导入与 GraphRAG 智能问答 v3.0",
-    version="3.0.0",
+    description="基于 Neo4j 的多系统本体浏览、图谱可视化、数据导入与 GraphRAG 智能问答 v4.0",
+    version="4.0.0",
     lifespan=lifespan,
 )
+
+# 全局异常处理器：捕获未处理异常，返回 detail 字段供前端展示具体原因
+@app.exception_handler(Exception)
+async def _global_exception_handler(request, exc):
+    import logging, traceback
+    from fastapi.responses import JSONResponse
+    logging.getLogger("uvicorn.error").error(
+        f"未捕获异常: {exc}\n{traceback.format_exc()}"
+    )
+    return JSONResponse(
+        status_code=500,
+        content={"detail": f"服务器内部错误: {exc}"},
+    )
 
 # CORS
 app.add_middleware(
@@ -156,7 +169,7 @@ app.include_router(import_router)
 
 @app.get("/")
 def root():
-    return {"service": "疾病本体知识图谱可视化系统", "version": "3.0.0", "status": "running"}
+    return {"service": "疾病本体知识图谱可视化系统", "version": "4.0.0", "status": "running"}
 
 
 @app.get("/api/health")

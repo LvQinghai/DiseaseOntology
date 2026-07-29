@@ -74,22 +74,22 @@ class OntologyService:
             rel_types.append(RelationshipCatalogItem(
                 type=short_type,
                 count=item["count"],
-                source_labels=[strip_prefix(item["source_label"], prefix)]
-                    if item.get("source_label") else [],
-                target_labels=[strip_prefix(item["target_label"], prefix)]
-                    if item.get("target_label") else [],
+                source_labels=[strip_prefix(l, prefix)
+                               for l in item.get("source_labels", [])],
+                target_labels=[strip_prefix(l, prefix)
+                               for l in item.get("target_labels", [])],
                 description=REL_TYPE_LABELS.get(short_type, raw_type),
             ))
 
         return OntologyTree(node_types=node_types, relationship_types=rel_types)
 
-    def get_node_detail(self, element_id: str) -> NodeDetail | None:
-        """获取节点完整详情."""
+    def get_node_detail(self, element_id: str, prefix: str = "") -> NodeDetail | None:
+        """获取节点完整详情. prefix 非空时仅返回同系统关系."""
         node = self._repo.get_node_by_id(element_id)
         if not node:
             return None
 
-        relationships = self._repo.get_node_relationships(element_id)
+        relationships = self._repo.get_node_relationships(element_id, prefix)
         incoming = [
             RelationshipItem(
                 type=r["type"], direction=r["direction"],
@@ -129,10 +129,10 @@ class OntologyService:
             RelationshipCatalogItem(
                 type=strip_prefix(item["type"], prefix),
                 count=item["count"],
-                source_labels=[strip_prefix(item["source_label"], prefix)]
-                    if item.get("source_label") else [],
-                target_labels=[strip_prefix(item["target_label"], prefix)]
-                    if item.get("target_label") else [],
+                source_labels=[strip_prefix(l, prefix)
+                               for l in item.get("source_labels", [])],
+                target_labels=[strip_prefix(l, prefix)
+                               for l in item.get("target_labels", [])],
                 description=REL_TYPE_LABELS.get(
                     strip_prefix(item["type"], prefix), item["type"]
                 ),

@@ -37,9 +37,13 @@ def get_tree(
 # ───────────── 节点详情 ─────────────
 
 @router.get("/nodes/{element_id}", response_model=NodeDetail)
-def get_node_detail(element_id: str):
+def get_node_detail(
+    element_id: str,
+    system_id: str = Query(default="disease_ontology", description="系统标识"),
+):
     """获取节点完整详情。"""
-    result = _get_ontology_service().get_node_detail(element_id)
+    prefix = _resolve_prefix(system_id)
+    result = _get_ontology_service().get_node_detail(element_id, prefix)
     if not result:
         raise HTTPException(status_code=404, detail=f"节点 {element_id} 不存在")
     return result

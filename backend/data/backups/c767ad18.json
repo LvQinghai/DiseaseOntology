@@ -1,0 +1,1680 @@
+{
+  "id": "c767ad18",
+  "name": "医疗数据备份基线",
+  "prefix": "MED_",
+  "created_at": "2026-07-26T15:52:34.495314",
+  "node_count": 55,
+  "relationship_count": 112,
+  "nodes": [
+    {
+      "elementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:0",
+      "labels": [
+        "MED_Disease"
+      ],
+      "properties": {
+        "icd_prefix": "A-Z",
+        "name": "疾病",
+        "definition": "对人体健康异常状态的统称"
+      }
+    },
+    {
+      "elementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:1",
+      "labels": [
+        "MED_Disease"
+      ],
+      "properties": {
+        "icd_prefix": "A-B",
+        "name": "感染性疾病",
+        "definition": "由病原微生物引起的疾病"
+      }
+    },
+    {
+      "elementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:2",
+      "labels": [
+        "MED_Disease"
+      ],
+      "properties": {
+        "icd_prefix": "I",
+        "name": "心血管疾病",
+        "definition": "心脏和血管系统的疾病"
+      }
+    },
+    {
+      "elementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:3",
+      "labels": [
+        "MED_Disease"
+      ],
+      "properties": {
+        "icd_prefix": "K",
+        "name": "消化系统疾病",
+        "definition": "消化器官的疾病"
+      }
+    },
+    {
+      "elementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:4",
+      "labels": [
+        "MED_Disease"
+      ],
+      "properties": {
+        "icd_prefix": "J00-J06",
+        "name": "上呼吸道感染",
+        "definition": "鼻腔、咽、喉的急性感染"
+      }
+    },
+    {
+      "elementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:5",
+      "labels": [
+        "MED_Disease"
+      ],
+      "properties": {
+        "icd_prefix": "J09-J18",
+        "name": "下呼吸道感染",
+        "definition": "气管、支气管、肺的急性感染"
+      }
+    },
+    {
+      "elementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:6",
+      "labels": [
+        "MED_Disease"
+      ],
+      "properties": {
+        "icd_prefix": "A00-A09",
+        "name": "消化道感染",
+        "definition": "胃肠道急性感染"
+      }
+    },
+    {
+      "elementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:7",
+      "labels": [
+        "MED_Disease"
+      ],
+      "properties": {
+        "severity": "轻",
+        "icd_code": "J00",
+        "prevalence": "极高",
+        "name": "普通感冒",
+        "definition": "鼻病毒等引起的上呼吸道轻度感染"
+      }
+    },
+    {
+      "elementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:8",
+      "labels": [
+        "MED_Disease"
+      ],
+      "properties": {
+        "icd_code": "J02",
+        "severity": "轻",
+        "prevalence": "高",
+        "name": "急性咽炎",
+        "definition": "咽部黏膜的急性炎症"
+      }
+    },
+    {
+      "elementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:9",
+      "labels": [
+        "MED_Disease"
+      ],
+      "properties": {
+        "icd_code": "J18",
+        "severity": "重",
+        "prevalence": "中",
+        "name": "肺炎",
+        "definition": "肺实质的急性感染性炎症"
+      }
+    },
+    {
+      "elementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:10",
+      "labels": [
+        "MED_Disease"
+      ],
+      "properties": {
+        "icd_code": "J20",
+        "severity": "中",
+        "prevalence": "高",
+        "name": "急性支气管炎",
+        "definition": "支气管黏膜的急性炎症"
+      }
+    },
+    {
+      "elementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:11",
+      "labels": [
+        "MED_Disease"
+      ],
+      "properties": {
+        "icd_code": "A09",
+        "severity": "中",
+        "prevalence": "高",
+        "name": "急性胃肠炎",
+        "definition": "胃肠道急性感染性炎症"
+      }
+    },
+    {
+      "elementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:12",
+      "labels": [
+        "MED_Disease"
+      ],
+      "properties": {
+        "icd_code": "A05",
+        "severity": "中",
+        "prevalence": "中",
+        "name": "细菌性食物中毒",
+        "definition": "细菌污染食品引起的急性中毒"
+      }
+    },
+    {
+      "elementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:13",
+      "labels": [
+        "MED_Disease"
+      ],
+      "properties": {
+        "severity": "中-重",
+        "icd_code": "I10",
+        "prevalence": "极高",
+        "name": "高血压",
+        "is_chronic": true,
+        "definition": "动脉血压持续升高的慢性病"
+      }
+    },
+    {
+      "elementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:14",
+      "labels": [
+        "MED_Disease"
+      ],
+      "properties": {
+        "icd_code": "I25",
+        "severity": "重",
+        "prevalence": "高",
+        "name": "冠心病",
+        "is_chronic": true,
+        "definition": "冠状动脉粥样硬化性心脏病"
+      }
+    },
+    {
+      "elementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:15",
+      "labels": [
+        "MED_Disease"
+      ],
+      "properties": {
+        "icd_code": "K25",
+        "severity": "中",
+        "prevalence": "中",
+        "name": "胃溃疡",
+        "is_chronic": true,
+        "definition": "胃黏膜被胃酸侵蚀形成的溃疡"
+      }
+    },
+    {
+      "elementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:16",
+      "labels": [
+        "MED_Disease"
+      ],
+      "properties": {
+        "icd_code": "K29.0",
+        "severity": "轻-中",
+        "prevalence": "高",
+        "name": "急性胃炎",
+        "definition": "胃黏膜的急性炎症"
+      }
+    },
+    {
+      "elementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:17",
+      "labels": [
+        "MED_Symptom"
+      ],
+      "properties": {
+        "severity": "轻-重",
+        "body_region": "全身",
+        "name": "发热",
+        "description": "体温超过37.3°C"
+      }
+    },
+    {
+      "elementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:18",
+      "labels": [
+        "MED_Symptom"
+      ],
+      "properties": {
+        "severity": "轻",
+        "body_region": "全身",
+        "name": "乏力",
+        "description": "体力下降、精神不振"
+      }
+    },
+    {
+      "elementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:19",
+      "labels": [
+        "MED_Symptom"
+      ],
+      "properties": {
+        "severity": "轻-中",
+        "body_region": "头部",
+        "name": "头痛",
+        "description": "头部疼痛"
+      }
+    },
+    {
+      "elementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:20",
+      "labels": [
+        "MED_Symptom"
+      ],
+      "properties": {
+        "severity": "轻-重",
+        "body_region": "呼吸系统",
+        "name": "咳嗽",
+        "description": "呼吸道刺激引起的排痰反射"
+      }
+    },
+    {
+      "elementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:21",
+      "labels": [
+        "MED_Symptom"
+      ],
+      "properties": {
+        "severity": "轻-中",
+        "body_region": "咽部",
+        "name": "咽痛",
+        "description": "咽喉部疼痛"
+      }
+    },
+    {
+      "elementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:22",
+      "labels": [
+        "MED_Symptom"
+      ],
+      "properties": {
+        "severity": "轻",
+        "body_region": "鼻腔",
+        "name": "鼻塞流涕",
+        "description": "鼻腔阻塞和分泌物增多"
+      }
+    },
+    {
+      "elementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:23",
+      "labels": [
+        "MED_Symptom"
+      ],
+      "properties": {
+        "severity": "中-重",
+        "body_region": "胸部",
+        "name": "胸闷胸痛",
+        "description": "胸部压迫感或疼痛"
+      }
+    },
+    {
+      "elementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:24",
+      "labels": [
+        "MED_Symptom"
+      ],
+      "properties": {
+        "severity": "中-重",
+        "body_region": "呼吸系统",
+        "name": "呼吸困难",
+        "description": "呼吸费力、气短"
+      }
+    },
+    {
+      "elementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:25",
+      "labels": [
+        "MED_Symptom"
+      ],
+      "properties": {
+        "severity": "轻-重",
+        "body_region": "腹部",
+        "name": "腹痛",
+        "description": "腹部疼痛"
+      }
+    },
+    {
+      "elementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:26",
+      "labels": [
+        "MED_Symptom"
+      ],
+      "properties": {
+        "severity": "轻-重",
+        "body_region": "肠道",
+        "name": "腹泻",
+        "description": "排便次数增多、粪便稀薄"
+      }
+    },
+    {
+      "elementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:27",
+      "labels": [
+        "MED_Symptom"
+      ],
+      "properties": {
+        "severity": "轻-中",
+        "body_region": "胃部",
+        "name": "恶心呕吐",
+        "description": "胃部不适引起的呕吐感或实际呕吐"
+      }
+    },
+    {
+      "elementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:28",
+      "labels": [
+        "MED_Symptom"
+      ],
+      "properties": {
+        "severity": "轻-中",
+        "body_region": "头部",
+        "name": "头晕",
+        "description": "头部昏沉、视物旋转"
+      }
+    },
+    {
+      "elementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:29",
+      "labels": [
+        "MED_Symptom"
+      ],
+      "properties": {
+        "severity": "轻-中",
+        "body_region": "心脏",
+        "name": "心悸",
+        "description": "心跳异常感知，心慌感"
+      }
+    },
+    {
+      "elementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:30",
+      "labels": [
+        "MED_Symptom"
+      ],
+      "properties": {
+        "severity": "轻-中",
+        "body_region": "下肢/全身",
+        "name": "水肿",
+        "description": "组织间隙液体积聚"
+      }
+    },
+    {
+      "elementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:31",
+      "labels": [
+        "MED_Drug"
+      ],
+      "properties": {
+        "dosage": "500mg",
+        "max_daily": "2000mg",
+        "generic_name": "Paracetamol",
+        "name": "对乙酰氨基酚",
+        "brand_name": "泰诺/扑热息痛",
+        "category": "解热镇痛药",
+        "dosage_form": "片剂",
+        "frequency": "每4-6小时一次"
+      }
+    },
+    {
+      "elementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:32",
+      "labels": [
+        "MED_Drug"
+      ],
+      "properties": {
+        "dosage": "400mg",
+        "max_daily": "1200mg",
+        "generic_name": "Ibuprofen",
+        "name": "布洛芬",
+        "brand_name": "芬必得/美林",
+        "category": "解热镇痛药(NSAIDs)",
+        "dosage_form": "片剂",
+        "frequency": "每6-8小时一次"
+      }
+    },
+    {
+      "elementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:33",
+      "labels": [
+        "MED_Drug"
+      ],
+      "properties": {
+        "dosage": "500mg",
+        "max_daily": "1500mg",
+        "generic_name": "Amoxicillin",
+        "name": "阿莫西林",
+        "brand_name": "阿莫仙",
+        "category": "抗生素(β-内酰胺类)",
+        "dosage_form": "胶囊",
+        "frequency": "每8小时一次"
+      }
+    },
+    {
+      "elementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:34",
+      "labels": [
+        "MED_Drug"
+      ],
+      "properties": {
+        "dosage": "500mg",
+        "max_daily": "500mg",
+        "generic_name": "Azithromycin",
+        "name": "阿奇霉素",
+        "brand_name": "希舒美",
+        "category": "抗生素(大环内酯类)",
+        "dosage_form": "片剂",
+        "frequency": "每日一次"
+      }
+    },
+    {
+      "elementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:35",
+      "labels": [
+        "MED_Drug"
+      ],
+      "properties": {
+        "dosage": "5mg",
+        "max_daily": "10mg",
+        "generic_name": "Amlodipine",
+        "name": "氨氯地平",
+        "brand_name": "络活喜",
+        "category": "降压药(CCB)",
+        "dosage_form": "片剂",
+        "frequency": "每日一次"
+      }
+    },
+    {
+      "elementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:36",
+      "labels": [
+        "MED_Drug"
+      ],
+      "properties": {
+        "dosage": "50mg",
+        "max_daily": "200mg",
+        "generic_name": "Metoprolol",
+        "name": "美托洛尔",
+        "brand_name": "倍他乐克",
+        "category": "降压药(β受体阻滞剂)",
+        "dosage_form": "片剂",
+        "frequency": "每日一次"
+      }
+    },
+    {
+      "elementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:37",
+      "labels": [
+        "MED_Drug"
+      ],
+      "properties": {
+        "dosage": "20mg",
+        "max_daily": "40mg",
+        "generic_name": "Omeprazole",
+        "name": "奥美拉唑",
+        "brand_name": "洛赛克",
+        "category": "抑酸药(PPI)",
+        "dosage_form": "胶囊",
+        "frequency": "每日一次"
+      }
+    },
+    {
+      "elementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:38",
+      "labels": [
+        "MED_Drug"
+      ],
+      "properties": {
+        "dosage": "3g",
+        "max_daily": "9g",
+        "generic_name": "Smectite",
+        "name": "蒙脱石散",
+        "brand_name": "思密达",
+        "category": "止泻药",
+        "dosage_form": "散剂",
+        "frequency": "每日三次"
+      }
+    },
+    {
+      "elementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:39",
+      "labels": [
+        "MED_Disease"
+      ],
+      "properties": {
+        "icd_code": "Z88.0",
+        "severity": "重",
+        "prevalence": "低",
+        "name": "青霉素过敏",
+        "definition": "对青霉素类药物的过敏反应"
+      }
+    },
+    {
+      "elementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:40",
+      "labels": [
+        "MED_Disease"
+      ],
+      "properties": {
+        "severity": "重",
+        "name": "严重主动脉瓣狭窄",
+        "definition": "主动脉瓣口严重狭窄"
+      }
+    },
+    {
+      "elementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:41",
+      "labels": [
+        "MED_BodyPart"
+      ],
+      "properties": {
+        "name": "肺",
+        "location": "胸部"
+      }
+    },
+    {
+      "elementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:42",
+      "labels": [
+        "MED_BodyPart"
+      ],
+      "properties": {
+        "name": "咽喉",
+        "location": "颈部"
+      }
+    },
+    {
+      "elementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:43",
+      "labels": [
+        "MED_BodyPart"
+      ],
+      "properties": {
+        "name": "胃",
+        "location": "上腹部"
+      }
+    },
+    {
+      "elementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:44",
+      "labels": [
+        "MED_BodyPart"
+      ],
+      "properties": {
+        "name": "肠道",
+        "location": "腹部"
+      }
+    },
+    {
+      "elementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:45",
+      "labels": [
+        "MED_BodyPart"
+      ],
+      "properties": {
+        "name": "心脏",
+        "location": "胸部"
+      }
+    },
+    {
+      "elementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:46",
+      "labels": [
+        "MED_BodyPart"
+      ],
+      "properties": {
+        "name": "鼻腔",
+        "location": "面部"
+      }
+    },
+    {
+      "elementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:47",
+      "labels": [
+        "MED_BodyPart"
+      ],
+      "properties": {
+        "name": "血管",
+        "location": "全身"
+      }
+    },
+    {
+      "elementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:48",
+      "labels": [
+        "MED_SideEffect"
+      ],
+      "properties": {
+        "severity": "轻",
+        "name": "胃不适",
+        "frequency": "常见"
+      }
+    },
+    {
+      "elementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:49",
+      "labels": [
+        "MED_SideEffect"
+      ],
+      "properties": {
+        "severity": "轻",
+        "name": "头晕",
+        "frequency": "偶见"
+      }
+    },
+    {
+      "elementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:50",
+      "labels": [
+        "MED_SideEffect"
+      ],
+      "properties": {
+        "severity": "重",
+        "name": "过敏反应",
+        "frequency": "罕见"
+      }
+    },
+    {
+      "elementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:51",
+      "labels": [
+        "MED_SideEffect"
+      ],
+      "properties": {
+        "severity": "重",
+        "name": "肝损伤",
+        "frequency": "罕见"
+      }
+    },
+    {
+      "elementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:52",
+      "labels": [
+        "MED_SideEffect"
+      ],
+      "properties": {
+        "severity": "重",
+        "name": "肾损伤",
+        "frequency": "罕见"
+      }
+    },
+    {
+      "elementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:53",
+      "labels": [
+        "MED_SideEffect"
+      ],
+      "properties": {
+        "severity": "中-重",
+        "name": "心律失常",
+        "frequency": "偶见"
+      }
+    },
+    {
+      "elementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:54",
+      "labels": [
+        "MED_SideEffect"
+      ],
+      "properties": {
+        "severity": "轻",
+        "name": "便秘",
+        "frequency": "常见"
+      }
+    }
+  ],
+  "relationships": [
+    {
+      "elementId": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:0",
+      "type": "MED_CAN_SUBSTITUTE",
+      "startNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:31",
+      "endNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:32",
+      "properties": {
+        "note": "布洛芬有抗炎作用，对乙酰氨基酚更安全",
+        "condition": "轻中度疼痛和退热",
+        "similarity": "高"
+      }
+    },
+    {
+      "elementId": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:1",
+      "type": "MED_CAN_SUBSTITUTE",
+      "startNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:32",
+      "endNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:31",
+      "properties": {
+        "note": "对乙酰氨基酚对胃更友好",
+        "condition": "轻中度疼痛和退热",
+        "similarity": "高"
+      }
+    },
+    {
+      "elementId": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:2",
+      "type": "MED_CAN_SUBSTITUTE",
+      "startNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:33",
+      "endNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:34",
+      "properties": {
+        "note": "阿奇霉素适用于青霉素过敏者",
+        "condition": "呼吸道感染",
+        "similarity": "中"
+      }
+    },
+    {
+      "elementId": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:3",
+      "type": "MED_CAN_SUBSTITUTE",
+      "startNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:34",
+      "endNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:33",
+      "properties": {
+        "note": "阿莫西林为一线选择",
+        "condition": "呼吸道感染",
+        "similarity": "中"
+      }
+    },
+    {
+      "elementId": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:4",
+      "type": "MED_CAN_SUBSTITUTE",
+      "startNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:35",
+      "endNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:36",
+      "properties": {
+        "note": "CCB和β阻滞剂是不同机制",
+        "condition": "高血压",
+        "similarity": "中"
+      }
+    },
+    {
+      "elementId": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:5",
+      "type": "MED_CAN_SUBSTITUTE",
+      "startNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:36",
+      "endNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:35",
+      "properties": {
+        "note": "各有优势场景",
+        "condition": "高血压",
+        "similarity": "中"
+      }
+    },
+    {
+      "elementId": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:6",
+      "type": "MED_AFFECTS",
+      "startNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:9",
+      "endNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:41",
+      "properties": {}
+    },
+    {
+      "elementId": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:7",
+      "type": "MED_AFFECTS",
+      "startNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:10",
+      "endNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:41",
+      "properties": {}
+    },
+    {
+      "elementId": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:8",
+      "type": "MED_AFFECTS",
+      "startNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:8",
+      "endNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:42",
+      "properties": {}
+    },
+    {
+      "elementId": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:9",
+      "type": "MED_AFFECTS",
+      "startNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:7",
+      "endNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:46",
+      "properties": {}
+    },
+    {
+      "elementId": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:10",
+      "type": "MED_AFFECTS",
+      "startNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:7",
+      "endNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:42",
+      "properties": {}
+    },
+    {
+      "elementId": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:11",
+      "type": "MED_AFFECTS",
+      "startNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:11",
+      "endNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:43",
+      "properties": {}
+    },
+    {
+      "elementId": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:12",
+      "type": "MED_AFFECTS",
+      "startNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:11",
+      "endNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:44",
+      "properties": {}
+    },
+    {
+      "elementId": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:13",
+      "type": "MED_AFFECTS",
+      "startNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:15",
+      "endNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:43",
+      "properties": {}
+    },
+    {
+      "elementId": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:14",
+      "type": "MED_AFFECTS",
+      "startNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:16",
+      "endNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:43",
+      "properties": {}
+    },
+    {
+      "elementId": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:15",
+      "type": "MED_AFFECTS",
+      "startNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:13",
+      "endNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:47",
+      "properties": {}
+    },
+    {
+      "elementId": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:112",
+      "type": "MED_SUB_CLASS_OF",
+      "startNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:1",
+      "endNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:0",
+      "properties": {}
+    },
+    {
+      "elementId": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:113",
+      "type": "MED_SUB_CLASS_OF",
+      "startNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:2",
+      "endNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:0",
+      "properties": {}
+    },
+    {
+      "elementId": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:114",
+      "type": "MED_SUB_CLASS_OF",
+      "startNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:3",
+      "endNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:0",
+      "properties": {}
+    },
+    {
+      "elementId": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:115",
+      "type": "MED_SUB_CLASS_OF",
+      "startNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:4",
+      "endNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:1",
+      "properties": {}
+    },
+    {
+      "elementId": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:116",
+      "type": "MED_SUB_CLASS_OF",
+      "startNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:5",
+      "endNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:1",
+      "properties": {}
+    },
+    {
+      "elementId": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:117",
+      "type": "MED_SUB_CLASS_OF",
+      "startNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:6",
+      "endNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:1",
+      "properties": {}
+    },
+    {
+      "elementId": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:118",
+      "type": "MED_SUB_CLASS_OF",
+      "startNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:7",
+      "endNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:4",
+      "properties": {}
+    },
+    {
+      "elementId": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:119",
+      "type": "MED_SUB_CLASS_OF",
+      "startNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:8",
+      "endNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:4",
+      "properties": {}
+    },
+    {
+      "elementId": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:120",
+      "type": "MED_SUB_CLASS_OF",
+      "startNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:9",
+      "endNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:5",
+      "properties": {}
+    },
+    {
+      "elementId": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:121",
+      "type": "MED_SUB_CLASS_OF",
+      "startNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:10",
+      "endNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:5",
+      "properties": {}
+    },
+    {
+      "elementId": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:122",
+      "type": "MED_SUB_CLASS_OF",
+      "startNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:11",
+      "endNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:6",
+      "properties": {}
+    },
+    {
+      "elementId": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:123",
+      "type": "MED_SUB_CLASS_OF",
+      "startNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:12",
+      "endNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:6",
+      "properties": {}
+    },
+    {
+      "elementId": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:124",
+      "type": "MED_SUB_CLASS_OF",
+      "startNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:13",
+      "endNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:2",
+      "properties": {}
+    },
+    {
+      "elementId": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:125",
+      "type": "MED_SUB_CLASS_OF",
+      "startNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:14",
+      "endNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:2",
+      "properties": {}
+    },
+    {
+      "elementId": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:126",
+      "type": "MED_SUB_CLASS_OF",
+      "startNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:15",
+      "endNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:3",
+      "properties": {}
+    },
+    {
+      "elementId": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:127",
+      "type": "MED_SUB_CLASS_OF",
+      "startNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:16",
+      "endNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:3",
+      "properties": {}
+    },
+    {
+      "elementId": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:128",
+      "type": "MED_MANIFESTS_IN",
+      "startNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:17",
+      "endNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:7",
+      "properties": {
+        "frequency": "偶见"
+      }
+    },
+    {
+      "elementId": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:129",
+      "type": "MED_MANIFESTS_IN",
+      "startNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:18",
+      "endNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:7",
+      "properties": {
+        "frequency": "常见"
+      }
+    },
+    {
+      "elementId": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:130",
+      "type": "MED_MANIFESTS_IN",
+      "startNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:19",
+      "endNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:7",
+      "properties": {
+        "frequency": "偶见"
+      }
+    },
+    {
+      "elementId": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:131",
+      "type": "MED_MANIFESTS_IN",
+      "startNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:20",
+      "endNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:7",
+      "properties": {
+        "frequency": "常见"
+      }
+    },
+    {
+      "elementId": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:132",
+      "type": "MED_MANIFESTS_IN",
+      "startNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:21",
+      "endNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:7",
+      "properties": {
+        "frequency": "常见"
+      }
+    },
+    {
+      "elementId": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:133",
+      "type": "MED_MANIFESTS_IN",
+      "startNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:22",
+      "endNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:7",
+      "properties": {
+        "frequency": "极常见"
+      }
+    },
+    {
+      "elementId": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:134",
+      "type": "MED_MANIFESTS_IN",
+      "startNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:17",
+      "endNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:9",
+      "properties": {
+        "frequency": "极常见"
+      }
+    },
+    {
+      "elementId": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:135",
+      "type": "MED_MANIFESTS_IN",
+      "startNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:18",
+      "endNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:9",
+      "properties": {
+        "frequency": "偶见"
+      }
+    },
+    {
+      "elementId": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:136",
+      "type": "MED_MANIFESTS_IN",
+      "startNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:20",
+      "endNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:9",
+      "properties": {
+        "frequency": "极常见"
+      }
+    },
+    {
+      "elementId": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:137",
+      "type": "MED_MANIFESTS_IN",
+      "startNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:23",
+      "endNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:9",
+      "properties": {
+        "frequency": "常见"
+      }
+    },
+    {
+      "elementId": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:138",
+      "type": "MED_MANIFESTS_IN",
+      "startNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:24",
+      "endNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:9",
+      "properties": {
+        "frequency": "常见"
+      }
+    },
+    {
+      "elementId": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:139",
+      "type": "MED_MANIFESTS_IN",
+      "startNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:17",
+      "endNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:8",
+      "properties": {
+        "frequency": "常见"
+      }
+    },
+    {
+      "elementId": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:140",
+      "type": "MED_MANIFESTS_IN",
+      "startNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:19",
+      "endNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:8",
+      "properties": {
+        "frequency": "偶见"
+      }
+    },
+    {
+      "elementId": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:141",
+      "type": "MED_MANIFESTS_IN",
+      "startNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:20",
+      "endNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:8",
+      "properties": {
+        "frequency": "偶见"
+      }
+    },
+    {
+      "elementId": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:142",
+      "type": "MED_MANIFESTS_IN",
+      "startNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:21",
+      "endNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:8",
+      "properties": {
+        "frequency": "极常见"
+      }
+    },
+    {
+      "elementId": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:143",
+      "type": "MED_MANIFESTS_IN",
+      "startNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:17",
+      "endNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:10",
+      "properties": {
+        "frequency": "常见"
+      }
+    },
+    {
+      "elementId": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:144",
+      "type": "MED_MANIFESTS_IN",
+      "startNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:18",
+      "endNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:10",
+      "properties": {
+        "frequency": "偶见"
+      }
+    },
+    {
+      "elementId": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:145",
+      "type": "MED_MANIFESTS_IN",
+      "startNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:20",
+      "endNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:10",
+      "properties": {
+        "frequency": "极常见"
+      }
+    },
+    {
+      "elementId": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:146",
+      "type": "MED_MANIFESTS_IN",
+      "startNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:23",
+      "endNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:10",
+      "properties": {
+        "frequency": "偶见"
+      }
+    },
+    {
+      "elementId": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:147",
+      "type": "MED_MANIFESTS_IN",
+      "startNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:17",
+      "endNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:11",
+      "properties": {
+        "frequency": "偶见"
+      }
+    },
+    {
+      "elementId": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:148",
+      "type": "MED_MANIFESTS_IN",
+      "startNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:18",
+      "endNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:11",
+      "properties": {
+        "frequency": "偶见"
+      }
+    },
+    {
+      "elementId": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:149",
+      "type": "MED_MANIFESTS_IN",
+      "startNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:25",
+      "endNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:11",
+      "properties": {
+        "frequency": "极常见"
+      }
+    },
+    {
+      "elementId": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:150",
+      "type": "MED_MANIFESTS_IN",
+      "startNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:26",
+      "endNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:11",
+      "properties": {
+        "frequency": "极常见"
+      }
+    },
+    {
+      "elementId": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:151",
+      "type": "MED_MANIFESTS_IN",
+      "startNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:27",
+      "endNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:11",
+      "properties": {
+        "frequency": "常见"
+      }
+    },
+    {
+      "elementId": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:152",
+      "type": "MED_MANIFESTS_IN",
+      "startNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:17",
+      "endNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:12",
+      "properties": {
+        "frequency": "偶见"
+      }
+    },
+    {
+      "elementId": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:153",
+      "type": "MED_MANIFESTS_IN",
+      "startNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:25",
+      "endNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:12",
+      "properties": {
+        "frequency": "极常见"
+      }
+    },
+    {
+      "elementId": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:154",
+      "type": "MED_MANIFESTS_IN",
+      "startNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:26",
+      "endNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:12",
+      "properties": {
+        "frequency": "常见"
+      }
+    },
+    {
+      "elementId": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:155",
+      "type": "MED_MANIFESTS_IN",
+      "startNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:27",
+      "endNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:12",
+      "properties": {
+        "frequency": "极常见"
+      }
+    },
+    {
+      "elementId": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:156",
+      "type": "MED_MANIFESTS_IN",
+      "startNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:18",
+      "endNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:13",
+      "properties": {
+        "frequency": "偶见"
+      }
+    },
+    {
+      "elementId": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:157",
+      "type": "MED_MANIFESTS_IN",
+      "startNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:19",
+      "endNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:13",
+      "properties": {
+        "frequency": "偶见"
+      }
+    },
+    {
+      "elementId": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:158",
+      "type": "MED_MANIFESTS_IN",
+      "startNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:28",
+      "endNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:13",
+      "properties": {
+        "frequency": "常见"
+      }
+    },
+    {
+      "elementId": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:159",
+      "type": "MED_MANIFESTS_IN",
+      "startNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:29",
+      "endNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:13",
+      "properties": {
+        "frequency": "偶见"
+      }
+    },
+    {
+      "elementId": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:160",
+      "type": "MED_MANIFESTS_IN",
+      "startNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:18",
+      "endNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:14",
+      "properties": {
+        "frequency": "偶见"
+      }
+    },
+    {
+      "elementId": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:161",
+      "type": "MED_MANIFESTS_IN",
+      "startNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:23",
+      "endNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:14",
+      "properties": {
+        "frequency": "极常见"
+      }
+    },
+    {
+      "elementId": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:162",
+      "type": "MED_MANIFESTS_IN",
+      "startNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:24",
+      "endNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:14",
+      "properties": {
+        "frequency": "常见"
+      }
+    },
+    {
+      "elementId": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:163",
+      "type": "MED_MANIFESTS_IN",
+      "startNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:29",
+      "endNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:14",
+      "properties": {
+        "frequency": "常见"
+      }
+    },
+    {
+      "elementId": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:164",
+      "type": "MED_MANIFESTS_IN",
+      "startNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:18",
+      "endNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:15",
+      "properties": {
+        "frequency": "偶见"
+      }
+    },
+    {
+      "elementId": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:165",
+      "type": "MED_MANIFESTS_IN",
+      "startNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:25",
+      "endNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:15",
+      "properties": {
+        "frequency": "极常见"
+      }
+    },
+    {
+      "elementId": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:166",
+      "type": "MED_MANIFESTS_IN",
+      "startNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:27",
+      "endNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:15",
+      "properties": {
+        "frequency": "常见"
+      }
+    },
+    {
+      "elementId": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:167",
+      "type": "MED_MANIFESTS_IN",
+      "startNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:17",
+      "endNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:16",
+      "properties": {
+        "frequency": "偶见"
+      }
+    },
+    {
+      "elementId": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:168",
+      "type": "MED_MANIFESTS_IN",
+      "startNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:25",
+      "endNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:16",
+      "properties": {
+        "frequency": "极常见"
+      }
+    },
+    {
+      "elementId": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:169",
+      "type": "MED_MANIFESTS_IN",
+      "startNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:27",
+      "endNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:16",
+      "properties": {
+        "frequency": "极常见"
+      }
+    },
+    {
+      "elementId": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:170",
+      "type": "MED_TREATS",
+      "startNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:31",
+      "endNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:7",
+      "properties": {
+        "effectiveness": "对症缓解",
+        "is_primary": false
+      }
+    },
+    {
+      "elementId": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:171",
+      "type": "MED_TREATS",
+      "startNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:31",
+      "endNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:8",
+      "properties": {
+        "effectiveness": "对症缓解",
+        "is_primary": false
+      }
+    },
+    {
+      "elementId": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:172",
+      "type": "MED_TREATS",
+      "startNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:31",
+      "endNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:13",
+      "properties": {
+        "effectiveness": "辅助降压",
+        "is_primary": false
+      }
+    },
+    {
+      "elementId": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:173",
+      "type": "MED_TREATS",
+      "startNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:32",
+      "endNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:7",
+      "properties": {
+        "effectiveness": "对症缓解",
+        "is_primary": false
+      }
+    },
+    {
+      "elementId": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:174",
+      "type": "MED_TREATS",
+      "startNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:32",
+      "endNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:8",
+      "properties": {
+        "effectiveness": "对症缓解",
+        "is_primary": false
+      }
+    },
+    {
+      "elementId": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:175",
+      "type": "MED_TREATS",
+      "startNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:32",
+      "endNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:10",
+      "properties": {
+        "effectiveness": "抗炎退热",
+        "is_primary": false
+      }
+    },
+    {
+      "elementId": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:176",
+      "type": "MED_TREATS",
+      "startNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:33",
+      "endNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:9",
+      "properties": {
+        "effectiveness": "抗菌治疗",
+        "is_primary": true
+      }
+    },
+    {
+      "elementId": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:177",
+      "type": "MED_TREATS",
+      "startNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:33",
+      "endNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:10",
+      "properties": {
+        "effectiveness": "抗菌治疗",
+        "is_primary": true
+      }
+    },
+    {
+      "elementId": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:178",
+      "type": "MED_TREATS",
+      "startNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:33",
+      "endNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:11",
+      "properties": {
+        "effectiveness": "抗菌治疗",
+        "is_primary": true
+      }
+    },
+    {
+      "elementId": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:179",
+      "type": "MED_TREATS",
+      "startNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:34",
+      "endNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:9",
+      "properties": {
+        "effectiveness": "抗菌治疗",
+        "is_primary": true
+      }
+    },
+    {
+      "elementId": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:180",
+      "type": "MED_TREATS",
+      "startNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:34",
+      "endNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:8",
+      "properties": {
+        "effectiveness": "抗菌治疗",
+        "is_primary": true
+      }
+    },
+    {
+      "elementId": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:181",
+      "type": "MED_TREATS",
+      "startNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:34",
+      "endNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:10",
+      "properties": {
+        "effectiveness": "抗菌治疗",
+        "is_primary": false
+      }
+    },
+    {
+      "elementId": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:182",
+      "type": "MED_TREATS",
+      "startNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:35",
+      "endNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:13",
+      "properties": {
+        "effectiveness": "一线降压",
+        "is_primary": true
+      }
+    },
+    {
+      "elementId": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:183",
+      "type": "MED_TREATS",
+      "startNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:35",
+      "endNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:14",
+      "properties": {
+        "effectiveness": "辅助治疗",
+        "is_primary": false
+      }
+    },
+    {
+      "elementId": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:184",
+      "type": "MED_TREATS",
+      "startNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:36",
+      "endNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:13",
+      "properties": {
+        "effectiveness": "一线降压",
+        "is_primary": true
+      }
+    },
+    {
+      "elementId": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:185",
+      "type": "MED_TREATS",
+      "startNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:36",
+      "endNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:14",
+      "properties": {
+        "effectiveness": "一线治疗",
+        "is_primary": true
+      }
+    },
+    {
+      "elementId": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:186",
+      "type": "MED_TREATS",
+      "startNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:37",
+      "endNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:15",
+      "properties": {
+        "effectiveness": "一线抑酸",
+        "is_primary": true
+      }
+    },
+    {
+      "elementId": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:187",
+      "type": "MED_TREATS",
+      "startNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:37",
+      "endNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:16",
+      "properties": {
+        "effectiveness": "抑酸保护胃黏膜",
+        "is_primary": true
+      }
+    },
+    {
+      "elementId": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:188",
+      "type": "MED_TREATS",
+      "startNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:38",
+      "endNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:11",
+      "properties": {
+        "effectiveness": "对症止泻",
+        "is_primary": false
+      }
+    },
+    {
+      "elementId": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:189",
+      "type": "MED_TREATS",
+      "startNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:38",
+      "endNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:12",
+      "properties": {
+        "effectiveness": "对症止泻",
+        "is_primary": false
+      }
+    },
+    {
+      "elementId": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:190",
+      "type": "MED_CONTRAINDICATED_WITH",
+      "startNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:32",
+      "endNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:15",
+      "properties": {
+        "severity": "严重",
+        "reason": "NSAIDs刺激胃黏膜，加重溃疡和炎症"
+      }
+    },
+    {
+      "elementId": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:191",
+      "type": "MED_CONTRAINDICATED_WITH",
+      "startNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:32",
+      "endNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:16",
+      "properties": {
+        "severity": "中度",
+        "reason": "NSAIDs刺激胃黏膜"
+      }
+    },
+    {
+      "elementId": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:192",
+      "type": "MED_CONTRAINDICATED_WITH",
+      "startNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:33",
+      "endNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:39",
+      "properties": {
+        "severity": "严重",
+        "reason": "β-内酰胺类抗生素，青霉素过敏者禁用"
+      }
+    },
+    {
+      "elementId": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:193",
+      "type": "MED_CONTRAINDICATED_WITH",
+      "startNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:36",
+      "endNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:24",
+      "properties": {
+        "severity": "严重",
+        "reason": "β受体阻滞剂可加重支气管痉挛"
+      }
+    },
+    {
+      "elementId": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:194",
+      "type": "MED_CONTRAINDICATED_WITH",
+      "startNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:35",
+      "endNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:40",
+      "properties": {
+        "severity": "严重",
+        "reason": "CCB可能加重心输出量不足"
+      }
+    },
+    {
+      "elementId": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:195",
+      "type": "MED_AFFECTS",
+      "startNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:14",
+      "endNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:45",
+      "properties": {}
+    },
+    {
+      "elementId": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:196",
+      "type": "MED_HAS_SIDE_EFFECT",
+      "startNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:32",
+      "endNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:48",
+      "properties": {
+        "note": "NSAIDs常见副作用"
+      }
+    },
+    {
+      "elementId": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:197",
+      "type": "MED_HAS_SIDE_EFFECT",
+      "startNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:32",
+      "endNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:52",
+      "properties": {
+        "note": "长期大量使用风险"
+      }
+    },
+    {
+      "elementId": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:198",
+      "type": "MED_HAS_SIDE_EFFECT",
+      "startNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:31",
+      "endNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:51",
+      "properties": {
+        "note": "超量使用风险"
+      }
+    },
+    {
+      "elementId": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:199",
+      "type": "MED_HAS_SIDE_EFFECT",
+      "startNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:31",
+      "endNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:50",
+      "properties": {
+        "note": "罕见"
+      }
+    },
+    {
+      "elementId": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:200",
+      "type": "MED_HAS_SIDE_EFFECT",
+      "startNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:33",
+      "endNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:50",
+      "properties": {
+        "note": "青霉素类过敏风险"
+      }
+    },
+    {
+      "elementId": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:201",
+      "type": "MED_HAS_SIDE_EFFECT",
+      "startNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:33",
+      "endNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:48",
+      "properties": {
+        "note": "抗生素常见"
+      }
+    },
+    {
+      "elementId": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:202",
+      "type": "MED_HAS_SIDE_EFFECT",
+      "startNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:35",
+      "endNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:49",
+      "properties": {
+        "note": "CCB常见"
+      }
+    },
+    {
+      "elementId": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:203",
+      "type": "MED_HAS_SIDE_EFFECT",
+      "startNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:35",
+      "endNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:54",
+      "properties": {
+        "note": "偶见"
+      }
+    },
+    {
+      "elementId": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:204",
+      "type": "MED_HAS_SIDE_EFFECT",
+      "startNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:36",
+      "endNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:49",
+      "properties": {
+        "note": "β阻滞剂常见"
+      }
+    },
+    {
+      "elementId": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:205",
+      "type": "MED_HAS_SIDE_EFFECT",
+      "startNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:36",
+      "endNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:53",
+      "properties": {
+        "note": "需监测心率"
+      }
+    },
+    {
+      "elementId": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:206",
+      "type": "MED_HAS_SIDE_EFFECT",
+      "startNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:37",
+      "endNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:54",
+      "properties": {
+        "note": "PPI偶见"
+      }
+    },
+    {
+      "elementId": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:207",
+      "type": "MED_HAS_SIDE_EFFECT",
+      "startNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:37",
+      "endNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:49",
+      "properties": {
+        "note": "偶见"
+      }
+    }
+  ]
+}

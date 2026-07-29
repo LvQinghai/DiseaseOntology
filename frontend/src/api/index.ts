@@ -28,6 +28,16 @@ import type {
   RelationshipMapping,
   ImportPreviewData,
   ImportResult,
+  // v3.5
+  SheetDetectionResult,
+  ValidationReport,
+  CypherPreview,
+  ExecuteResult,
+  BackupSnapshot,
+  // v3.6
+  RelationSemanticInfo,
+  UpsertRelationSemanticRequest,
+  SystemSemanticsResponse,
 } from '@/types'
 
 const api = axios.create({
@@ -85,8 +95,10 @@ export async function fetchOntologyTree(systemId = 'disease_ontology'): Promise<
   return { roots: nodeTypeRoots }
 }
 
-export async function fetchNodeDetail(elementId: string): Promise<NodeDetail> {
-  const { data } = await api.get(`/ontology/nodes/${encodeURIComponent(elementId)}`)
+export async function fetchNodeDetail(elementId: string, systemId?: string): Promise<NodeDetail> {
+  const params: Record<string, string> = {}
+  if (systemId) params.system_id = systemId
+  const { data } = await api.get(`/ontology/nodes/${encodeURIComponent(elementId)}`, { params })
   // 转换后端格式为前端 NodeDetail 格式
   const props = data.properties || {}
   const incoming = (data.incoming_relationships || []).map((r: any) => ({
@@ -156,9 +168,10 @@ export async function fetchGraphOverview(systemId = 'disease_ontology'): Promise
 export async function fetchNeighborhood(
   elementId: string,
   depth = 1,
+  systemId = 'disease_ontology',
 ): Promise<NeighborhoodData> {
   const { data } = await api.get(`/graph/neighbors/${encodeURIComponent(elementId)}`, {
-    params: { depth },
+    params: { hops: depth, system_id: systemId },
   })
   return data
 }
@@ -206,8 +219,8 @@ export async function updateEntity(
   return data
 }
 
-export async function deleteEntity(elementId: string): Promise<void> {
-  await api.delete(`/editor/entities/${encodeURIComponent(elementId)}`)
+export async function deleteEntity(elementId: string, force: boolean = false): Promise<void> {
+  await api.delete(`/editor/entities/${encodeURIComponent(elementId)}`, { params: { force } })
 }
 
 export async function checkEntityDeletion(elementId: string): Promise<import('@/types').DeletionCheckResult> {
@@ -286,7 +299,7 @@ export async function fetchAvailableRelationshipTypes(systemId = 'disease_ontolo
 }
 
 export async function searchNodes(keyword: string, systemId = 'disease_ontology'): Promise<NodeSearchResult[]> {
-  const { data } = await api.get('/editor/nodes/search', { params: { keyword, system_id: systemId } })
+  const { data } = await api.get('/editor/search-nodes', { params: { keyword, system_id: systemId } })
   return data
 }
 
@@ -296,7 +309,29 @@ export async function fetchRelationshipInstances(
   type: string,
   systemId = 'disease_ontology',
 ): Promise<RelationshipInstanceSummary[]> {
-  const { data } = await api.get('/editor/relationship-instances', { params: { type, system_id: systemId } })
+  const { data } = await api.get(
+    `/editor/relationship-instances/${encodeURIComponent(type)}`,
+    { params: { system_id: systemId } },
+  )
+  return data
+}
+
+export async function checkRelationshipDuplicate(
+  sourceId: string,
+  targetId: string,
+  relType: string,
+  systemId = 'disease_ontology',
+  excludeId = '',
+): Promise<{ exists: boolean }> {
+  const { data } = await api.get('/editor/relationships/duplicate-check', {
+    params: {
+      source_id: sourceId,
+      target_id: targetId,
+      rel_type: relType,
+      system_id: systemId,
+      exclude_id: excludeId,
+    },
+  })
   return data
 }
 
@@ -312,10 +347,29 @@ export async function fetchDefaultSystem(): Promise<SystemInfo> {
   return data
 }
 
-export async function deleteSystem(systemId: string): Promise<void> {
-  await api.delete(`/system/${encodeURIComponent(systemId)}`, {
+export async function fetchSystemStats(systemId: string): Promise<{
+  system_id: string
+  name: string
+  prefix: string
+  node_count: number
+  relationship_count: number
+  node_labels: { label: string; count: number }[]
+  relationship_types: { type: string; count: number }[]
+  semantics_count: number
+}> {
+  const { data } = await api.get(`/system/${encodeURIComponent(systemId)}/stats`)
+  return data
+}
+
+export async function deleteSystem(systemId: string): Promise<{
+  deleted_nodes: number
+  deleted_relationships: number
+  deleted_semantics: number
+}> {
+  const { data } = await api.delete(`/system/${encodeURIComponent(systemId)}`, {
     params: { clean_neo4j: true },
   })
+  return data
 }
 
 // ==================== v3.0 数据导入 API ====================
@@ -331,12 +385,26 @@ export async function importFromExcel(
   file: File,
   systemName: string,
   description: string,
+  prefix = '',
 ): Promise<ImportResult> {
   const formData = new FormData()
   formData.append('file', file)
   formData.append('system_name', systemName)
   formData.append('description', description)
+  if (prefix) formData.append('prefix', prefix)
   const { data } = await api.post('/import/excel/import', formData)
+  return data
+}
+
+/** ★ v3.5: Excel 追加到已有系统 */
+export async function appendFromExcel(
+  file: File,
+  targetSystemId: string,
+): Promise<ImportResult> {
+  const formData = new FormData()
+  formData.append('file', file)
+  formData.append('target_system_id', targetSystemId)
+  const { data } = await api.post('/import/excel/append', formData)
   return data
 }
 
@@ -368,14 +436,33 @@ export async function importFromDB(
   entityMappings: TableMapping[],
   systemName: string,
   description: string,
+  prefix = '',
   relationshipMappings?: RelationshipMapping[],
 ): Promise<ImportResult> {
-  const { data } = await api.post('/import/db/import', {
+  const body: Record<string, unknown> = {
     conn,
     entity_mappings: entityMappings,
     relationship_mappings: relationshipMappings,
     system_name: systemName,
     description,
+  }
+  if (prefix) body['prefix'] = prefix
+  const { data } = await api.post('/import/db/import', body)
+  return data
+}
+
+/** ★ v3.5: 数据库追加到已有系统 */
+export async function appendFromDB(
+  conn: DBConnection,
+  entityMappings: TableMapping[],
+  targetSystemId: string,
+  relationshipMappings?: RelationshipMapping[],
+): Promise<ImportResult> {
+  const { data } = await api.post('/import/db/append', {
+    conn,
+    entity_mappings: entityMappings,
+    relationship_mappings: relationshipMappings,
+    target_system_id: targetSystemId,
   })
   return data
 }
@@ -383,4 +470,133 @@ export async function importFromDB(
 export async function downloadTemplate(): Promise<Blob> {
   const response = await api.get('/import/template', { responseType: 'blob' })
   return response.data
+}
+
+// ==================== v3.5 导入验证与执行 API ====================
+
+/** ★ v3.5: 检测 Excel 中 Sheet 类型 */
+export async function detectExcelSheets(file: File): Promise<SheetDetectionResult> {
+  const formData = new FormData()
+  formData.append('file', file)
+  const { data } = await api.post('/import/excel/sheets', formData)
+  return data
+}
+
+/** ★ v3.5: 验证 Excel 数据（新建模式） */
+export async function validateExcel(file: File): Promise<ValidationReport> {
+  const formData = new FormData()
+  formData.append('file', file)
+  const { data } = await api.post('/import/excel/validate', formData)
+  return data
+}
+
+/** ★ v3.5: 验证 Excel 数据（追加模式，含冲突检测） */
+export async function validateExcelAppend(
+  file: File,
+  targetSystemId: string,
+): Promise<ValidationReport> {
+  const formData = new FormData()
+  formData.append('file', file)
+  formData.append('target_system_id', targetSystemId)
+  const { data } = await api.post('/import/excel/validate-append', formData)
+  return data
+}
+
+/** ★ v3.5: 生成 Cypher 预览 */
+export async function generateCypherPreview(
+  file: File,
+  prefix: string,
+  mode: 'new' | 'append',
+): Promise<CypherPreview> {
+  const formData = new FormData()
+  formData.append('file', file)
+  formData.append('prefix', prefix)
+  formData.append('mode', mode)
+  const { data } = await api.post('/import/excel/generate-cypher', formData)
+  return data
+}
+
+/** ★ v3.5: 执行导入（含备份） */
+export async function executeImport(
+  file: File,
+  mode: 'new' | 'append',
+  prefix: string,
+  systemName: string,
+  description: string,
+  targetSystemId: string,
+  strategy: string,
+): Promise<ExecuteResult> {
+  const formData = new FormData()
+  formData.append('file', file)
+  formData.append('mode', mode)
+  formData.append('prefix', prefix)
+  formData.append('system_name', systemName)
+  formData.append('description', description)
+  formData.append('target_system_id', targetSystemId)
+  formData.append('strategy', strategy)
+  const { data } = await api.post('/import/excel/execute', formData)
+  return data
+}
+
+/** ★ v3.5: 回滚导入 */
+export async function rollbackImport(snapshotId: string): Promise<{
+  success: boolean
+  message: string
+  restored_nodes: number
+  restored_relationships: number
+}> {
+  const { data } = await api.post(`/import/excel/rollback/${encodeURIComponent(snapshotId)}`)
+  return data
+}
+
+/** ★ v3.5: 列出备份 */
+export async function listBackups(): Promise<BackupSnapshot[]> {
+  const { data } = await api.get('/import/backups')
+  return data
+}
+
+/** ★ v3.5: 删除备份 */
+export async function deleteBackup(snapshotId: string): Promise<void> {
+  await api.delete(`/import/backups/${encodeURIComponent(snapshotId)}`)
+}
+
+// ==================== v3.6 关系语义 API ====================
+
+/** 获取系统的全部关系语义 */
+export async function fetchRelationSemantics(prefix: string): Promise<SystemSemanticsResponse> {
+  const { data } = await api.get(`/system/${encodeURIComponent(prefix)}/relation-semantics`)
+  return data
+}
+
+/** 创建或更新一条关系语义 */
+export async function upsertRelationSemantic(
+  prefix: string,
+  relType: string,
+  req: UpsertRelationSemanticRequest,
+): Promise<RelationSemanticInfo> {
+  const { data } = await api.put(
+    `/system/${encodeURIComponent(prefix)}/relation-semantics/${encodeURIComponent(relType)}`,
+    req,
+  )
+  return data
+}
+
+/** 删除一条关系语义 */
+export async function deleteRelationSemantic(prefix: string, relType: string): Promise<void> {
+  await api.delete(
+    `/system/${encodeURIComponent(prefix)}/relation-semantics/${encodeURIComponent(relType)}`,
+  )
+}
+
+/** 从 Neo4j 自动初始化关系语义 */
+export async function initRelationSemantics(prefix: string): Promise<{
+  success: boolean
+  message: string
+  initialized_count: number
+  total_types: number
+}> {
+  const { data } = await api.post(
+    `/system/${encodeURIComponent(prefix)}/relation-semantics/init`,
+  )
+  return data
 }

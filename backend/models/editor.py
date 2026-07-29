@@ -110,7 +110,9 @@ class DeletionCheckResult(BaseModel):
 class RelationshipInstanceSummary(BaseModel):
     """关系实例摘要（编辑器中展示所有源-目标对）"""
     element_id: str = ""
+    source_id: str = ""
     source_name: str = ""
     source_label: str = ""
+    target_id: str = ""
     target_name: str = ""
     target_label: str = ""
