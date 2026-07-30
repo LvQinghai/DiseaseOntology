@@ -92,15 +92,16 @@ class GraphService:
         # 使用传入的 prefix 查询关系语义（不再覆盖为空）
         rel_labels = self._get_rel_labels(prefix)
 
-        nodes = [
-            GraphNode(
+        nodes = []
+        for n in raw["nodes"]:
+            node_type = n.get("type", "Unknown")
+            short_type = strip_prefix(node_type, prefix) if prefix else node_type
+            nodes.append(GraphNode(
                 id=n["id"],
                 label=n.get("label", ""),
-                type=n.get("type", "Unknown"),
-                color=get_node_color(n.get("type", "")),
-            )
-            for n in raw["nodes"]
-        ]
+                type=short_type,
+                color=get_node_color(short_type),
+            ))
         # 加上中心节点本身
         center = self._repo.get_node_by_id(element_id)
         if center:
@@ -110,11 +111,12 @@ class GraphService:
             node_type = sys_labels[0] if sys_labels else "Unknown"
             existing_ids = {n.id for n in nodes}
             if element_id not in existing_ids:
+                short_type = strip_prefix(node_type, prefix) if prefix else node_type
                 nodes.append(GraphNode(
                     id=element_id,
                     label=label,
-                    type=node_type,
-                    color=get_node_color(node_type),
+                    type=short_type,
+                    color=get_node_color(short_type),
                 ))
 
         edges = []
@@ -147,15 +149,16 @@ class GraphService:
             prefix = self._extract_prefix(raw["edges"][0]["type"])
         rel_labels = self._get_rel_labels(prefix)
 
-        nodes = [
-            GraphNode(
+        nodes = []
+        for n in raw["nodes"]:
+            node_type = n.get("type", "Unknown")
+            short_type = strip_prefix(node_type, prefix) if prefix else node_type
+            nodes.append(GraphNode(
                 id=n["id"],
                 label=n.get("label", ""),
-                type=n.get("type", "Unknown"),
-                color=get_node_color(n.get("type", "")),
-            )
-            for n in raw["nodes"]
-        ]
+                type=short_type,
+                color=get_node_color(short_type),
+            ))
         edges = []
         for e in raw["edges"]:
             etype = e["type"]

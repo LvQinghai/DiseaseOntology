@@ -2,7 +2,7 @@
 
 import io
 import logging
-from fastapi import APIRouter, UploadFile, File, Form, HTTPException, Query
+from fastapi import APIRouter, UploadFile, File, Form, HTTPException, Query, Body
 from fastapi.responses import StreamingResponse
 
 from backend.models.import_task import (
@@ -306,8 +306,8 @@ async def execute_excel_import(
     tx_manager = _get_tx_manager()
     result = tx_manager.execute_with_backup(cypher_batch, actual_prefix)
 
-    # 更新 SQLite（新建模式：只要写入了实体就创建系统记录）
-    if result.entities_created > 0 and mode == "new":
+    # 更新 SQLite：仅在 Neo4j 完整导入成功后创建新系统记录
+    if result.success and result.entities_created > 0 and mode == "new":
         svc = _get_import_service()
         # 如果 system_name 为空，从 prefix 生成默认名称
         display_name = system_name.strip() if system_name.strip() else f"未命名图谱 ({actual_prefix.rstrip('_')})"
@@ -321,7 +321,7 @@ async def execute_excel_import(
         svc.system_service.update_counts(system.system_id, node_total, rel_total)
 
     # v3.6: 导入完成后自动初始化关系语义（仅新建/追加，不覆盖已有配置）
-    if result.entities_created > 0:
+    if result.success and result.entities_created > 0:
         try:
             rel_types = repo.get_relation_types_by_prefix(actual_prefix)
             if rel_types:
@@ -358,9 +358,9 @@ async def execute_excel_import(
 # v3.5 新增: 备份/回滚管理
 # ══════════════════════════════════════════════════
 
-@router.post("/excel/rollback/{snapshot_id}")
+@router.post("/rollback/{snapshot_id}")
 async def rollback_import(snapshot_id: str):
-    """★ v3.5: 回滚到指定快照。"""
+    """回滚到指定导入前快照，适用于 Excel 和关系数据库导入。"""
     tx_manager = _get_tx_manager()
     result = tx_manager.restore_from_backup(snapshot_id)
     if not result.get("success"):
@@ -431,8 +431,11 @@ async def append_excel(
 @router.post("/db/test")
 async def test_connection(conn: DBConnection):
     """测试数据库连接."""
-    ok = _get_import_service().test_connection(conn)
-    return {"success": ok, "message": "连接成功" if ok else "连接失败"}
+    try:
+        ok = _get_import_service().test_connection(conn)
+        return {"success": ok, "message": "连接成功" if ok else "连接失败"}
+    except ValueError as exc:
+        raise HTTPException(status_code=400, detail=str(exc)) from exc
 
 
 @router.post("/db/tables")
@@ -455,9 +458,9 @@ async def preview_db(
 async def import_db(
     conn: DBConnection,
     entity_mappings: list[TableMapping],
-    system_name: str,
-    description: str = "",
-    prefix: str = "",
+    system_name: str = Body(...),
+    description: str = Body(""),
+    prefix: str = Body(""),
     relationship_mappings: list[RelationshipMapping] | None = None,
 ) -> ImportResult:
     """从数据库导入创建新系统（v3.5: 支持自定义 prefix）。"""
@@ -471,8 +474,8 @@ async def import_db(
 async def append_db(
     conn: DBConnection,
     entity_mappings: list[TableMapping],
-    target_system_id: str,
-    relationship_mappings: list[RelationshipMapping] | None = None,
+    target_system_id: str = Body(...),
+    relationship_mappings: list[RelationshipMapping] | None = Body(None),
 ) -> ImportResult:
     """★ v3.5: 数据库追加数据到已有系统。"""
     return _get_import_service().append_from_db(

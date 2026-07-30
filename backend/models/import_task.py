@@ -13,6 +13,8 @@ class DBConnection(BaseModel):
     database: str
     user: str
     password: str
+    entity_table_name: str = ""
+    relationship_table_name: str = ""
 
 
 class TableInfo(BaseModel):
@@ -27,7 +29,8 @@ class TableMapping(BaseModel):
     """表→实体映射配置"""
     source_table: str                   # 源表名
     source_column: str                  # 源列名（用于 name 属性）
-    target_label: str                   # 目标节点标签
+    target_label: str = ""              # 统一目标节点标签，兼容无分类字段的数据
+    label_column: str | None = None     # 源列名（逐行读取 Neo4j 节点标签）
 
 
 class RelationshipMapping(BaseModel):
@@ -73,5 +76,9 @@ class ImportResult(BaseModel):
     system_name: str = ""
     entities_created: int = 0
     relationships_created: int = 0
+    snapshot_id: str | None = None
+    backup_available: bool = False
+    warnings: list[str] = []
+    stages: list[dict] = []
     message: str = ""
     errors: list[str] = []

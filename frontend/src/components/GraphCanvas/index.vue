@@ -202,7 +202,8 @@ function renderGraph(nodesData: any[], edgesData: any[]) {
       tooltipDelay: 150,
       zoomView: true,
       dragView: false,
-      keyboard: true,
+      // 导入向导打开时，图谱不应响应页面级键盘事件，避免输入框按键改变图谱视图
+      keyboard: false,
     },
   }
 

@@ -545,7 +545,7 @@ export async function rollbackImport(snapshotId: string): Promise<{
   restored_nodes: number
   restored_relationships: number
 }> {
-  const { data } = await api.post(`/import/excel/rollback/${encodeURIComponent(snapshotId)}`)
+  const { data } = await api.post(`/import/rollback/${encodeURIComponent(snapshotId)}`)
   return data
 }
 

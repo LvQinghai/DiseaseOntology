@@ -33,7 +33,7 @@ requests>=2.31.0            # HTTP 请求库（GraphRAG / Cypher 生成调用 LL
 # 安装方式：pip install pymysql psycopg2-binary pyodbc cx_Oracle
 # ═══════════════════════════════════════════════════════════════
 
-# pymysql>=1.1.0            # MySQL 导入（可选）
+pymysql>=1.1.0             # MySQL 导入（数据库导入功能必需）
 # psycopg2-binary>=2.9.0    # PostgreSQL 导入（可选）
 # pyodbc>=5.0.0             # SQL Server 导入（可选）
 # cx_Oracle>=8.3.0          # Oracle 导入（可选）

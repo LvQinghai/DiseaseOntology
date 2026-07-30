@@ -82,8 +82,11 @@ class Neo4jTransactionManager:
         try:
             snapshot = self.create_backup(prefix)
         except Exception as e:
-            errors.append(f"备份失败: {e}")
-            # 备份失败不阻止导入，但无回滚能力
+            return ExecuteResult(
+                success=False,
+                errors=[f"导入已取消，备份失败: {e}"],
+                message="导入已取消：无法创建 Neo4j 导入前备份",
+            )
 
         # 2. 实体写入
         entity_created = 0
@@ -129,10 +132,22 @@ class Neo4jTransactionManager:
             warnings.append("关系均未写入（可能源/目标节点不存在）")
 
         success = len(errors) == 0
+        rollback_warning = ""
+        if not success and snapshot is not None:
+            try:
+                rollback_result = self.restore_from_backup(snapshot.snapshot_id)
+                if rollback_result.get("success"):
+                    rollback_warning = "；失败导入已自动回滚"
+                else:
+                    rollback_warning = f"；自动回滚失败: {rollback_result.get('message', '未知错误')}"
+            except Exception as rollback_error:
+                rollback_warning = f"；自动回滚异常: {rollback_error}"
+            warnings.append(rollback_warning.lstrip("；"))
+
         message = (
             f"导入完成: {entity_created} 个实体, {rel_created} 条关系"
             if success
-            else f"导入部分失败: {'; '.join(errors[:3])}"
+            else f"导入失败: {'; '.join(errors[:3])}{rollback_warning}"
         )
 
         return ExecuteResult(

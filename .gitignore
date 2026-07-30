@@ -30,3 +30,5 @@ Thumbs.db
 
 # Test databases
 knowledge_graph.db
+
+test_graphrag.py

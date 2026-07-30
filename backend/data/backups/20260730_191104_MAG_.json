@@ -1,0 +1,17 @@
+{
+  "snapshot_id": "20260730_191104_MAG_",
+  "prefix": "MAG_",
+  "created_at": "2026-07-30T19:11:04.632140",
+  "node_count": 0,
+  "relationship_count": 1,
+  "nodes_backup": [],
+  "relationships_backup": [
+    {
+      "elementId": "5:12a48da8-460f-4cbb-93ee-bb65e72d722a:354",
+      "type": "MAG_MANAGES",
+      "startNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:41",
+      "endNodeElementId": "4:12a48da8-460f-4cbb-93ee-bb65e72d722a:42",
+      "properties": {}
+    }
+  ]
+}

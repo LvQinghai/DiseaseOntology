@@ -57,7 +57,8 @@ def get_node_color(node_type: str) -> str:
     if short in NODE_COLORS:
         return NODE_COLORS[short]
     # 动态分配：基于类型名哈希从备用调色板中选取
-    idx = hash(node_type) % len(_FALLBACK_COLORS)
+    # 使用稳定哈希，避免 Python 进程重启后同一类型颜色变化。
+    idx = sum((position + 1) * ord(char) for position, char in enumerate(short)) % len(_FALLBACK_COLORS)
     return _FALLBACK_COLORS[idx]
 
 

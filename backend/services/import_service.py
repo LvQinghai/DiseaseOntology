@@ -3,6 +3,9 @@
 import io
 
 from backend.repositories.neo4j_repository import Neo4jRepository
+from backend.services.cypher_generator import CypherBatch, CypherGenerator
+from backend.services.excel_detector import ParsedSheet
+from backend.services.neo4j_tx_manager import Neo4jTransactionManager, ExecuteResult
 from backend.models.import_task import (
     DBConnection, TableInfo, ImportPreviewData, ImportResult,
     TableMapping, RelationshipMapping,
@@ -25,6 +28,7 @@ class ImportService:
     def __init__(self, repo: Neo4jRepository, system_service: SystemService):
         self.repo = repo
         self.system_service = system_service
+        self.tx_manager = Neo4jTransactionManager(repo)
 
     # ==================== Excel 导入 ====================
 
@@ -166,20 +170,40 @@ class ImportService:
     # ==================== 关系数据库导入 ====================
 
     def _build_url(self, conn: DBConnection) -> str:
-        """构建 SQLAlchemy 连接 URL."""
-        url_template = self.DB_DIALECTS.get(conn.db_type)
-        if not url_template:
+        """构建 SQLAlchemy 连接 URL，避免用户名或密码破坏 URL。"""
+        from sqlalchemy.engine import URL
+        if conn.db_type not in self.DB_DIALECTS:
             raise ValueError(f"不支持的数据库类型: {conn.db_type}")
-        return url_template.format(
-            user=conn.user, password=conn.password,
-            host=conn.host, port=conn.port, database=conn.database,
-        )
+        if conn.db_type == "sqlite":
+            database = conn.database
+            if database == ":memory:":
+                return URL.create("sqlite", database=":memory:").render_as_string(hide_password=False)
+            return URL.create("sqlite", database=database).render_as_string(hide_password=False)
+        drivers = {
+            "mysql": "mysql+pymysql", "postgresql": "postgresql+psycopg2",
+            "mssql": "mssql+pyodbc", "oracle": "oracle+cx_oracle",
+        }
+        query = {"driver": "ODBC Driver 17 for SQL Server"} if conn.db_type == "mssql" else {}
+        return URL.create(
+            drivers[conn.db_type], username=conn.user, password=conn.password,
+            host=conn.host, port=conn.port, database=conn.database, query=query,
+        ).render_as_string(hide_password=False)
+
+    def _create_db_engine(self, conn: DBConnection):
+        """创建短生命周期只读查询引擎。"""
+        from sqlalchemy import create_engine
+        kwargs = {"pool_pre_ping": True}
+        if conn.db_type in {"mysql", "postgresql"}:
+            kwargs["connect_args"] = {"connect_timeout": 5}
+        return create_engine(self._build_url(conn), **kwargs)
 
     def test_connection(self, conn: DBConnection) -> bool:
-        """测试数据库连接."""
-        from sqlalchemy import create_engine, text
-        url = self._build_url(conn)
-        engine = create_engine(url, connect_args={"connect_timeout": 5})
+        """测试数据库连接。"""
+        from sqlalchemy import text
+        try:
+            engine = self._create_db_engine(conn)
+        except ModuleNotFoundError as exc:
+            raise ValueError(self._driver_error_message(conn, exc)) from exc
         try:
             with engine.connect() as c:
                 c.execute(text("SELECT 1"))
@@ -189,11 +213,21 @@ class ImportService:
         finally:
             engine.dispose()
 
+    @staticmethod
+    def _driver_error_message(conn: DBConnection, exc: ModuleNotFoundError) -> str:
+        drivers = {
+            "mysql": "pymysql",
+            "postgresql": "psycopg2-binary",
+            "mssql": "pyodbc",
+            "oracle": "cx_Oracle",
+        }
+        package = drivers.get(conn.db_type, exc.name or "对应数据库驱动")
+        return f"当前环境缺少 {conn.db_type} 数据库驱动，请先安装依赖：pip install {package}"
+
     def get_tables(self, conn: DBConnection) -> list[TableInfo]:
         """获取数据库所有表结构."""
-        from sqlalchemy import create_engine, inspect
-        url = self._build_url(conn)
-        engine = create_engine(url)
+        from sqlalchemy import inspect
+        engine = self._create_db_engine(conn)
         try:
             inspector = inspect(engine)
             tables = []
@@ -209,50 +243,129 @@ class ImportService:
 
     def preview_db(
         self, conn: DBConnection,
-        entity_mappings: list[TableMapping],
+        entity_mappings: list[TableMapping] | None = None,
         relationship_mappings: list[RelationshipMapping] | None = None,
         limit: int = 100,
     ) -> ImportPreviewData:
-        """预览关系数据库导入数据."""
-        from sqlalchemy import create_engine, text
-        url = self._build_url(conn)
-        engine = create_engine(url)
-
-        entities = []
-        relationships = []
-
+        """预览数据库中的 Ontology 和 Relationship 数据。"""
+        engine = self._create_db_engine(conn)
+        entities: list[dict] = []
+        relationships: list[dict] = []
         try:
-            for mapping in entity_mappings:
-                rows = self._read_table(engine, mapping.source_table, limit)
-                for row in rows:
-                    entity = {
-                        "label": mapping.target_label,
-                        "name": str(row.get(mapping.source_column, "Unnamed")),
-                    }
-                    for k, v in row.items():
-                        if k != mapping.source_column and v is not None:
-                            entity[k] = str(v)
-                    entities.append(entity)
+            tables = self.get_tables(conn)
+            by_name = {table.name.casefold(): table for table in tables}
+            entity_table_name = conn.entity_table_name.strip()
+            relationship_table_name = conn.relationship_table_name.strip()
+            if not entity_table_name or not relationship_table_name:
+                raise ValueError("请指定实体表名称和关系表名称")
+            entity_table = by_name.get(entity_table_name.casefold())
+            relationship_table = by_name.get(relationship_table_name.casefold())
+            missing = [
+                name for name, table in (
+                    (entity_table_name, entity_table),
+                    (relationship_table_name, relationship_table),
+                ) if table is None
+            ]
+            if missing:
+                raise ValueError(f"未找到指定表：{', '.join(missing)}")
 
-            if relationship_mappings:
-                for mapping in relationship_mappings:
-                    rows = self._read_table(engine, mapping.source_table, limit)
-                    for row in rows:
-                        rel = {
-                            "type": mapping.relationship_type,
-                            "source_name": str(row.get(mapping.source_column, "")),
-                            "target_name": str(row.get(mapping.target_column, "")),
-                        }
-                        relationships.append(rel)
+            ontology_map = self._infer_entity_mapping(entity_table, entity_mappings)
+            relationship_map = self._infer_relationship_mapping(relationship_table, relationship_mappings)
+            for row_number, row in enumerate(self._read_table(engine, entity_table.name, limit), start=1):
+                name = row.get(ontology_map.source_column)
+                if name is None or str(name).strip() == "":
+                    continue
+                raw_label = (
+                    row.get(ontology_map.label_column)
+                    if ontology_map.label_column
+                    else ontology_map.label_value
+                )
+                if raw_label is None or str(raw_label).strip() == "":
+                    raise ValueError(
+                        f"实体表第 {row_number} 行缺少有效 Label。"
+                        "请在映射中指定 label_column 或 target_label。"
+                    )
+                label = str(raw_label).strip()
+                entity = {"label": label, "name": str(name)}
+                excluded_columns = {ontology_map.source_column, ontology_map.label_column}
+                entity.update({
+                    k: str(v) for k, v in row.items()
+                    if k not in excluded_columns and v is not None
+                })
+                entities.append(entity)
+            for row in self._read_table(engine, relationship_table.name, limit):
+                source = row.get(relationship_map.source_column)
+                target = row.get(relationship_map.target_column)
+                if source is None or target is None or str(source).strip() == "" or str(target).strip() == "":
+                    continue
+                rel_type = relationship_map.type_value or row.get(relationship_map.type_column, "RELATED_TO")
+                relationships.append({"type": str(rel_type), "source_name": str(source), "target_name": str(target)})
         finally:
             engine.dispose()
+        return ImportPreviewData(entities=entities, relationships=relationships, total_entities=len(entities), total_relationships=len(relationships))
 
-        return ImportPreviewData(
-            entities=entities,
-            relationships=relationships,
-            total_entities=len(entities),
-            total_relationships=len(relationships),
+    @staticmethod
+    def _pick_column(columns: list[str], candidates: tuple[str, ...], role: str) -> str:
+        normalized = {column.casefold().replace("_", "").replace("-", ""): column for column in columns}
+        for candidate in candidates:
+            value = normalized.get(candidate.casefold().replace("_", "").replace("-", ""))
+            if value:
+                return value
+        raise ValueError(f"{role}缺少可识别字段，候选字段：{', '.join(candidates)}")
+
+    @staticmethod
+    def _resolve_requested_column(columns: list[str], requested: str | None) -> str | None:
+        if not requested:
+            return None
+        normalized = requested.casefold().replace("_", "").replace("-", "")
+        return next(
+            (column for column in columns
+             if column.casefold().replace("_", "").replace("-", "") == normalized),
+            None,
         )
+
+    def _infer_entity_mapping(self, table: TableInfo, mappings: list[TableMapping] | None):
+        from types import SimpleNamespace
+        columns = [column["name"] for column in table.columns]
+        mapping = mappings[0] if mappings else None
+        name_column = self._resolve_requested_column(columns, mapping.source_column if mapping else None) or self._pick_column(columns, ("name", "Name", "entity_name", "node_name", "名称", "实体名称"), "Ontology 实体名称")
+        requested_label_column = self._resolve_requested_column(
+            columns, mapping.label_column if mapping else None
+        )
+        if mapping and mapping.label_column and not requested_label_column:
+            raise ValueError(f"实体 Label 字段不存在：{mapping.label_column}")
+        label_column = requested_label_column or self._find_optional_column(
+            columns,
+            (
+                "label", "Label", "class", "Class", "type", "entity_type",
+                "node_type", "node_type_name", "标签", "实体标签", "实体类型",
+                "类别", "分类", "人员类别", "组织类型", "岗位类别",
+            ),
+        )
+        label_value = mapping.target_label.strip() if mapping and mapping.target_label else None
+        if label_value and self._resolve_requested_column(columns, label_value):
+            label_value = None
+        return SimpleNamespace(source_column=name_column, label_column=label_column, label_value=label_value)
+
+    @staticmethod
+    def _find_optional_column(columns: list[str], candidates: tuple[str, ...]) -> str | None:
+        normalized = {column.casefold().replace("_", "").replace("-", ""): column for column in columns}
+        for candidate in candidates:
+            if candidate.casefold().replace("_", "").replace("-", "") in normalized:
+                return normalized[candidate.casefold().replace("_", "").replace("-", "")]
+        return None
+
+    def _infer_relationship_mapping(self, table: TableInfo, mappings: list[RelationshipMapping] | None):
+        from types import SimpleNamespace
+        columns = [column["name"] for column in table.columns]
+        mapping = mappings[0] if mappings else None
+        source_column = self._resolve_requested_column(columns, mapping.source_column if mapping else None) or self._pick_column(columns, ("source_name", "Source_Name", "source", "src", "from", "源实体"), "Relationship 源实体")
+        target_column = self._resolve_requested_column(columns, mapping.target_column if mapping else None) or self._pick_column(columns, ("target_name", "Target_Name", "target", "dst", "to", "目标实体"), "Relationship 目标实体")
+        type_column = self._find_optional_column(columns, ("type", "Type", "relation", "Relation", "relationship", "rel_type", "关系类型"))
+        type_value = mapping.relationship_type if mapping and mapping.relationship_type and mapping.relationship_type not in columns else None
+        if not type_column and not type_value:
+            raise ValueError("Relationship 缺少关系类型字段，请在映射中指定 relationship_type")
+        return SimpleNamespace(source_column=source_column, type_column=type_column, type_value=type_value, target_column=target_column)
 
     def import_from_db(
         self, conn: DBConnection,
@@ -261,7 +374,45 @@ class ImportService:
         prefix: str = "",
         relationship_mappings: list[RelationshipMapping] | None = None,
     ) -> ImportResult:
-        """从关系数据库导入创建新系统（v3.5: 支持自定义 prefix）。"""
+        """分阶段执行关系数据库导入，并在异常时清理新建的 SQLite 系统记录。"""
+        before_ids = {item.system_id for item in self.system_service.get_all_systems()}
+        stages = [
+            {"key": "mapping", "label": "表与字段匹配", "status": "success"},
+            {"key": "reading", "label": "读取关系数据库数据", "status": "processing"},
+            {"key": "cypher", "label": "转换为 Cypher", "status": "pending"},
+            {"key": "execution", "label": "执行 Cypher", "status": "pending"},
+            {"key": "result", "label": "校验执行结果", "status": "pending"},
+        ]
+        try:
+            result = self._import_from_db_unsafe(
+                conn, entity_mappings, system_name, description, prefix, relationship_mappings
+            )
+            for stage in stages:
+                stage["status"] = "success"
+            result.stages = stages
+            return result
+        except Exception as exc:
+            for item in self.system_service.get_all_systems():
+                if item.system_id not in before_ids:
+                    self.system_service.delete_system(item.system_id)
+            stages[-1]["status"] = "error"
+            stages[-1]["message"] = str(exc)
+            return ImportResult(
+                success=False,
+                system_name=system_name,
+                stages=stages,
+                message=f"关系数据库导入失败，已清理 SQLite 临时记录：{exc}",
+                errors=[str(exc)],
+            )
+
+    def _import_from_db_unsafe(
+        self, conn: DBConnection,
+        entity_mappings: list[TableMapping],
+        system_name: str, description: str,
+        prefix: str = "",
+        relationship_mappings: list[RelationshipMapping] | None = None,
+    ) -> ImportResult:
+        """执行关系数据库导入核心逻辑；外层负责异常补偿。"""
         # 1. 在 SQLite 创建系统记录
         system = self.system_service.create_system(
             name=system_name, description=description,
@@ -275,27 +426,46 @@ class ImportService:
 
         errors = []
 
-        # 3. 批量写入 Neo4j（使用 prefix）
-        entity_count = self.repo.batch_create_nodes(preview.entities, prefix)
-
-        # 4. 批量写入关系
-        rel_count = 0
-        if preview.relationships:
-            rel_count = self.repo.batch_create_relationships(preview.relationships, prefix)
-
-        # 5. 更新 SQLite 统计
-        node_total = self.repo.count_system_nodes(prefix)
-        rel_total = self.repo.count_system_relationships(prefix)
-        self.system_service.update_counts(system.system_id, node_total, rel_total)
-
+        # 3. 统一转换为标准 CypherBatch，并在写入前强制创建快照
+        generator = CypherGenerator(prefix)
+        entity_sheet = ParsedSheet(
+            sheet_name=conn.entity_table_name,
+            sheet_type="entity",
+            headers=list(preview.entities[0].keys()) if preview.entities else [],
+            rows=preview.entities,
+            row_count=len(preview.entities),
+        ) if preview.entities else None
+        relationship_sheet = ParsedSheet(
+            sheet_name=conn.relationship_table_name,
+            sheet_type="relationship",
+            headers=list(preview.relationships[0].keys()) if preview.relationships else [],
+            rows=preview.relationships,
+            row_count=len(preview.relationships),
+        ) if preview.relationships else None
+        batch = generator.generate(entity_sheet, relationship_sheet, strategy="CREATE")
+        execution = self.tx_manager.execute_with_backup(batch, prefix)
+        if execution.success:
+            node_total = self.repo.count_system_nodes(prefix)
+            rel_total = self.repo.count_system_relationships(prefix)
+            self.system_service.update_counts(system.system_id, node_total, rel_total)
         return ImportResult(
-            success=len(errors) == 0,
+            success=execution.success,
             system_id=system.system_id,
             system_name=system.name,
-            entities_created=entity_count,
-            relationships_created=rel_count,
-            message=f"成功导入 {entity_count} 个实体, {rel_count} 条关系",
-            errors=errors,
+            entities_created=execution.entities_created,
+            relationships_created=execution.relationships_created,
+            snapshot_id=execution.snapshot_id,
+            backup_available=execution.backup_available,
+            warnings=execution.warnings,
+            message=execution.message or f"成功导入 {execution.entities_created} 个实体, {execution.relationships_created} 条关系",
+            errors=execution.errors,
+            stages=[
+                {"key": "mapping", "label": "表与字段匹配", "status": "success"},
+                {"key": "reading", "label": "读取关系数据库数据", "status": "success"},
+                {"key": "cypher", "label": "转换为 Cypher", "status": "success"},
+                {"key": "execution", "label": "执行 Cypher", "status": "success" if execution.success else "error"},
+                {"key": "result", "label": "校验执行结果", "status": "success" if execution.success else "error"},
+            ],
         )
 
     def append_from_db(
@@ -321,27 +491,39 @@ class ImportService:
 
         errors = []
 
-        # 3. 批量写入 Neo4j（使用目标系统的 prefix）
-        entity_count = self.repo.batch_create_nodes(preview.entities, prefix)
-
-        # 4. 批量写入关系
-        rel_count = 0
-        if preview.relationships:
-            rel_count = self.repo.batch_create_relationships(preview.relationships, prefix)
-
-        # 5. 更新 SQLite 统计
-        node_total = self.repo.count_system_nodes(prefix)
-        rel_total = self.repo.count_system_relationships(prefix)
-        self.system_service.update_counts(system.system_id, node_total, rel_total)
-
+        # 3. 统一转换为标准 CypherBatch，并在写入前强制创建快照
+        generator = CypherGenerator(prefix)
+        entity_sheet = ParsedSheet(
+            sheet_name=system.name,
+            sheet_type="entity",
+            headers=list(preview.entities[0].keys()) if preview.entities else [],
+            rows=preview.entities,
+            row_count=len(preview.entities),
+        ) if preview.entities else None
+        relationship_sheet = ParsedSheet(
+            sheet_name=conn.relationship_table_name,
+            sheet_type="relationship",
+            headers=list(preview.relationships[0].keys()) if preview.relationships else [],
+            rows=preview.relationships,
+            row_count=len(preview.relationships),
+        ) if preview.relationships else None
+        batch = generator.generate(entity_sheet, relationship_sheet, strategy="MERGE")
+        execution = self.tx_manager.execute_with_backup(batch, prefix)
+        if execution.success:
+            node_total = self.repo.count_system_nodes(prefix)
+            rel_total = self.repo.count_system_relationships(prefix)
+            self.system_service.update_counts(system.system_id, node_total, rel_total)
         return ImportResult(
-            success=len(errors) == 0,
+            success=execution.success,
             system_id=system.system_id,
             system_name=system.name,
-            entities_created=entity_count,
-            relationships_created=rel_count,
-            message=f"已向「{system.name}」追加 {entity_count} 个实体, {rel_count} 条关系",
-            errors=errors,
+            entities_created=execution.entities_created,
+            relationships_created=execution.relationships_created,
+            snapshot_id=execution.snapshot_id,
+            backup_available=execution.backup_available,
+            warnings=execution.warnings,
+            message=execution.message or f"已向「{system.name}」追加 {execution.entities_created} 个实体, {execution.relationships_created} 条关系",
+            errors=execution.errors,
         )
 
     # ==================== 模板下载 ====================
@@ -562,12 +744,14 @@ class ImportService:
         return output.getvalue()
 
     def _read_table(self, engine, table_name: str, limit: int) -> list[dict]:
-        """读取表数据."""
-        from sqlalchemy import text
-        with engine.connect() as c:
-            result = c.execute(text(f"SELECT * FROM {table_name} LIMIT {limit}"))
-            columns = result.keys()
-            return [dict(zip(columns, row)) for row in result.fetchall()]
+        """通过 SQLAlchemy 元数据读取表数据，兼容不同方言并避免拼接表名。"""
+        from sqlalchemy import MetaData, Table, select
+        if not table_name or limit <= 0:
+            return []
+        table = Table(table_name, MetaData(), autoload_with=engine)
+        with engine.connect() as connection:
+            result = connection.execute(select(table).limit(min(limit, 500000)))
+            return [dict(row._mapping) for row in result]
 
     # ═══════════════════════════════════════════
     # v3.6: 语义自动初始化

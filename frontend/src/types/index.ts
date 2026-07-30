@@ -232,6 +232,7 @@ export interface RelationshipInstanceSummary {
 
 /** 系统信息 */
 export interface SystemInfo {
+  id: number
   system_id: string
   prefix: string
   name: string
@@ -253,6 +254,8 @@ export interface DBConnection {
   database: string
   user: string
   password: string
+  entity_table_name: string
+  relationship_table_name: string
 }
 
 /** 数据库表结构 */
@@ -266,6 +269,7 @@ export interface TableMapping {
   source_table: string
   source_column: string
   target_label: string
+  label_column?: string
 }
 
 /** 关系映射配置 */
@@ -292,6 +296,15 @@ export interface ImportResult {
   system_name: string
   entities_created: number
   relationships_created: number
+  snapshot_id?: string | null
+  backup_available?: boolean
+  warnings?: string[]
+  stages?: Array<{
+    key: string
+    label: string
+    status: 'pending' | 'processing' | 'success' | 'error'
+    message?: string
+  }>
   message: string
   errors: string[]
 }
@@ -420,6 +433,13 @@ export interface ExecuteResult {
   snapshot_id: string | null
   backup_available: boolean
   errors: string[]
+  warnings?: string[]
+  stages?: Array<{
+    key: string
+    label: string
+    status: 'pending' | 'processing' | 'success' | 'error'
+    message?: string
+  }>
   message: string
 }
 

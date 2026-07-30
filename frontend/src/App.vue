@@ -285,6 +285,13 @@
         </div>
 
         <div v-if="store.importSource === 'database'">
+          <a-alert
+            message="字段命名说明"
+            type="info"
+            show-icon
+            style="margin-bottom:16px"
+            description="Ontology 表通常使用 Name 作为实体名称，Label 或 Class 作为实体类型；Description 和 Alias 会作为实体属性导入。Relationship 表通常使用 Source_Name 作为源实体、Target_Name 作为目标实体，type 或 relation 作为关系类型。"
+          />
           <a-form layout="vertical">
             <a-form-item label="数据库类型">
               <a-select v-model:value="dbConn.db_type" placeholder="选择数据库类型">
@@ -307,7 +314,13 @@
               </a-col>
             </a-row>
             <a-form-item label="数据库名">
-              <a-input v-model:value="dbConn.database" placeholder="mydb" />
+              <a-input
+                v-model:value="dbConn.database"
+                placeholder="例如：Test_OntologyData"
+              />
+              <span style="color:#999;font-size:12px;display:block;margin-top:4px">
+                支持字母、数字、下划线和连字符
+              </span>
             </a-form-item>
             <a-row :gutter="16">
               <a-col :span="12">
@@ -323,17 +336,69 @@
             </a-row>
           </a-form>
           <a-button type="primary" :loading="dbConnecting" @click="onTestConnection">
-            测试连接并获取表结构
+            测试数据库连接
           </a-button>
           <div v-if="dbConError" style="margin-top:12px">
             <a-alert :message="dbConError" type="error" show-icon />
           </div>
-          <a-alert
+          <div v-if="dbTables.length > 0" style="margin-top:16px">
+            <a-divider orientation="left">数据库表结构</a-divider>
+            <a-alert
+              :message="`连接成功！发现 ${dbTables.length} 张表，请选择实体表和关系表`"
+              type="success" show-icon
+            />
+            <a-row :gutter="16" style="margin-top:16px">
+              <a-col :span="12">
+                <a-form-item label="实体表名称" required>
+                  <a-select
+                    v-model:value="dbConn.entity_table_name"
+                    placeholder="请选择实体表"
+                    show-search
+                    :filter-option="(input: string, option: any) => String(option?.value || '').toLowerCase().includes(input.toLowerCase())"
+                  >
+                    <a-select-option v-for="table in dbTables" :key="table.name" :value="table.name">
+                      {{ table.name }}
+                    </a-select-option>
+                  </a-select>
+                </a-form-item>
+              </a-col>
+              <a-col :span="12">
+                <a-form-item label="关系表名称" required>
+                  <a-select
+                    v-model:value="dbConn.relationship_table_name"
+                    placeholder="请选择关系表"
+                    show-search
+                    :filter-option="(input: string, option: any) => String(option?.value || '').toLowerCase().includes(input.toLowerCase())"
+                  >
+                    <a-select-option v-for="table in dbTables" :key="table.name" :value="table.name">
+                      {{ table.name }}
+                    </a-select-option>
+                  </a-select>
+                </a-form-item>
+              </a-col>
+            </a-row>
+          </div>
+          <a-list
             v-if="dbTables.length > 0"
-            :message="`连接成功！发现 ${dbTables.length} 张表`"
-            type="success" show-icon
-            style="margin-top:12px"
-          />
+            size="small"
+            bordered
+            :data-source="dbTables"
+            style="margin-top:12px;max-height:180px;overflow:auto"
+          >
+            <template #renderItem="{ item }">
+              <a-list-item>{{ item.name }}（{{ item.columns.length }} 个字段）</a-list-item>
+            </template>
+          </a-list>
+          <a-button
+            v-if="dbTables.length > 0"
+            type="primary"
+            :loading="dbPreviewing"
+            :disabled="!dbConn.entity_table_name || !dbConn.relationship_table_name"
+            style="margin-top:16px"
+            @click="onPreviewDB"
+          >
+            确认表选择并预览数据
+          </a-button>
         </div>
 
         <div class="import-step__actions">
@@ -519,12 +584,20 @@
 
         <div class="import-step__actions">
           <a-button @click="goToStep(4)" :disabled="importing || store.executeResult?.success">上一步</a-button>
-          <template v-if="store.executeResult?.success">
+          <template v-if="store.executeResult?.success || importResult?.success">
             <a-button type="primary" disabled style="margin-left:8px" class="header-action-link">
               导入成功
             </a-button>
+            <a-button
+              v-if="(store.executeResult?.snapshot_id || importResult?.snapshot_id) && (store.executeResult?.backup_available || importResult?.backup_available)"
+              danger
+              style="margin-left:8px"
+              @click="onRollbackImport"
+            >
+              回退本次导入
+            </a-button>
             <a-button type="primary" style="margin-left:8px" @click="onCloseImportWizard">
-              关闭
+              结束并退出
             </a-button>
           </template>
           <a-button
@@ -538,30 +611,46 @@
           </a-button>
         </div>
 
-        <div v-if="store.executeResult" style="margin-top:16px">
+        <div v-if="store.executeResult || importResult" style="margin-top:16px">
           <a-alert
-            v-if="store.executeResult.success"
-            :message="store.executeResult.message"
+            v-if="(store.executeResult?.success ?? importResult?.success)"
+            :message="store.executeResult?.message || importResult?.message"
             type="success"
             show-icon
           />
           <a-alert
             v-else
-            :message="store.executeResult.errors?.join(', ') || store.executeResult.message"
+            :message="formatImportMessage(store.executeResult?.errors || importResult?.errors, store.executeResult?.message || importResult?.message || '导入失败')"
             type="error"
             show-icon
           />
-          <div v-if="store.executeResult.backup_available && store.executeResult.snapshot_id" style="margin-top:8px">
-            <a-alert
-              type="warning"
-              show-icon
-              message="如需回滚："
-            >
-              <template #description>
-                <span>备份ID: <a-tag>{{ store.executeResult.snapshot_id }}</a-tag></span>
-              </template>
-            </a-alert>
-          </div>
+          <a-descriptions v-if="store.executeResult?.success || importResult?.success" bordered size="small" :column="2" style="margin-top:12px">
+            <a-descriptions-item label="创建实体">{{ store.executeResult?.entities_created ?? importResult?.entities_created ?? 0 }}</a-descriptions-item>
+            <a-descriptions-item label="创建关系">{{ store.executeResult?.relationships_created ?? importResult?.relationships_created ?? 0 }}</a-descriptions-item>
+            <a-descriptions-item label="执行状态"><a-tag color="green">成功</a-tag></a-descriptions-item>
+            <a-descriptions-item label="备份快照">{{ store.executeResult?.snapshot_id || importResult?.snapshot_id || '无' }}</a-descriptions-item>
+          </a-descriptions>
+          <a-steps
+            v-if="importResult?.stages?.length"
+            direction="vertical"
+            size="small"
+            style="margin-top:16px"
+          >
+            <a-step
+              v-for="stage in importResult.stages"
+              :key="stage.key"
+              :title="stage.label"
+              :status="stage.status === 'processing' ? 'process' : stage.status"
+              :description="stage.message"
+            />
+          </a-steps>
+          <a-alert
+            v-if="importResult?.warnings?.length"
+            type="warning"
+            show-icon
+            :message="(importResult?.warnings || []).join('；')"
+            style="margin-top:8px"
+          />
         </div>
       </div>
     </a-modal>
@@ -719,6 +808,7 @@ import {
   validateExcel,
   validateExcelAppend,
   executeImport,
+  rollbackImport,
 } from '@/api'
 import type {
   DBConnection,
@@ -728,6 +818,7 @@ import type {
   ImportPreviewData,
   ImportResult,
   ExecuteResult,
+  ValidationReport,
 } from '@/types'
 
 const store = useAppStore()
@@ -913,6 +1004,26 @@ const importing = ref(false)
 const validating = ref(false)
 const importResult = ref<ImportResult | null>(null)
 
+function formatImportMessage(errors: unknown, fallback: unknown = '导入失败'): string {
+  const values = Array.isArray(errors) ? errors : [errors]
+  const text = values
+    .map((item) => {
+      if (item == null) return ''
+      if (typeof item === 'string') return item
+      if (item instanceof Error) return item.message
+      if (typeof item === 'object') {
+        const record = item as Record<string, unknown>
+        return String(record.message || record.detail || record.error || JSON.stringify(item))
+      }
+      return String(item)
+    })
+    .filter(Boolean)
+    .join('；')
+  if (text) return text
+  if (typeof fallback === 'string') return fallback
+  return formatImportMessage(fallback, '导入失败')
+}
+
 const excelFile = ref<File | null>(null)
 const excelPreview = ref<ImportPreviewData | null>(null)
 const excelError = ref('')
@@ -924,14 +1035,29 @@ const dbConn = ref<DBConnection>({
   database: '',
   user: 'root',
   password: '',
+  entity_table_name: '',
+  relationship_table_name: '',
 })
 const dbConnecting = ref(false)
 const dbConError = ref('')
 const dbTables = ref<DBTableInfo[]>([])
 const dbPreviewing = ref(false)
 
-const entityMappings = ref<TableMapping[]>([{ source_table: '', source_column: '', target_label: '' }])
+const entityMappings = ref<TableMapping[]>([{ source_table: '', source_column: '', target_label: '', label_column: '' }])
 const relationshipMappings = ref<RelationshipMapping[]>([])
+
+const labelColumnCandidates = [
+  'label', 'class', 'type', 'entity_type', 'node_type', 'node_type_name',
+  '标签', '实体标签', '实体类型', '类别', '分类', '人员类别', '组织类型', '岗位类别',
+]
+
+function inferLabelColumn(tableName: string): string {
+  const table = dbTables.value.find(item => item.name.toLowerCase() === tableName.toLowerCase())
+  if (!table) return ''
+  const normalize = (value: string) => value.toLowerCase().replace(/[_-]/g, '')
+  const columns = new Map(table.columns.map(column => [normalize(column.name), column.name]))
+  return labelColumnCandidates.map(normalize).map(name => columns.get(name)).find(Boolean) || ''
+}
 
 const dbPreview = ref<ImportPreviewData | null>(null)
 
@@ -943,7 +1069,10 @@ const selectedTargetSystem = computed(() =>
 /** v3.5: Step3 到 Step4 的前置条件 */
 const canProceedFromStep3 = computed(() => {
   if (store.importSource === 'excel') return excelFile.value !== null
-  return dbTables.value.length > 0
+  const tableNames = new Set(dbTables.value.map(table => table.name.toLowerCase()))
+  const entityTable = dbConn.value.entity_table_name.trim().toLowerCase()
+  const relationshipTable = dbConn.value.relationship_table_name.trim().toLowerCase()
+  return !!entityTable && !!relationshipTable && tableNames.has(entityTable) && tableNames.has(relationshipTable) && !!dbPreview.value
 })
 
 const previewSampleE = computed(() => {
@@ -996,6 +1125,7 @@ function onPrefixInput(e: Event) {
   }
 }
 
+
 /** 将前缀转为展示格式（追加下划线） */
 function normalizePrefixDisplay(prefix: string) {
   const trimmed = prefix.trim().toUpperCase()
@@ -1021,8 +1151,29 @@ function goToStep(step: number) {
 /** v3.5: 从 Step3 进入验证步骤 */
 async function onGoToValidation() {
   if (store.importSource !== 'excel' || !excelFile.value) {
-    // 数据库来源直接跳确认
-    store.importStep = 5
+    // 数据库预览已经完成读取和映射，必须同步到验证报告，避免验证页显示 0。
+    if (dbPreview.value) {
+      const entityCount = dbPreview.value.total_entities ?? dbPreview.value.entities.length
+      const relationshipCount = dbPreview.value.total_relationships ?? dbPreview.value.relationships.length
+      const report: ValidationReport = {
+        is_valid: true,
+        entity_count: entityCount,
+        relationship_count: relationshipCount,
+        error_count: 0,
+        warning_count: 0,
+        issues: [],
+        preview: {
+          entities: dbPreview.value.entities as any,
+          relationships: dbPreview.value.relationships as any,
+          entity_count: entityCount,
+          relationship_count: relationshipCount,
+        },
+        conflict_entities: [],
+        conflict_relationships: [],
+      }
+      store.validationReport = report
+    }
+    store.importStep = 4
     return
   }
 
@@ -1073,13 +1224,13 @@ async function onExecuteImport() {
         store.lastSnapshotId = result.snapshot_id
       }
       if (result.success) {
-        message.success(result.message)
+        message.success(formatImportMessage(result.message, '导入成功'))
         await refreshSystemList()
       } else {
-        message.error(result.message)
+        message.error(formatImportMessage(result.message, '导入失败'))
       }
     } else {
-      // ★ DB 导入（保持原有流程）
+      // ★ DB 导入：后端在写入前强制备份，并返回实际写入统计与快照
       if (store.importMode === 'new') {
         importResult.value = await importFromDB(
           dbConn.value,
@@ -1099,16 +1250,56 @@ async function onExecuteImport() {
         )
       }
       if (importResult.value?.success) {
-        message.success('导入成功！')
+        message.success(formatImportMessage(importResult.value.message, '导入成功！'))
+        store.executeResult = {
+          success: importResult.value.success,
+          entities_created: importResult.value.entities_created,
+          relationships_created: importResult.value.relationships_created,
+          snapshot_id: importResult.value.snapshot_id || null,
+          backup_available: importResult.value.backup_available || false,
+          errors: importResult.value.errors || [],
+          message: importResult.value.message || '导入成功',
+        }
+        if (importResult.value.snapshot_id) store.lastSnapshotId = importResult.value.snapshot_id
         await refreshSystemList()
         store.setCurrentSystem(importResult.value.system_id)
         store.triggerTreeRefresh()
+      } else if (importResult.value) {
+        store.executeResult = {
+          success: false,
+          entities_created: importResult.value.entities_created || 0,
+          relationships_created: importResult.value.relationships_created || 0,
+          snapshot_id: importResult.value.snapshot_id || null,
+          backup_available: importResult.value.backup_available || false,
+          errors: importResult.value.errors || [],
+          message: importResult.value.message || '导入失败',
+        }
+        message.error(formatImportMessage(importResult.value.message, '导入失败'))
       }
     }
   } catch (e: any) {
-    message.error(e?.response?.data?.detail || '导入失败')
+    message.error(formatImportMessage(e?.response?.data?.detail, '导入失败'))
   } finally {
     importing.value = false
+  }
+}
+
+async function onRollbackImport() {
+  const snapshotId = store.executeResult?.snapshot_id || importResult.value?.snapshot_id
+  if (!snapshotId) return
+  try {
+    const result = await rollbackImport(snapshotId)
+    if (result.success) {
+      message.success('已回退到导入前状态')
+      store.executeResult = null
+      importResult.value = null
+      await refreshSystemList()
+      onCloseImportWizard()
+      } else {
+        message.error(formatImportMessage(result.message, '回退失败'))
+      }
+    } catch (e: any) {
+      message.error(formatImportMessage(e?.response?.data?.detail, '回退失败'))
   }
 }
 
@@ -1123,7 +1314,7 @@ function resetImportState() {
   excelFile.value = null
   excelPreview.value = null
   excelError.value = ''
-  dbConn.value = { db_type: 'mysql', host: 'localhost', port: 3306, database: '', user: 'root', password: '' }
+  dbConn.value = { db_type: 'mysql', host: 'localhost', port: 3306, database: '', user: 'root', password: '', entity_table_name: '', relationship_table_name: '' }
   dbConnecting.value = false
   dbConError.value = ''
   dbTables.value = []
@@ -1143,6 +1334,8 @@ async function handleExcelUpload(file: File) {
 async function onTestConnection() {
   dbConError.value = ''
   dbConnecting.value = true
+  dbTables.value = []
+  dbPreview.value = null
   try {
     const result = await testDBConnection(dbConn.value)
     if (!result.success) {
@@ -1150,14 +1343,60 @@ async function onTestConnection() {
       return
     }
     dbTables.value = await getDBTables(dbConn.value)
+    if (dbTables.value.length === 0) {
+      dbConError.value = '数据库中未发现可用数据表'
+      return
+    }
+
+    const tableNames = new Set(dbTables.value.map(table => table.name.toLowerCase()))
+    const similarEntityTable = dbTables.value.find(table => /ontology|entity|node|class/i.test(table.name))
+    const similarRelationshipTable = dbTables.value.find(table => /relationship|relation|rel|edge/i.test(table.name))
+    const currentEntityTable = dbConn.value.entity_table_name.trim()
+    const currentRelationshipTable = dbConn.value.relationship_table_name.trim()
+    const entityTableName = currentEntityTable && tableNames.has(currentEntityTable.toLowerCase())
+      ? currentEntityTable
+      : similarEntityTable?.name || ''
+    const relationshipTableName = currentRelationshipTable && tableNames.has(currentRelationshipTable.toLowerCase())
+      ? currentRelationshipTable
+      : similarRelationshipTable?.name || ''
+
+    dbConn.value.entity_table_name = entityTableName
+    dbConn.value.relationship_table_name = relationshipTableName
+    if (!entityTableName || !relationshipTableName) {
+      dbConError.value = '请从表清单中选择实体表和关系表'
+      return
+    }
+    const missing = [entityTableName, relationshipTableName].filter(name => !tableNames.has(name.toLowerCase()))
+    if (missing.length > 0) {
+      dbConError.value = `未找到指定表：${missing.join('、')}`
+      return
+    }
+    entityMappings.value = [{
+      source_table: entityTableName,
+      source_column: 'name',
+      target_label: '',
+      label_column: inferLabelColumn(entityTableName),
+    }]
+    relationshipMappings.value = [{ source_table: relationshipTableName, source_column: 'source_name', target_table: entityTableName, target_column: 'target_name', relationship_type: '' }]
   } catch (e: any) {
-    dbConError.value = e?.response?.data?.detail || '连接或获取表结构失败'
+    dbConError.value = e?.response?.data?.detail || e?.message || '连接或获取表结构失败'
   } finally {
     dbConnecting.value = false
   }
 }
 
 async function onPreviewDB() {
+  const entityTableName = dbConn.value.entity_table_name.trim()
+  const relationshipTableName = dbConn.value.relationship_table_name.trim()
+  const tableNames = new Set(dbTables.value.map(table => table.name.toLowerCase()))
+  if (!entityTableName || !relationshipTableName) {
+    message.error('请先选择实体表和关系表')
+    return
+  }
+  if (!tableNames.has(entityTableName.toLowerCase()) || !tableNames.has(relationshipTableName.toLowerCase())) {
+    message.error(`未找到指定表：${entityTableName} 或 ${relationshipTableName}`)
+    return
+  }
   dbPreviewing.value = true
   try {
     dbPreview.value = await previewDBImport(
@@ -1165,7 +1404,7 @@ async function onPreviewDB() {
       entityMappings.value.filter(m => m.source_table),
       relationshipMappings.value.filter(m => m.source_table) || undefined,
     )
-    store.importStep = 5  // v3.5: 数据库预览后直接到确认页
+    await onGoToValidation()
   } catch (e: any) {
     message.error(e?.response?.data?.detail || '预览失败')
   } finally {

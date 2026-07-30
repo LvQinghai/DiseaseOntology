@@ -63,6 +63,7 @@ class RelationSemanticModel(Base):
 
 class SystemInfo(BaseModel):
     """系统信息（API 响应）"""
+    id: int
     system_id: str
     prefix: str                          # ★ v3.0 核心：Neo4j 标签/关系前缀
     name: str

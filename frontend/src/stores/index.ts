@@ -271,8 +271,12 @@ export const useAppStore = defineStore('app', () => {
     if (sys) currentSystemInfo.value = sys
   }
 
+  function sortSystemsById(list: SystemInfo[]) {
+    return [...list].sort((a, b) => a.id - b.id)
+  }
+
   function setSystemList(list: SystemInfo[]) {
-    systemList.value = list
+    systemList.value = sortSystemsById(list)
   }
 
   function addSystem(sys: SystemInfo) {
@@ -280,8 +284,9 @@ export const useAppStore = defineStore('app', () => {
     if (idx >= 0) {
       systemList.value[idx] = sys
     } else {
-      systemList.value.unshift(sys)
+      systemList.value.push(sys)
     }
+    systemList.value = sortSystemsById(systemList.value)
   }
 
   function removeSystem(systemId: string) {

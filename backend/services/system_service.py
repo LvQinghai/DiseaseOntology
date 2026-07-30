@@ -56,7 +56,7 @@ class SystemService:
         session = get_session()
         try:
             rows = session.query(SystemModel).order_by(
-                SystemModel.system_id.asc()
+                SystemModel.id.asc()
             ).all()
             return [self._to_info(r) for r in rows]
         finally:
@@ -162,6 +162,7 @@ class SystemService:
     def _to_info(self, model: SystemModel) -> SystemInfo:
         """ORM 模型 → Pydantic 模型。"""
         return SystemInfo(
+            id=model.id,
             system_id=model.system_id,
             prefix=model.prefix,
             name=model.name,
